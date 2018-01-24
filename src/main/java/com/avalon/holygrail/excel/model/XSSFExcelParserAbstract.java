@@ -2,9 +2,12 @@ package com.avalon.holygrail.excel.model;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.norm.ExcelParser;
+import com.avalon.holygrail.excel.norm.MergeCell;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +33,7 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
     }
 
     @Override
-    public XSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) {
+    public XSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException {
         XSSFMergeCell mergeCell = new XSSFMergeCell();
 
         mergeCell.setCellRangeAddress(new CellRangeAddress(startRow, endRow, startCol, endCol));
@@ -39,5 +42,25 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
         excelTitle.copyCellStyle(mergeCell);//设置样式
 
         return mergeCell;
+    }
+
+    /**
+     * 搜寻与数据直接相关的field名称,按照单元格顺序排列,从第0列开始,如果没有就设置为""
+     * @param mergeCellList 单元格合并信息
+     * @return 数据Fields
+     */
+    public ArrayList<String> searchDataTitleFields(List<MergeCell> mergeCellList) {
+        ArrayList<String> fs = new ArrayList<>();
+        int start = 0;
+        for (MergeCell mergeCell : mergeCellList) {
+            for (int i = start; i < mergeCell.getStartCol(); i++) {
+                fs.add("");
+            }
+            for (int i = mergeCell.getStartCol(); i <= mergeCell.getEndCol(); i++) {
+                fs.add(((XSSFMergeCell)mergeCell).getField());
+            }
+            start = mergeCell.getEndCol() + 1;
+        }
+        return fs;
     }
 }

@@ -1,5 +1,6 @@
 package com.avalon.holygrail.excel.norm;
 
+import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
@@ -25,22 +26,22 @@ public interface ExcelSheetImport extends SheetImportHandler {
     ExcelSheetImport setColCursor(Function<Integer, Integer> handler);
 
     @Override
-    <T> ExcelSheetImport parseTitlesJson(String titlesJson, Class<T> clazz) throws ExcelTitleException, ExportException;
+    <T> ExcelSheetImport parseTitlesJson(String titlesJson, Class<T> clazz) throws ExcelException;
 
     @Override
-    <T> ExcelSheetImport parseTitlesJson(InputStream inputStream, Class<T> clazz) throws IOException, ExcelTitleException, ExportException;
+    <T> ExcelSheetImport parseTitlesJson(InputStream inputStream, Class<T> clazz) throws IOException, ExcelException;
 
     @Override
-    <T> ExcelSheetImport parseTitlesJson(File file, Class<T> clazz) throws IOException, ExcelTitleException, ExportException;
+    <T> ExcelSheetImport parseTitlesJson(File file, Class<T> clazz) throws IOException, ExcelException;
 
     @Override
-    <T> ExcelSheetImport setTitles(ExcelTitleCellAbstract[][] titles, Class<T> clazz) throws ExcelTitleException, ExportException;
+    <T> ExcelSheetImport setTitles(ExcelTitleCellAbstract[][] titles, Class<T> clazz) throws ExcelException;
 
     @Override
-    <T> ExcelSheetImport setColumnFields(List<String> fields, Class<T> clazz) throws ExcelTitleException, ExportException;
+    <T> ExcelSheetImport setColumnFields(List<String> fields, Class<T> clazz) throws ExcelException;
 
     @Override
-    default ExcelSheetImport setColumnFields(String... fields) throws ExcelTitleException, ExportException {
+    default ExcelSheetImport setColumnFields(String... fields) throws ExcelException {
         return setColumnFields(Arrays.asList(fields), Map.class);
     }
 

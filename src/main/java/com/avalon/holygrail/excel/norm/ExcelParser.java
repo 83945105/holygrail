@@ -1,5 +1,6 @@
 package com.avalon.holygrail.excel.norm;
 
+import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.model.ExcelCellAbstract;
 import com.avalon.holygrail.excel.model.ExcelCellError;
@@ -35,7 +36,7 @@ public interface ExcelParser {
      * @param endCol     占用结束列
      * @return 单元格合并对象
      */
-    MergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol);
+    MergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException;
 
     /**
      * 搜寻影响数据的表头合并单元格数据
@@ -43,7 +44,7 @@ public interface ExcelParser {
      * @param titles 表头合并单元格
      * @return 数据表头
      */
-    default LinkedList<MergeCell> searchDataTitleMergeCell(List<MergeCell> titles) {
+    default LinkedList<MergeCell> searchDataTitleMergeCells(List<MergeCell> titles) {
         MergeCell source;
         MergeCell target;
         LinkedList<MergeCell> targetMergeCell = new LinkedList<>();
@@ -79,7 +80,7 @@ public interface ExcelParser {
      * @param handlerMergeCell 处理单元格合并对象回调函数
      * @throws ExcelTitleException
      */
-    default void handlerExcelTitles(ExcelTitleCellAbstract[][] titles, int defaultSeatRow, int defaultSeatCol, Consumer<MergeCell> handlerMergeCell) throws ExcelTitleException {
+    default void handlerExcelTitles(ExcelTitleCellAbstract[][] titles, int defaultSeatRow, int defaultSeatCol, Consumer<MergeCell> handlerMergeCell) throws ExcelException {
         ExcelTitleCellAbstract[] excelTitles;
         ExcelTitleCellAbstract excelTitle;
         int endRow;//结束行
@@ -159,7 +160,7 @@ public interface ExcelParser {
      * @return 单元格合并集合
      * @throws ExcelTitleException
      */
-    default ArrayList<MergeCell> handlerExcelTitles(ExcelTitleCellAbstract[][] titles) throws ExcelTitleException {
+    default ArrayList<MergeCell> handlerExcelTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException {
         return handlerExcelTitles(titles, titles.length * 2, 10);
     }
 
@@ -171,7 +172,7 @@ public interface ExcelParser {
      * @return 单元格合并集合
      * @throws ExcelTitleException
      */
-    default ArrayList<MergeCell> handlerExcelTitles(ExcelTitleCellAbstract[][] titles, int defaultSeatRow, int defaultSeatCol) throws ExcelTitleException {
+    default ArrayList<MergeCell> handlerExcelTitles(ExcelTitleCellAbstract[][] titles, int defaultSeatRow, int defaultSeatCol) throws ExcelException {
         ArrayList<MergeCell> rs = new ArrayList<>();
         handlerExcelTitles(titles, defaultSeatRow, defaultSeatCol, mergeCell -> rs.add(mergeCell));
         return rs;

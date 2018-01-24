@@ -1,8 +1,7 @@
 package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.bean.SXSSFExcelWorkBookExport;
-import com.avalon.holygrail.excel.exception.ExcelTitleException;
-import com.avalon.holygrail.excel.exception.ExportException;
+import com.avalon.holygrail.excel.exception.ExcelException;
 
 import java.io.*;
 
@@ -67,7 +66,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
          * @param totalAllSheetDataSize WorkBook中所有Sheet已经导入的数据总数
          * @param totalSheetDataSize    本次创建的若干Sheet已经导入的数据中暑
          */
-        void accept(SheetExportHandler sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws ExcelTitleException, IOException, ExportException;
+        void accept(SheetExportHandler sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws ExcelException, IOException;
     }
 
     @FunctionalInterface
@@ -82,7 +81,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
          * @param totalSheetDataSize    本次创建的若干Sheet已经导入的数据中暑
          * @return 是否继续创建
          */
-        boolean accept(SheetExportHandler sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws IOException, ExcelTitleException, ExportException;
+        boolean accept(SheetExportHandler sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws IOException, ExcelException;
     }
 
     /**
@@ -92,7 +91,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * @param handlerSheet       处理Sheet
      * @return 当前工作簿对象
      */
-    default ExcelWorkBookExport createSheets(int totalSheet, SXSSFExcelWorkBookExport.FormatterSheetName formatterSheetName, SXSSFExcelWorkBookExport.HandlerSheetA handlerSheet) throws ExcelTitleException, IOException, ExportException {
+    default ExcelWorkBookExport createSheets(int totalSheet, SXSSFExcelWorkBookExport.FormatterSheetName formatterSheetName, SXSSFExcelWorkBookExport.HandlerSheetA handlerSheet) throws ExcelException, IOException {
         createSheets(formatterSheetName, (sheet, sheetIndex, index, totalAllSheetDataSize, totalSheetDataSize) -> {
             handlerSheet.accept(sheet, sheetIndex, index, totalAllSheetDataSize, totalSheetDataSize);
             if (index < totalSheet - 1) {
@@ -109,7 +108,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * @param handlerSheet 处理Sheet
      * @return 当前工作簿对象
      */
-    default ExcelWorkBookExport createSheets(int totalSheet, SXSSFExcelWorkBookExport.HandlerSheetA handlerSheet) throws ExcelTitleException, IOException, ExportException {
+    default ExcelWorkBookExport createSheets(int totalSheet, SXSSFExcelWorkBookExport.HandlerSheetA handlerSheet) throws ExcelException, IOException {
         createSheets(totalSheet, (sheetIndex, index) -> "sheet" + sheetIndex, handlerSheet);
         return this;
     }
@@ -120,7 +119,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * @param handlerSheet       处理Sheet,需要返回是否继续创建,最多创建100个Sheet
      * @return 当前工作簿对象
      */
-    default ExcelWorkBookExport createSheets(SXSSFExcelWorkBookExport.FormatterSheetName formatterSheetName, SXSSFExcelWorkBookExport.HandlerSheetB handlerSheet) throws IOException, ExcelTitleException, ExportException {
+    default ExcelWorkBookExport createSheets(SXSSFExcelWorkBookExport.FormatterSheetName formatterSheetName, SXSSFExcelWorkBookExport.HandlerSheetB handlerSheet) throws IOException, ExcelException {
         int totalAllSheetDataSize = getTotalSheetDataSize();
         int totalSheetDataSize = 0;
         boolean goon;
@@ -144,7 +143,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * @param handlerSheet 处理Sheet,需要返回是否继续创建,最多创建100个Sheet
      * @return 当前工作簿对象
      */
-    default ExcelWorkBookExport createSheets(SXSSFExcelWorkBookExport.HandlerSheetB handlerSheet) throws IOException, ExcelTitleException, ExportException {
+    default ExcelWorkBookExport createSheets(SXSSFExcelWorkBookExport.HandlerSheetB handlerSheet) throws IOException, ExcelException {
         createSheets((sheetIndex, index) -> "sheet" + sheetIndex, handlerSheet);
         return this;
     }

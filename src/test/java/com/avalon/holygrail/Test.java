@@ -1,6 +1,7 @@
 package com.avalon.holygrail;
 
-import com.avalon.holygrail.excel.norm.ExcelSheetImport;
+import com.avalon.holygrail.excel.exception.ExcelException;
+import com.avalon.holygrail.util.Export;
 import com.avalon.holygrail.util.Import;
 
 import java.io.File;
@@ -11,10 +12,16 @@ import java.io.IOException;
  */
 public class Test {
 
-    public static void main(String[] args) throws IOException {
-        ExcelSheetImport sheet = Import.buildXSSFImportExcelWorkBook()
-                .parseFile(new File("D://StuManager.xlsx"))
-                .getSheet(0);
-        System.out.println(sheet.getPhysicalNumberOfRows());
+    public static void main(String[] args) throws IOException, ExcelException {
+
+        Export.buildSXSSFExportExcelWorkBook()
+                .createSheet()
+                .parseTitlesJson("")
+                .importData(null)
+                .export("");
+
+        Import.buildXSSFImportExcelWorkBook()
+                .parseFile(new File("D://SubScoreRangeManager.xlsx"))
+                .getSheet(0).readRows();
     }
 }

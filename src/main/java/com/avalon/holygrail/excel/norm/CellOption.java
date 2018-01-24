@@ -1,5 +1,7 @@
 package com.avalon.holygrail.excel.norm;
 
+import com.avalon.holygrail.excel.exception.ExcelException;
+
 /**
  * 单元格属性
  * Created by 白超 on 2018/1/16.
@@ -80,7 +82,7 @@ public interface CellOption {
     /**
      * 获取值
      */
-    Object getValue();
+    Object getValue() throws ExcelException;
 
     /**
      * 设置值
@@ -132,8 +134,9 @@ public interface CellOption {
      *
      * @param target 目标单元格
      */
-    default void copyCellOption(CellOption target) {
-        target.setType(getType().name());
+    default void copyCellOption(CellOption target) throws ExcelException {
+        CellType type = getType();
+        target.setType(type == null ? CellType.TEXT.name() : type.name());
         target.setValue(getValue());
         target.setField(getField());
         target.setWidth(getWidth());

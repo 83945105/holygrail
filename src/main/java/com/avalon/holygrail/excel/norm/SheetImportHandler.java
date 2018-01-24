@@ -1,13 +1,13 @@
 package com.avalon.holygrail.excel.norm;
 
-import com.avalon.holygrail.excel.exception.ExcelTitleException;
-import com.avalon.holygrail.excel.exception.ExportException;
+import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -30,7 +30,7 @@ public interface SheetImportHandler extends Sheet {
      * @param clazz 数据容器
      * @return 准备导入
      */
-    <T> SheetImportHandler parseTitlesJson(String titlesJson, Class<T> clazz) throws ExcelTitleException, ExportException;
+    <T> SheetImportHandler parseTitlesJson(String titlesJson, Class<T> clazz) throws ExcelException;
 
     /**
      * 解析表头json文件
@@ -38,7 +38,7 @@ public interface SheetImportHandler extends Sheet {
      * @param clazz 数据容器
      * @return 准备导入
      */
-    <T> SheetImportHandler parseTitlesJson(InputStream inputStream, Class<T> clazz) throws IOException, ExcelTitleException, ExportException;
+    <T> SheetImportHandler parseTitlesJson(InputStream inputStream, Class<T> clazz) throws IOException, ExcelException;
 
     /**
      * 解析表头json文件
@@ -46,7 +46,7 @@ public interface SheetImportHandler extends Sheet {
      * @param clazz 数据容器
      * @return 准备导入
      */
-    <T> SheetImportHandler parseTitlesJson(File file, Class<T> clazz) throws IOException, ExcelTitleException, ExportException;
+    <T> SheetImportHandler parseTitlesJson(File file, Class<T> clazz) throws IOException, ExcelException;
 
     /**
      * 设置表头
@@ -54,7 +54,7 @@ public interface SheetImportHandler extends Sheet {
      * @param clazz 数据容器
      * @return 准备导入
      */
-    <T> SheetImportHandler setTitles(ExcelTitleCellAbstract[][] titles, Class<T> clazz) throws ExcelTitleException, ExportException;
+    <T> SheetImportHandler setTitles(ExcelTitleCellAbstract[][] titles, Class<T> clazz) throws ExcelException;
 
     /**
      * 设置列对应的数据属性
@@ -62,29 +62,29 @@ public interface SheetImportHandler extends Sheet {
      * @param clazz 数据容器
      * @return 准备导入
      */
-    <T> SheetImportHandler setColumnFields(List<String> fields, Class<T> clazz) throws ExcelTitleException, ExportException;
+    <T> SheetImportHandler setColumnFields(List<String> fields, Class<T> clazz) throws ExcelException;
 
-    default SheetImportHandler setColumnFields(String... fields) throws ExcelTitleException, ExportException {
+    default SheetImportHandler setColumnFields(String... fields) throws ExcelException {
         return setColumnFields(Arrays.asList(fields), Map.class);
     }
 
     @Override
-    default SheetImportHandler parseTitlesJson(InputStream inputStream) throws IOException, ExcelTitleException, ExportException {
+    default SheetImportHandler parseTitlesJson(InputStream inputStream) throws IOException, ExcelException {
         return parseTitlesJson(inputStream, Map.class);
     }
 
     @Override
-    default SheetImportHandler parseTitlesJson(File file) throws IOException, ExcelTitleException, ExportException {
+    default SheetImportHandler parseTitlesJson(File file) throws IOException, ExcelException {
         return parseTitlesJson(file, Map.class);
     }
 
     @Override
-    default SheetImportHandler parseTitlesJson(String titlesJson) throws ExcelTitleException, ExportException {
+    default SheetImportHandler parseTitlesJson(String titlesJson) throws ExcelException {
         return parseTitlesJson(titlesJson, Map.class);
     }
 
     @Override
-    default SheetImportHandler setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelTitleException, ExportException {
+    default SheetImportHandler setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException {
         return setTitles(titles, Map.class);
     }
 
@@ -94,5 +94,9 @@ public interface SheetImportHandler extends Sheet {
      */
     int getPhysicalNumberOfRows();
 
-    SheetImportHandler readRows();
+    <T> SheetImportHandler readRows(Class<T> clazz) throws ExcelException;
+
+    default SheetImportHandler readRows() throws ExcelException {
+        return this.readRows(HashMap.class);
+    }
 }

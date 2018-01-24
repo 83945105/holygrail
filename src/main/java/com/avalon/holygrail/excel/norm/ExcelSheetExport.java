@@ -1,8 +1,7 @@
 package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.bean.SXSSFExcelSheetExport;
-import com.avalon.holygrail.excel.exception.ExcelTitleException;
-import com.avalon.holygrail.excel.exception.ExportException;
+import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 
 import java.io.File;
@@ -26,50 +25,50 @@ public interface ExcelSheetExport extends SheetExportHandler {
     ExcelSheetExport setColCursor(Function<Integer, Integer> handler);
 
     @Override
-    ExcelSheetExport parseTitlesJson(String titlesJson, boolean exportTitles) throws ExcelTitleException, ExportException;
+    ExcelSheetExport parseTitlesJson(String titlesJson, boolean exportTitles) throws ExcelException;
 
     @Override
-    ExcelSheetExport parseTitlesJson(InputStream inputStream, boolean exportTitles) throws IOException, ExcelTitleException, ExportException;
+    ExcelSheetExport parseTitlesJson(InputStream inputStream, boolean exportTitles) throws IOException, ExcelException;
 
     @Override
-    ExcelSheetExport parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelTitleException, ExportException;
+    ExcelSheetExport parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelException;
 
     @Override
-    ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] titles, boolean exportTitles) throws ExcelTitleException, ExportException;
+    ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] titles, boolean exportTitles) throws ExcelException;
 
     @Override
-    ExcelSheetExport setColumnFields(List<String> fields) throws ExcelTitleException, ExportException;
+    ExcelSheetExport setColumnFields(List<String> fields) throws ExcelException;
 
     @Override
-    default ExcelSheetExport setColumnFields(String... fields) throws ExcelTitleException, ExportException {
+    default ExcelSheetExport setColumnFields(String... fields) throws ExcelException {
         return setColumnFields(Arrays.asList(fields));
     }
 
     @Override
-    default ExcelSheetExport parseTitlesJson(InputStream inputStream) throws IOException, ExcelTitleException, ExportException {
+    default ExcelSheetExport parseTitlesJson(InputStream inputStream) throws IOException, ExcelException {
         return parseTitlesJson(inputStream, true);
     }
 
     @Override
-    default ExcelSheetExport parseTitlesJson(File file) throws IOException, ExcelTitleException, ExportException {
+    default ExcelSheetExport parseTitlesJson(File file) throws IOException, ExcelException {
         return parseTitlesJson(file, true);
     }
 
     @Override
-    default ExcelSheetExport parseTitlesJson(String titlesJson) throws ExcelTitleException, ExportException {
+    default ExcelSheetExport parseTitlesJson(String titlesJson) throws ExcelException {
         return parseTitlesJson(titlesJson, true);
     }
 
     @Override
-    default ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelTitleException, ExportException {
+    default ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException {
         return setTitles(titles, true);
     }
 
     @Override
-    <T> ExcelSheetExport importData(Collection<T> records) throws ExportException;
+    <T> ExcelSheetExport importData(Collection<T> records) throws ExcelException;
 
     @Override
-    <T> ExcelSheetExport importData(Collection<T> records, SXSSFExcelSheetExport.FormatterCell<T> formatter) throws ExportException;
+    <T> ExcelSheetExport importData(Collection<T> records, SXSSFExcelSheetExport.FormatterCell<T> formatter) throws ExcelException;
 
     /**
      * 获取所属Excel工作簿

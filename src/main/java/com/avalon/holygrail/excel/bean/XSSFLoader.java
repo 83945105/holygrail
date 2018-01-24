@@ -4,27 +4,25 @@ import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.CellStyle;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.xssf.streaming.SXSSFCell;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
 /**
- * SXSSF装载器
- * Created by 白超 on 2018/1/18.
+ * XSSF装载器
+ * Created by 白超 on 2018/1/24.
  */
-public class SXSSFLoader implements CellOption, CellStyle {
+public class XSSFLoader implements CellOption, CellStyle {
 
-    /**
-     * SXSSF工作表
-     */
-    protected SXSSFSheet sheet;
-    /**
-     * SXSSF单元格
-     */
-    protected SXSSFCell cell;
+    protected XSSFCell cell;
 
-    public SXSSFLoader(SXSSFSheet sheet, SXSSFCell cell, XSSFCellStyle cellStyle) {
-        this.sheet = sheet;
+    public XSSFLoader() {
+    }
+
+    public XSSFLoader(XSSFCell cell) {
+        this.cell = cell;
+    }
+
+    public XSSFLoader(XSSFCell cell, XSSFCellStyle cellStyle) {
         this.cell = cell;
         this.setCellStyle(cellStyle);
     }
@@ -66,22 +64,22 @@ public class SXSSFLoader implements CellOption, CellStyle {
     @Override
     public void setValue(Object value) {
         if (value == null) {
-            cell.setCellType(SXSSFCell.CELL_TYPE_STRING);
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             cell.setCellValue("");
             return;
         }
         if (value instanceof String) {
-            cell.setCellType(SXSSFCell.CELL_TYPE_STRING);
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             cell.setCellValue((String) value);
             return;
         }
         if (value instanceof Integer) {
-            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellType(Cell.CELL_TYPE_NUMERIC);
             cell.setCellValue((int) value);
             return;
         }
         if (value instanceof Boolean) {
-            cell.setCellType(SXSSFCell.CELL_TYPE_BOOLEAN);
+            cell.setCellType(Cell.CELL_TYPE_BOOLEAN);
             cell.setCellValue((boolean) value);
             return;
         }
@@ -206,24 +204,16 @@ public class SXSSFLoader implements CellOption, CellStyle {
         this.setBorderBottom(borders[3]);
     }
 
-    public SXSSFSheet getSheet() {
-        return sheet;
-    }
-
-    public void setSheet(SXSSFSheet sheet) {
-        this.sheet = sheet;
-    }
-
-    public SXSSFCell getCell() {
+    public XSSFCell getCell() {
         return cell;
     }
 
-    public void setCell(SXSSFCell cell) {
+    public void setCell(XSSFCell cell) {
         this.cell = cell;
     }
 
     public XSSFCellStyle getCellStyle() {
-        return (XSSFCellStyle) this.cell.getCellStyle();
+        return cell.getCellStyle();
     }
 
     public void setCellStyle(XSSFCellStyle cellStyle) {
