@@ -1,7 +1,7 @@
 package com.avalon.holygrail.util;
 
-import com.avalon.holygrail.excel.bean.SXSSFExcelWorkBook;
-import com.avalon.holygrail.excel.norm.ExcelWorkBook;
+import com.avalon.holygrail.excel.bean.SXSSFExcelExportWorkBook;
+import com.avalon.holygrail.excel.norm.ExcelExportWorkBook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 /**
@@ -13,8 +13,8 @@ public interface Export {
     /**
      * 构建基于SXSSFWorkbook的Excel导出工作簿
      */
-    static ExcelWorkBook buildSXSSFExportExcelWorkBook() {
-        return new SXSSFExcelWorkBook();
+    static ExcelExportWorkBook buildSXSSFExportExcelWorkBook() {
+        return new SXSSFExcelExportWorkBook();
     }
 
     /**
@@ -22,16 +22,16 @@ public interface Export {
      * @param rowAccessWindowSize 数据量达到多少时写入磁盘(默认100)
      * @return
      */
-    static ExcelWorkBook buildSXSSFExportExcelWorkBook(int rowAccessWindowSize) {
-        return new SXSSFExcelWorkBook(rowAccessWindowSize);
+    static ExcelExportWorkBook buildSXSSFExportExcelWorkBook(int rowAccessWindowSize) {
+        return new SXSSFExcelExportWorkBook(rowAccessWindowSize);
     }
 
     /**
      * 根据指定SXSSFWorkbook构建Excel导出工作簿
      * @param workbook
      */
-    static ExcelWorkBook buildSXSSFExportExcelWorkBook(SXSSFWorkbook workbook) {
-        return new SXSSFExcelWorkBook(workbook);
+    static ExcelExportWorkBook buildSXSSFExportExcelWorkBook(SXSSFWorkbook workbook) {
+        return new SXSSFExcelExportWorkBook(workbook);
     }
 
 }

@@ -7,7 +7,7 @@ import com.avalon.holygrail.excel.norm.ExcelExport;
 import java.util.List;
 
 /**
- * SXSSFWorkbook 表头
+ * SXSSFWorkbook
  * Created by 白超 on 2018/1/16.
  */
 public abstract class SXSSFExcelExportAbstract implements ExcelExport {
@@ -18,7 +18,7 @@ public abstract class SXSSFExcelExportAbstract implements ExcelExport {
      * @return 表头信息二维数组
      */
     @Override
-    public SXSSFExcelTitle[][] parseJson(String titlesJson) {
+    public SXSSFExcelTitle[][] parseCellsJson(String titlesJson) {
         JSONArray jsonArray = JSON.parseArray(titlesJson);
         SXSSFExcelTitle[][] rs = new SXSSFExcelTitle[jsonArray.size()][];
         for (int i = 0; i < jsonArray.size(); i++) {

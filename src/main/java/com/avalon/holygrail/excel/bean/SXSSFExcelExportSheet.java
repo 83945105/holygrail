@@ -5,10 +5,9 @@ import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleAbstract;
 import com.avalon.holygrail.excel.model.SXSSFExcelTitle;
 import com.avalon.holygrail.excel.model.SXSSFMergeCell;
-import com.avalon.holygrail.excel.norm.ExcelSheet;
+import com.avalon.holygrail.excel.norm.ExcelSheetExport;
 import com.avalon.holygrail.excel.norm.MergeCell;
 import com.avalon.holygrail.util.ClassUtil;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFCell;
@@ -26,14 +25,14 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * SXSSFWorkbook Sheet
+ * SXSSFWorkbook SheetExport
  * Created by 白超 on 2018/1/17.
  */
-public class SXSSFExcelSheet extends SXSSFExcelWorkBook implements ExcelSheet {
+public class SXSSFExcelExportSheet extends SXSSFExcelExportWorkBook implements ExcelSheetExport {
 
     protected SXSSFSheet sheet;//当前数据表对象
 
-    protected SXSSFExcelWorkBook ownerWorkBook;//所属工作簿对象
+    protected SXSSFExcelExportWorkBook ownerWorkBook;//所属工作簿对象
 
     protected List<MergeCell> titleMergeCells;//表头合并单元格信息
 
@@ -45,12 +44,12 @@ public class SXSSFExcelSheet extends SXSSFExcelWorkBook implements ExcelSheet {
 
     protected int totalDataSize;//数据记录总数
 
-    public SXSSFExcelSheet(String sheetName, SXSSFExcelWorkBook ownerWorkBook) {
+    public SXSSFExcelExportSheet(String sheetName, SXSSFExcelExportWorkBook ownerWorkBook) {
         this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
         this.ownerWorkBook = ownerWorkBook;
     }
 
-    public SXSSFExcelSheet(SXSSFWorkbook workbook, String sheetName, SXSSFExcelWorkBook ownerWorkBook) {
+    public SXSSFExcelExportSheet(SXSSFWorkbook workbook, String sheetName, SXSSFExcelExportWorkBook ownerWorkBook) {
         super(workbook);
         this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
         this.ownerWorkBook = ownerWorkBook;
@@ -72,7 +71,7 @@ public class SXSSFExcelSheet extends SXSSFExcelWorkBook implements ExcelSheet {
         SXSSFRow row = (SXSSFRow) this.sheet.getRow(rowIndex);
         if (row == null) {
             if (rowCursor >= rowIndex) {
-                throw new RuntimeException("SXSSFExcelSheet parseExportTitles rowCursor位置异常");
+                throw new RuntimeException("SXSSFExcelExportSheet parseExportTitles rowCursor位置异常");
             }
             row = (SXSSFRow) this.sheet.createRow(rowIndex);
         }
@@ -409,44 +408,44 @@ public class SXSSFExcelSheet extends SXSSFExcelWorkBook implements ExcelSheet {
     }
 
     @Override
-    public ExcelSheet setRowCursor(Function<Integer, Integer> handler) {
+    public ExcelSheetExport setRowCursor(Function<Integer, Integer> handler) {
         rowCursor = handler.apply(rowCursor);
         return this;
     }
 
     @Override
-    public ExcelSheet setColCursor(Function<Integer, Integer> handler) {
+    public ExcelSheetExport setColCursor(Function<Integer, Integer> handler) {
         colCursor = handler.apply(colCursor);
         return this;
     }
 
     @Override
-    public SXSSFExcelWorkBook getOwnerWorkBook() {
+    public SXSSFExcelExportWorkBook getOwnerWorkBook() {
         return this.ownerWorkBook;
     }
 
     @Override
-    public ExcelSheet parseTitlesJson(String titlesJson, boolean exportTitles) throws ExcelTitleException, ExportException {
-        SXSSFExcelTitle[][] excelTitles = this.parseJson(titlesJson);
+    public ExcelSheetExport parseTitlesJson(String titlesJson, boolean exportTitles) throws ExcelTitleException, ExportException {
+        SXSSFExcelTitle[][] excelTitles = this.parseCellsJson(titlesJson);
         return setTitles(excelTitles, exportTitles);
     }
 
     @Override
-    public ExcelSheet parseTitlesJson(InputStream inputStream, boolean exportTitles) throws IOException, ExcelTitleException, ExportException {
-        SXSSFExcelTitle[][] excelTitles = (SXSSFExcelTitle[][]) this.parseJson(inputStream);
+    public ExcelSheetExport parseTitlesJson(InputStream inputStream, boolean exportTitles) throws IOException, ExcelTitleException, ExportException {
+        SXSSFExcelTitle[][] excelTitles = (SXSSFExcelTitle[][]) this.parseCellsJson(inputStream);
         return setTitles(excelTitles, exportTitles);
     }
 
     @Override
-    public ExcelSheet parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelTitleException, ExportException {
-        SXSSFExcelTitle[][] excelTitles = (SXSSFExcelTitle[][]) this.parseJson(file);
+    public ExcelSheetExport parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelTitleException, ExportException {
+        SXSSFExcelTitle[][] excelTitles = (SXSSFExcelTitle[][]) this.parseCellsJson(file);
         return setTitles(excelTitles, exportTitles);
     }
 
     @Override
-    public ExcelSheet setTitles(ExcelTitleAbstract[][] excelTitles, boolean exportTitles) throws ExcelTitleException, ExportException {
+    public ExcelSheetExport setTitles(ExcelTitleAbstract[][] excelTitles, boolean exportTitles) throws ExcelTitleException, ExportException {
         if (!(excelTitles instanceof SXSSFExcelTitle[][])) {
-            throw new ExportException("SXSSFExcelSheet setTitles excelTitles类型应该为SXSSFExcelTitle[][]");
+            throw new ExportException("SXSSFExcelExportSheet setTitles excelTitles类型应该为SXSSFExcelTitle[][]");
         }
         this.titleMergeCells = handlerExcelTitles(excelTitles);
         this.dataTitleMergeCells = this.searchDataTitleMergeCell(this.titleMergeCells);
@@ -461,7 +460,7 @@ public class SXSSFExcelSheet extends SXSSFExcelWorkBook implements ExcelSheet {
     }
 
     @Override
-    public ExcelSheet setColumnFields(List<String> fields) throws ExcelTitleException, ExportException {
+    public ExcelSheetExport setColumnFields(List<String> fields) throws ExcelTitleException, ExportException {
         SXSSFExcelTitle[][] excelTitles = new SXSSFExcelTitle[1][fields.size()];
         for (int i = 0; i < fields.size(); i++) {
             excelTitles[0][i] = new SXSSFExcelTitle(fields.get(i));
@@ -475,13 +474,13 @@ public class SXSSFExcelSheet extends SXSSFExcelWorkBook implements ExcelSheet {
     }
 
     @Override
-    public <T> ExcelSheet importData(Collection<T> records) throws ExportException {
+    public <T> ExcelSheetExport importData(Collection<T> records) throws ExportException {
         this.parseExportData(records);
         return this;
     }
 
     @Override
-    public <T> ExcelSheet importData(Collection<T> records, FormatterCell<T> formatter) throws ExportException {
+    public <T> ExcelSheetExport importData(Collection<T> records, FormatterCell<T> formatter) throws ExportException {
         this.parseExportData(records, formatter);
         return this;
     }

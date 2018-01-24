@@ -1,6 +1,6 @@
 package com.avalon.holygrail.excel.norm;
 
-import com.avalon.holygrail.excel.bean.SXSSFExcelSheet;
+import com.avalon.holygrail.excel.bean.SXSSFExcelExportSheet;
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleAbstract;
@@ -12,22 +12,22 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * 工作表
+ * Sheet导出
  * Created by 白超 on 2018/1/19.
  */
-public interface Sheet {
+public interface SheetExport {
 
     /**
      * 设置行游标
      * @param handler 接收行号,返回你想设置的行号
      */
-    Sheet setRowCursor(Function<Integer, Integer> handler);
+    SheetExport setRowCursor(Function<Integer, Integer> handler);
 
     /**
      * 设置列游标
      * @param handler 接收列号,返回你想设置的列号
      */
-    Sheet setColCursor(Function<Integer, Integer> handler);
+    SheetExport setColCursor(Function<Integer, Integer> handler);
 
     /**
      * 解析表头json数据
@@ -35,7 +35,7 @@ public interface Sheet {
      * @param exportTitles 是否导出表头
      * @return 准备导出
      */
-    Sheet parseTitlesJson(String titlesJson, boolean exportTitles) throws ExcelTitleException, ExportException;
+    SheetExport parseTitlesJson(String titlesJson, boolean exportTitles) throws ExcelTitleException, ExportException;
 
     /**
      * 解析表头json文件
@@ -43,7 +43,7 @@ public interface Sheet {
      * @param exportTitles 是否导出表头
      * @return 准备导出
      */
-    Sheet parseTitlesJson(InputStream inputStream, boolean exportTitles) throws IOException, ExcelTitleException, ExportException;
+    SheetExport parseTitlesJson(InputStream inputStream, boolean exportTitles) throws IOException, ExcelTitleException, ExportException;
 
     /**
      * 解析表头json文件
@@ -51,7 +51,7 @@ public interface Sheet {
      * @param exportTitles 是否导出表头
      * @return 准备导出
      */
-    Sheet parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelTitleException, ExportException;
+    SheetExport parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelTitleException, ExportException;
 
     /**
      * 设置表头
@@ -59,14 +59,14 @@ public interface Sheet {
      * @param exportTitles 是否导出表头
      * @return 准备导出
      */
-    Sheet setTitles(ExcelTitleAbstract[][] titles, boolean exportTitles) throws ExcelTitleException, ExportException;
+    SheetExport setTitles(ExcelTitleAbstract[][] titles, boolean exportTitles) throws ExcelTitleException, ExportException;
 
     /**
      * 设置列属性
      * @param fields 属性
      * @return 准备导出
      */
-    Sheet setColumnFields(List<String> fields) throws ExcelTitleException, ExportException;
+    SheetExport setColumnFields(List<String> fields) throws ExcelTitleException, ExportException;
 
     /**
      * 设置列宽
@@ -80,7 +80,7 @@ public interface Sheet {
      * @param fields 属性
      * @return 准备导出
      */
-    default Sheet setColumnFields(String... fields) throws ExcelTitleException, ExportException {
+    default SheetExport setColumnFields(String... fields) throws ExcelTitleException, ExportException {
         return setColumnFields(Arrays.asList(fields));
     }
 
@@ -89,7 +89,7 @@ public interface Sheet {
      * @param inputStream 表头数据流
      * @return 准备导出
      */
-    default Sheet parseTitlesJson(InputStream inputStream) throws IOException, ExcelTitleException, ExportException {
+    default SheetExport parseTitlesJson(InputStream inputStream) throws IOException, ExcelTitleException, ExportException {
         return parseTitlesJson(inputStream, true);
     }
 
@@ -98,7 +98,7 @@ public interface Sheet {
      * @param file 表头数据文件
      * @return 准备导出
      */
-    default Sheet parseTitlesJson(File file) throws IOException, ExcelTitleException, ExportException {
+    default SheetExport parseTitlesJson(File file) throws IOException, ExcelTitleException, ExportException {
         return parseTitlesJson(file, true);
     }
 
@@ -107,7 +107,7 @@ public interface Sheet {
      * @param titlesJson 表头数据json
      * @return 准备导出
      */
-    default Sheet parseTitlesJson(String titlesJson) throws ExcelTitleException, ExportException {
+    default SheetExport parseTitlesJson(String titlesJson) throws ExcelTitleException, ExportException {
         return parseTitlesJson(titlesJson, true);
     }
 
@@ -116,7 +116,7 @@ public interface Sheet {
      * @param titles 表头对象
      * @return 准备导出
      */
-    default Sheet setTitles(ExcelTitleAbstract[][] titles) throws ExcelTitleException, ExportException {
+    default SheetExport setTitles(ExcelTitleAbstract[][] titles) throws ExcelTitleException, ExportException {
         return setTitles(titles, true);
     }
 
@@ -126,7 +126,7 @@ public interface Sheet {
      * @param <T> 数据类型
      * @return 当前对象
      */
-    <T> Sheet importData(Collection<T> records) throws ExportException;
+    <T> SheetExport importData(Collection<T> records) throws ExportException;
 
     /**
      * 导入数据
@@ -135,7 +135,7 @@ public interface Sheet {
      * @param formatter 格式化函数,接收5个参数,分别为 当前当前数据对象record、单元格信息、当前列值、游标、当前记录下标,需要返回要设置的单元格值
      * @return 当前对象
      */
-    <T> Sheet importData(Collection<T> records, SXSSFExcelSheet.FormatterCell<T> formatter) throws ExportException;
+    <T> SheetExport importData(Collection<T> records, SXSSFExcelExportSheet.FormatterCell<T> formatter) throws ExportException;
 
     /**
      * 获取表格导入的数据总数

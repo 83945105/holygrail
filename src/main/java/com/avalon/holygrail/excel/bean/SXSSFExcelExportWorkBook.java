@@ -3,8 +3,8 @@ package com.avalon.holygrail.excel.bean;
 import com.avalon.holygrail.excel.model.ExcelTitleAbstract;
 import com.avalon.holygrail.excel.model.SXSSFExcelExportAbstract;
 import com.avalon.holygrail.excel.model.SXSSFMergeCell;
-import com.avalon.holygrail.excel.norm.ExcelSheet;
-import com.avalon.holygrail.excel.norm.ExcelWorkBook;
+import com.avalon.holygrail.excel.norm.ExcelSheetExport;
+import com.avalon.holygrail.excel.norm.ExcelExportWorkBook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
@@ -15,38 +15,38 @@ import java.util.ArrayList;
  * SXSSFWorkbook 导出Excel
  * Created by 白超 on 2018/1/17.
  */
-public class SXSSFExcelWorkBook extends SXSSFExcelExportAbstract implements ExcelWorkBook {
+public class SXSSFExcelExportWorkBook extends SXSSFExcelExportAbstract implements ExcelExportWorkBook {
 
     protected SXSSFWorkbook sxssfWorkbook;
 
-    protected ArrayList<SXSSFExcelSheet> sheets = new ArrayList<>();
+    protected ArrayList<SXSSFExcelExportSheet> sheets = new ArrayList<>();
 
-    public SXSSFExcelWorkBook() {
+    public SXSSFExcelExportWorkBook() {
         this.sxssfWorkbook = new SXSSFWorkbook();
     }
 
-    public SXSSFExcelWorkBook(int rowAccessWindowSize) {
+    public SXSSFExcelExportWorkBook(int rowAccessWindowSize) {
         this.sxssfWorkbook = new SXSSFWorkbook(rowAccessWindowSize);
     }
 
-    public SXSSFExcelWorkBook(SXSSFWorkbook workbook) {
+    public SXSSFExcelExportWorkBook(SXSSFWorkbook workbook) {
         this.sxssfWorkbook = workbook;
     }
 
     @Override
-    public ExcelSheet createSheet() {
+    public ExcelSheetExport createSheet() {
         return createSheet("sheet" + sheets.size());
     }
 
     @Override
-    public ExcelSheet createSheet(String sheetName) {
-        SXSSFExcelSheet sheet = new SXSSFExcelSheet(this.sxssfWorkbook, sheetName, this);
+    public ExcelSheetExport createSheet(String sheetName) {
+        SXSSFExcelExportSheet sheet = new SXSSFExcelExportSheet(this.sxssfWorkbook, sheetName, this);
         this.sheets.add(sheet);
         return sheet;
     }
 
     @Override
-    public ExcelSheet getSheet(int index) {
+    public ExcelSheetExport getSheet(int index) {
         return this.sheets.get(index);
     }
 
@@ -64,8 +64,16 @@ public class SXSSFExcelWorkBook extends SXSSFExcelExportAbstract implements Exce
             osw = new BufferedOutputStream(fos);
             this.sxssfWorkbook.write(osw);
         } finally {
-            if (osw != null) osw.close();
-            if (fos != null) fos.close();
+            try {
+                if (osw != null) osw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (fos != null) fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

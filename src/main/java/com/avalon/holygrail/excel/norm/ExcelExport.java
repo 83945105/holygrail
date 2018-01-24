@@ -1,6 +1,7 @@
 package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
+import com.avalon.holygrail.excel.model.ExcelCellAbstract;
 import com.avalon.holygrail.excel.model.ExcelCellError;
 import com.avalon.holygrail.excel.model.ExcelTitleAbstract;
 import com.avalon.holygrail.util.SortUtil;
@@ -19,11 +20,11 @@ import java.util.function.Consumer;
 public interface ExcelExport {
 
     /**
-     * 解析表头json数据
+     * 解析单元格json数据
      * @param titlesJson 表头json
      * @return 表头信息二维数组
      */
-    ExcelTitleAbstract[][] parseJson(String titlesJson);
+    ExcelCellAbstract[][] parseCellsJson(String titlesJson);
 
     /**
      * 构建表头单元格合并对象
@@ -105,12 +106,12 @@ public interface ExcelExport {
     }
 
     /**
-     * 解析表头json数据
+     * 解析json数据
      * @param inputStream json数据输入流
      * @return 表头信息二维数组
      * @throws IOException
      */
-    default ExcelTitleAbstract[][] parseJson(InputStream inputStream) throws IOException {
+    default ExcelCellAbstract[][] parseCellsJson(InputStream inputStream) throws IOException {
         InputStreamReader reader = null;
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
@@ -138,46 +139,17 @@ public interface ExcelExport {
                 e.printStackTrace();
             }
         }
-        return parseJson(sb.toString());
+        return parseCellsJson(sb.toString());
     }
 
     /**
-     * 解析表头json数据
+     * 解析单元格json数据
      * @param file json数据文件
      * @return 表头信息二维数组
      * @throws IOException
      */
-    default ExcelTitleAbstract[][] parseJson(File file) throws IOException {
-        FileInputStream fs = null;
-        InputStreamReader reader = null;
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-        try {
-            fs = new FileInputStream(file);
-            reader = new InputStreamReader(fs, "UTF-8");
-            br = new BufferedReader(reader);
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line.trim());
-            }
-        } finally {
-            try {
-                if (br != null) br.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (reader != null) reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (fs != null) fs.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return parseJson(sb.toString());
+    default ExcelCellAbstract[][] parseCellsJson(File file) throws IOException {
+        return this.parseCellsJson(new FileInputStream(file));
     }
 
     /**
