@@ -2,15 +2,16 @@ package com.avalon.holygrail.excel.model;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.avalon.holygrail.excel.norm.ExcelExport;
+import com.avalon.holygrail.excel.norm.ExcelParser;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.List;
 
 /**
- * SXSSFWorkbook
+ * SXSSFWorkbook 解析器
  * Created by 白超 on 2018/1/16.
  */
-public abstract class SXSSFExcelExportAbstract implements ExcelExport {
+public abstract class SXSSFExcelParserAbstract extends XSSFExcelParserAbstract {
 
     /**
      * 解析表头json数据
@@ -28,4 +29,15 @@ public abstract class SXSSFExcelExportAbstract implements ExcelExport {
         return rs;
     }
 
+    @Override
+    public SXSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) {
+        SXSSFMergeCell mergeCell = new SXSSFMergeCell();
+
+        mergeCell.setCellRangeAddress(new CellRangeAddress(startRow, endRow, startCol, endCol));
+
+        excelTitle.copyCellOption(mergeCell);//设置属性
+        excelTitle.copyCellStyle(mergeCell);//设置样式
+
+        return mergeCell;
+    }
 }

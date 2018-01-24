@@ -1,6 +1,6 @@
 package com.avalon.holygrail.excel.norm;
 
-import com.avalon.holygrail.excel.bean.SXSSFExcelExportSheet;
+import com.avalon.holygrail.excel.bean.SXSSFExcelSheetExport;
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
@@ -17,29 +17,7 @@ import java.util.function.Function;
  * Excel Sheet导出
  * Created by 白超 on 2018/1/17.
  */
-public interface ExcelSheetExport extends SheetExport {
-
-    /**
-     * 获取所属Excel工作簿
-     * @return Excel工作簿
-     */
-    ExcelExportWorkBook getOwnerWorkBook();
-
-    /**
-     * 导出Excel
-     * @param outFile 目标文件
-     * @return 当前对象
-     * @throws IOException
-     */
-    void export(File outFile) throws IOException;
-
-    /**
-     * 导出Excel
-     * @param outPath 导出地址
-     * @return 当前对象
-     * @throws IOException
-     */
-    void export(String outPath) throws IOException;
+public interface ExcelSheetExport extends SheetExportHandler {
 
     @Override
     ExcelSheetExport setRowCursor(Function<Integer, Integer> handler);
@@ -91,6 +69,27 @@ public interface ExcelSheetExport extends SheetExport {
     <T> ExcelSheetExport importData(Collection<T> records) throws ExportException;
 
     @Override
-    <T> ExcelSheetExport importData(Collection<T> records, SXSSFExcelExportSheet.FormatterCell<T> formatter) throws ExportException;
+    <T> ExcelSheetExport importData(Collection<T> records, SXSSFExcelSheetExport.FormatterCell<T> formatter) throws ExportException;
 
+    /**
+     * 获取所属Excel工作簿
+     * @return Excel工作簿
+     */
+    ExcelWorkBookExport getOwnerWorkBook();
+
+    /**
+     * 导出Excel
+     * @param outFile 目标文件
+     * @return 当前对象
+     * @throws IOException
+     */
+    void export(File outFile) throws IOException;
+
+    /**
+     * 导出Excel
+     * @param outPath 导出地址
+     * @return 当前对象
+     * @throws IOException
+     */
+    void export(String outPath) throws IOException;
 }

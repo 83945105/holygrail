@@ -1,6 +1,6 @@
 package com.avalon.holygrail.excel.norm;
 
-import com.avalon.holygrail.excel.bean.SXSSFExcelExportWorkBook;
+import com.avalon.holygrail.excel.bean.SXSSFExcelWorkBookExport;
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.exception.ExportException;
 
@@ -10,7 +10,7 @@ import java.io.*;
  * Excel导出工作簿
  * Created by 白超 on 2018/1/17.
  */
-public interface ExcelExportWorkBook {
+public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 创建工作表
@@ -31,12 +31,6 @@ public interface ExcelExportWorkBook {
      * @return 工作表对象
      */
     ExcelSheetExport getSheet(int index);
-
-    /**
-     * 获取总Sheet数
-     * @return 存在的Sheet数量
-     */
-    int getSheetSize();
 
     /**
      * 获取所有表格的数据总数
@@ -73,7 +67,7 @@ public interface ExcelExportWorkBook {
          * @param totalAllSheetDataSize WorkBook中所有Sheet已经导入的数据总数
          * @param totalSheetDataSize    本次创建的若干Sheet已经导入的数据中暑
          */
-        void accept(SheetExport sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws ExcelTitleException, IOException, ExportException;
+        void accept(SheetExportHandler sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws ExcelTitleException, IOException, ExportException;
     }
 
     @FunctionalInterface
@@ -88,7 +82,7 @@ public interface ExcelExportWorkBook {
          * @param totalSheetDataSize    本次创建的若干Sheet已经导入的数据中暑
          * @return 是否继续创建
          */
-        boolean accept(SheetExport sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws IOException, ExcelTitleException, ExportException;
+        boolean accept(SheetExportHandler sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws IOException, ExcelTitleException, ExportException;
     }
 
     /**
@@ -98,7 +92,7 @@ public interface ExcelExportWorkBook {
      * @param handlerSheet       处理Sheet
      * @return 当前工作簿对象
      */
-    default ExcelExportWorkBook createSheets(int totalSheet, SXSSFExcelExportWorkBook.FormatterSheetName formatterSheetName, SXSSFExcelExportWorkBook.HandlerSheetA handlerSheet) throws ExcelTitleException, IOException, ExportException {
+    default ExcelWorkBookExport createSheets(int totalSheet, SXSSFExcelWorkBookExport.FormatterSheetName formatterSheetName, SXSSFExcelWorkBookExport.HandlerSheetA handlerSheet) throws ExcelTitleException, IOException, ExportException {
         createSheets(formatterSheetName, (sheet, sheetIndex, index, totalAllSheetDataSize, totalSheetDataSize) -> {
             handlerSheet.accept(sheet, sheetIndex, index, totalAllSheetDataSize, totalSheetDataSize);
             if (index < totalSheet - 1) {
@@ -115,7 +109,7 @@ public interface ExcelExportWorkBook {
      * @param handlerSheet 处理Sheet
      * @return 当前工作簿对象
      */
-    default ExcelExportWorkBook createSheets(int totalSheet, SXSSFExcelExportWorkBook.HandlerSheetA handlerSheet) throws ExcelTitleException, IOException, ExportException {
+    default ExcelWorkBookExport createSheets(int totalSheet, SXSSFExcelWorkBookExport.HandlerSheetA handlerSheet) throws ExcelTitleException, IOException, ExportException {
         createSheets(totalSheet, (sheetIndex, index) -> "sheet" + sheetIndex, handlerSheet);
         return this;
     }
@@ -126,13 +120,13 @@ public interface ExcelExportWorkBook {
      * @param handlerSheet       处理Sheet,需要返回是否继续创建,最多创建100个Sheet
      * @return 当前工作簿对象
      */
-    default ExcelExportWorkBook createSheets(SXSSFExcelExportWorkBook.FormatterSheetName formatterSheetName, SXSSFExcelExportWorkBook.HandlerSheetB handlerSheet) throws IOException, ExcelTitleException, ExportException {
+    default ExcelWorkBookExport createSheets(SXSSFExcelWorkBookExport.FormatterSheetName formatterSheetName, SXSSFExcelWorkBookExport.HandlerSheetB handlerSheet) throws IOException, ExcelTitleException, ExportException {
         int totalAllSheetDataSize = getTotalSheetDataSize();
         int totalSheetDataSize = 0;
         boolean goon;
         for (int i = 0; i < 100; i++) {
             int sheetIndex = getSheetSize();
-            SheetExport s = createSheet(formatterSheetName.apply(sheetIndex, i));
+            SheetExportHandler s = createSheet(formatterSheetName.apply(sheetIndex, i));
             if (i > 0) {
                 totalAllSheetDataSize += getSheet(i - 1).getTotalDataSize();
                 totalSheetDataSize += getSheet(i - 1).getTotalDataSize();
@@ -150,7 +144,7 @@ public interface ExcelExportWorkBook {
      * @param handlerSheet 处理Sheet,需要返回是否继续创建,最多创建100个Sheet
      * @return 当前工作簿对象
      */
-    default ExcelExportWorkBook createSheets(SXSSFExcelExportWorkBook.HandlerSheetB handlerSheet) throws IOException, ExcelTitleException, ExportException {
+    default ExcelWorkBookExport createSheets(SXSSFExcelWorkBookExport.HandlerSheetB handlerSheet) throws IOException, ExcelTitleException, ExportException {
         createSheets((sheetIndex, index) -> "sheet" + sheetIndex, handlerSheet);
         return this;
     }

@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Excel导出
+ * Excel解析器
  * Created by 白超 on 2018/1/17.
  */
-public interface ExcelExport {
+public interface ExcelParser {
 
     /**
      * 解析单元格json数据

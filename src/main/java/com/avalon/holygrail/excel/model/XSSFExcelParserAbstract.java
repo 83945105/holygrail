@@ -1,0 +1,43 @@
+package com.avalon.holygrail.excel.model;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.avalon.holygrail.excel.norm.ExcelParser;
+import org.apache.poi.ss.util.CellRangeAddress;
+
+import java.util.List;
+
+/**
+ * XSSFWorkbook
+ * Created by 白超 on 2018/1/24.
+ */
+public abstract class XSSFExcelParserAbstract implements ExcelParser {
+
+    /**
+     * 解析表头json数据
+     * @param titlesJson 表头json
+     * @return 表头信息二维数组
+     */
+    @Override
+    public XSSFExcelTitle[][] parseCellsJson(String titlesJson) {
+        JSONArray jsonArray = JSON.parseArray(titlesJson);
+        XSSFExcelTitle[][] rs = new XSSFExcelTitle[jsonArray.size()][];
+        for (int i = 0; i < jsonArray.size(); i++) {
+            List<XSSFExcelTitle> list = JSON.parseArray(jsonArray.get(i).toString(), XSSFExcelTitle.class);
+            rs[i] = list.toArray(new XSSFExcelTitle[list.size()]);
+        }
+        return rs;
+    }
+
+    @Override
+    public XSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) {
+        XSSFMergeCell mergeCell = new XSSFMergeCell();
+
+        mergeCell.setCellRangeAddress(new CellRangeAddress(startRow, endRow, startCol, endCol));
+
+        excelTitle.copyCellOption(mergeCell);//设置属性
+        excelTitle.copyCellStyle(mergeCell);//设置样式
+
+        return mergeCell;
+    }
+}

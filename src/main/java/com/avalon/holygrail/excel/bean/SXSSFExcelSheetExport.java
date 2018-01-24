@@ -25,14 +25,14 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * SXSSFWorkbook SheetExport
+ * SXSSFWorkbook SheetExportHandler
  * Created by 白超 on 2018/1/17.
  */
-public class SXSSFExcelExportSheet extends SXSSFExcelExportWorkBook implements ExcelSheetExport {
+public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements ExcelSheetExport {
 
     protected SXSSFSheet sheet;//当前数据表对象
 
-    protected SXSSFExcelExportWorkBook ownerWorkBook;//所属工作簿对象
+    protected SXSSFExcelWorkBookExport ownerWorkBook;//所属工作簿对象
 
     protected List<MergeCell> titleMergeCells;//表头合并单元格信息
 
@@ -44,12 +44,12 @@ public class SXSSFExcelExportSheet extends SXSSFExcelExportWorkBook implements E
 
     protected int totalDataSize;//数据记录总数
 
-    public SXSSFExcelExportSheet(String sheetName, SXSSFExcelExportWorkBook ownerWorkBook) {
+    public SXSSFExcelSheetExport(String sheetName, SXSSFExcelWorkBookExport ownerWorkBook) {
         this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
         this.ownerWorkBook = ownerWorkBook;
     }
 
-    public SXSSFExcelExportSheet(SXSSFWorkbook workbook, String sheetName, SXSSFExcelExportWorkBook ownerWorkBook) {
+    public SXSSFExcelSheetExport(SXSSFWorkbook workbook, String sheetName, SXSSFExcelWorkBookExport ownerWorkBook) {
         super(workbook);
         this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
         this.ownerWorkBook = ownerWorkBook;
@@ -71,7 +71,7 @@ public class SXSSFExcelExportSheet extends SXSSFExcelExportWorkBook implements E
         SXSSFRow row = (SXSSFRow) this.sheet.getRow(rowIndex);
         if (row == null) {
             if (rowCursor >= rowIndex) {
-                throw new RuntimeException("SXSSFExcelExportSheet parseExportTitles rowCursor位置异常");
+                throw new RuntimeException("SXSSFExcelSheetExport parseExportTitles rowCursor位置异常");
             }
             row = (SXSSFRow) this.sheet.createRow(rowIndex);
         }
@@ -420,7 +420,7 @@ public class SXSSFExcelExportSheet extends SXSSFExcelExportWorkBook implements E
     }
 
     @Override
-    public SXSSFExcelExportWorkBook getOwnerWorkBook() {
+    public SXSSFExcelWorkBookExport getOwnerWorkBook() {
         return this.ownerWorkBook;
     }
 
@@ -445,7 +445,7 @@ public class SXSSFExcelExportSheet extends SXSSFExcelExportWorkBook implements E
     @Override
     public ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] excelTitles, boolean exportTitles) throws ExcelTitleException, ExportException {
         if (!(excelTitles instanceof SXSSFExcelTitle[][])) {
-            throw new ExportException("SXSSFExcelExportSheet setTitles excelTitles类型应该为SXSSFExcelTitle[][]");
+            throw new ExportException("SXSSFExcelSheetExport setTitles excelTitles类型应该为SXSSFExcelTitle[][]");
         }
         this.titleMergeCells = handlerExcelTitles(excelTitles);
         this.dataTitleMergeCells = this.searchDataTitleMergeCell(this.titleMergeCells);
