@@ -2,7 +2,7 @@ package com.avalon.holygrail.excel.bean;
 
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.exception.ExportException;
-import com.avalon.holygrail.excel.model.ExcelTitleAbstract;
+import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import com.avalon.holygrail.excel.model.SXSSFExcelTitle;
 import com.avalon.holygrail.excel.model.SXSSFMergeCell;
 import com.avalon.holygrail.excel.norm.ExcelSheetExport;
@@ -95,7 +95,7 @@ public class SXSSFExcelExportSheet extends SXSSFExcelExportWorkBook implements E
     }
 
     @Override
-    public SXSSFMergeCell buildTitleMergeCell(ExcelTitleAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) {
+    public SXSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) {
         SXSSFMergeCell mergeCell = new SXSSFMergeCell();
 
         mergeCell.setCellRangeAddress(new CellRangeAddress(rowCursor + startRow + 1, rowCursor + endRow + 1, colCursor + startCol + 1, colCursor + endCol + 1));
@@ -443,7 +443,7 @@ public class SXSSFExcelExportSheet extends SXSSFExcelExportWorkBook implements E
     }
 
     @Override
-    public ExcelSheetExport setTitles(ExcelTitleAbstract[][] excelTitles, boolean exportTitles) throws ExcelTitleException, ExportException {
+    public ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] excelTitles, boolean exportTitles) throws ExcelTitleException, ExportException {
         if (!(excelTitles instanceof SXSSFExcelTitle[][])) {
             throw new ExportException("SXSSFExcelExportSheet setTitles excelTitles类型应该为SXSSFExcelTitle[][]");
         }

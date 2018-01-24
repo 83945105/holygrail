@@ -3,7 +3,7 @@ package com.avalon.holygrail.excel.norm;
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.model.ExcelCellAbstract;
 import com.avalon.holygrail.excel.model.ExcelCellError;
-import com.avalon.holygrail.excel.model.ExcelTitleAbstract;
+import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import com.avalon.holygrail.util.SortUtil;
 
 import java.io.*;
@@ -35,7 +35,7 @@ public interface ExcelExport {
      * @param endCol     占用结束列
      * @return 单元格合并对象
      */
-    MergeCell buildTitleMergeCell(ExcelTitleAbstract excelTitle, int startRow, int endRow, int startCol, int endCol);
+    MergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol);
 
     /**
      * 搜寻影响数据的表头合并单元格数据
@@ -79,9 +79,9 @@ public interface ExcelExport {
      * @param handlerMergeCell 处理单元格合并对象回调函数
      * @throws ExcelTitleException
      */
-    default void handlerExcelTitles(ExcelTitleAbstract[][] titles, int defaultSeatRow, int defaultSeatCol, Consumer<MergeCell> handlerMergeCell) throws ExcelTitleException {
-        ExcelTitleAbstract[] excelTitles;
-        ExcelTitleAbstract excelTitle;
+    default void handlerExcelTitles(ExcelTitleCellAbstract[][] titles, int defaultSeatRow, int defaultSeatCol, Consumer<MergeCell> handlerMergeCell) throws ExcelTitleException {
+        ExcelTitleCellAbstract[] excelTitles;
+        ExcelTitleCellAbstract excelTitle;
         int endRow;//结束行
         int endCol;//结束列
         int[][] seat = new int[defaultSeatRow][defaultSeatCol];//位置
@@ -159,7 +159,7 @@ public interface ExcelExport {
      * @return 单元格合并集合
      * @throws ExcelTitleException
      */
-    default ArrayList<MergeCell> handlerExcelTitles(ExcelTitleAbstract[][] titles) throws ExcelTitleException {
+    default ArrayList<MergeCell> handlerExcelTitles(ExcelTitleCellAbstract[][] titles) throws ExcelTitleException {
         return handlerExcelTitles(titles, titles.length * 2, 10);
     }
 
@@ -171,7 +171,7 @@ public interface ExcelExport {
      * @return 单元格合并集合
      * @throws ExcelTitleException
      */
-    default ArrayList<MergeCell> handlerExcelTitles(ExcelTitleAbstract[][] titles, int defaultSeatRow, int defaultSeatCol) throws ExcelTitleException {
+    default ArrayList<MergeCell> handlerExcelTitles(ExcelTitleCellAbstract[][] titles, int defaultSeatRow, int defaultSeatCol) throws ExcelTitleException {
         ArrayList<MergeCell> rs = new ArrayList<>();
         handlerExcelTitles(titles, defaultSeatRow, defaultSeatCol, mergeCell -> rs.add(mergeCell));
         return rs;
@@ -201,7 +201,7 @@ public interface ExcelExport {
      * @param excelTitle  表头
      * @return 校验/扩充后的位置
      */
-    default int[][] validateExpandSeat(int[][] seat, int[] startCursor, ExcelTitleAbstract excelTitle) throws ExcelTitleException {
+    default int[][] validateExpandSeat(int[][] seat, int[] startCursor, ExcelTitleCellAbstract excelTitle) throws ExcelTitleException {
 
         int startRow = startCursor[0];
         int endRow = startRow + excelTitle.getRowSpan() - 1;

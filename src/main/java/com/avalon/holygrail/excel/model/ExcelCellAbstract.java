@@ -4,6 +4,7 @@ import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.CellStyle;
 
 /**
+ * Excel Cell属性
  * Created by 白超 on 2018/1/17.
  */
 public abstract class ExcelCellAbstract implements CellOption, CellStyle {
@@ -43,7 +44,7 @@ public abstract class ExcelCellAbstract implements CellOption, CellStyle {
     /**
      * 垂直对齐方式-默认顶部对齐
      */
-    protected String VAlign = "left";
+    protected String VAlign = "top";
     /**
      * 左边框
      */

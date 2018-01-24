@@ -61,6 +61,13 @@ public interface CellOption {
     void setType(String type);
 
     /**
+     * 设置类型
+     */
+    default void setType(CellType type) {
+        this.setType(type.name());
+    }
+
+    /**
      * 获取下拉框值
      */
     String[] getOptions();

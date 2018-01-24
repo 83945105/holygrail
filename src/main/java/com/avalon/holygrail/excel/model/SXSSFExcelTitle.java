@@ -4,7 +4,7 @@ package com.avalon.holygrail.excel.model;
  * SXSSFWorkbook 表头
  * Created by 白超 on 2018/1/16.
  */
-public class SXSSFExcelTitle extends ExcelTitleAbstract {
+public class SXSSFExcelTitle extends ExcelTitleCellAbstract {
 
     public SXSSFExcelTitle() {
     }

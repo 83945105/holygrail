@@ -1,6 +1,6 @@
 package com.avalon.holygrail.excel.bean;
 
-import com.avalon.holygrail.excel.model.ExcelTitleAbstract;
+import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import com.avalon.holygrail.excel.model.SXSSFExcelExportAbstract;
 import com.avalon.holygrail.excel.model.SXSSFMergeCell;
 import com.avalon.holygrail.excel.norm.ExcelSheetExport;
@@ -78,7 +78,7 @@ public class SXSSFExcelExportWorkBook extends SXSSFExcelExportAbstract implement
     }
 
     @Override
-    public SXSSFMergeCell buildTitleMergeCell(ExcelTitleAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) {
+    public SXSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) {
         SXSSFMergeCell mergeCell = new SXSSFMergeCell();
 
         mergeCell.setCellRangeAddress(new CellRangeAddress(startRow, endRow, startCol, endCol));
