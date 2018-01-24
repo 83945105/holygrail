@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.avalon</groupId>
+    <groupId>com.github.83945105</groupId>
     <artifactId>holygrail</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
@@ -11,17 +11,51 @@
     <name>holygrail</name>
     <description>Demo project for Spring Boot</description>
 
+    <!--    <parent>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-parent</artifactId>
+            <version>1.5.9.RELEASE</version>
+            <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;
+        </parent>-->
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.9.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
     </parent>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <tag>master</tag>
+        <url>https://github.com/83945105/holygrail</url>
+        <connection>https://github.com/83945105/holygrail.git</connection>
+        <developerConnection>https://github.com/83945105/holygrail</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <name>baichao</name>
+            <email>18606167809@163.com</email>
+            <url>https://github.com/83945105/holygrail</url>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <spring.version>4.3.13.RELEASE</spring.version>
+        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
+        <reflectasm.version>1.11.3</reflectasm.version>
+        <org.apache.poi.version>3.9</org.apache.poi.version>
+        <mysql-connector.version>6.0.6</mysql-connector.version>
+        <javax.servlet.version>4.0.0-b01</javax.servlet.version>
+        <com.alibaba.fastjson.version>1.2.7</com.alibaba.fastjson.version>
+        <com.alibaba.druid.version>1.0.26</com.alibaba.druid.version>
     </properties>
 
     <dependencies>
@@ -29,43 +63,43 @@
         <dependency>
             <groupId>com.esotericsoftware</groupId>
             <artifactId>reflectasm</artifactId>
-            <version>1.11.3</version>
+            <version>${reflectasm.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>3.9</version>
+            <version>${org.apache.poi.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.9</version>
+            <version>${org.apache.poi.version}</version>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
+            <version>${mysql-connector.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.0.26</version>
+            <version>${com.alibaba.druid.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.7</version>
+            <version>${com.alibaba.fastjson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.0-b01</version>
+            <version>${javax.servlet.version}</version>
         </dependency>
 
         <dependency>
@@ -101,26 +135,77 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <version>${spring-boot.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-<!--            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>-->
+            <!--            <plugin>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-maven-plugin</artifactId>
+                        </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <resources>
             <resource>
