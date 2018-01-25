@@ -1,5 +1,7 @@
 package com.avalon.holygrail.excel.norm;
 
+import com.avalon.holygrail.excel.exception.ExcelException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -53,7 +55,7 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
          * @param sheet 读取的Sheet
          * @param index 当前Sheet下标
          */
-        void accept(ExcelSheetImport sheet, int index);
+        void accept(ExcelSheetImport sheet, int index) throws IOException, ExcelException;
     }
 
     @FunctionalInterface
@@ -74,7 +76,7 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
      *
      * @param handlerSheet 操作读取的Sheet
      */
-    default void readSheets(HandlerSheetA handlerSheet) {
+    default void readSheets(HandlerSheetA handlerSheet) throws IOException, ExcelException {
         int totalSheetSize = this.getSheetSize();
         for (int i = 0; i < totalSheetSize; i++) {
             ExcelSheetImport sheet = this.getSheet(i);
