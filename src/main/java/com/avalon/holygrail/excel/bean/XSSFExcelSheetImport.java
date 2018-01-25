@@ -211,7 +211,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    protected <T> void loadRows(Class<T> clazz, HandlerRowA handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
+    protected <T> void loadRows(Class<T> clazz, HandlerRowA<T> handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
         Iterator<Row> rows = this.sheet.iterator();
         int i = 0;
         int start = rowCursor;//开始读取的行号
@@ -239,7 +239,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    protected <T> void loadRows(Class<T> clazz, HandlerRowB handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
+    protected <T> void loadRows(Class<T> clazz, HandlerRowB<T> handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
         Iterator<Row> rows = this.sheet.iterator();
         int i = 0;
         int start = rowCursor;//开始读取的行号
@@ -435,13 +435,13 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     }
 
     @Override
-    public <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowA handlerRow) throws ExcelException, InstantiationException, IllegalAccessException {
+    public <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowA<T> handlerRow) throws ExcelException, InstantiationException, IllegalAccessException {
         this.loadRows(clazz, handlerRow);
         return this;
     }
 
     @Override
-    public <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowB handlerRow) throws ExcelException, InstantiationException, IllegalAccessException {
+    public <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowB<T> handlerRow) throws ExcelException, InstantiationException, IllegalAccessException {
         this.loadRows(clazz, handlerRow);
         return this;
     }

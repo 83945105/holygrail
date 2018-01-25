@@ -174,7 +174,7 @@ public interface SheetImportHandler extends Sheet {
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowA handlerRow) throws ExcelException, InstantiationException, IllegalAccessException;
+    <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowA<T> handlerRow) throws ExcelException, InstantiationException, IllegalAccessException;
 
     /**
      * 读取数据
@@ -186,7 +186,7 @@ public interface SheetImportHandler extends Sheet {
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowB handlerRow) throws ExcelException, InstantiationException, IllegalAccessException;
+    <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowB<T> handlerRow) throws ExcelException, InstantiationException, IllegalAccessException;
 
     /**
      * 读取数据(使用默认数据类型或者表头设置的数据类型)
@@ -205,7 +205,7 @@ public interface SheetImportHandler extends Sheet {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    SheetImportHandler readRows(HandlerRowA handlerRow) throws ExcelException, IllegalAccessException, InstantiationException;
+    <T> SheetImportHandler readRows(HandlerRowA<T> handlerRow) throws ExcelException, IllegalAccessException, InstantiationException;
 
     /**
      * 读取数据(使用默认数据类型或者表头设置的数据类型)
@@ -215,7 +215,7 @@ public interface SheetImportHandler extends Sheet {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    SheetImportHandler readRows(HandlerRowB handlerRow) throws ExcelException, IllegalAccessException, InstantiationException;
+    <T> SheetImportHandler readRows(HandlerRowB<T> handlerRow) throws ExcelException, IllegalAccessException, InstantiationException;
 
     /**
      * 获取读到的数据
