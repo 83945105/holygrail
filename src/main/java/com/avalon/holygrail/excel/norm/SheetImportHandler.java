@@ -6,10 +6,7 @@ import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -17,6 +14,41 @@ import java.util.function.Function;
  * Created by 白超 on 2018/1/24.
  */
 public interface SheetImportHandler extends Sheet {
+
+    /**
+     * 操作行
+     */
+    @FunctionalInterface
+    interface HandlerRowA<T> {
+
+        /**
+         * 接收行
+         *
+         * @param record    当前行数据对象
+         * @param records   数据容器
+         * @param rowCursor 行游标
+         * @param index     当前行数据在数据容器中的下标
+         */
+        void accept(T record, ArrayList<T> records, int rowCursor, int index);
+    }
+
+    /**
+     * 操作行
+     */
+    @FunctionalInterface
+    interface HandlerRowB<T> {
+
+        /**
+         * 接收行
+         *
+         * @param record    当前行数据对象
+         * @param records   数据容器
+         * @param rowCursor 行游标
+         * @param index     当前行数据在数据容器中的下标
+         * @return 是否继续读取下一行
+         */
+        boolean apply(T record, ArrayList<T> records, int rowCursor, int index);
+    }
 
     @Override
     SheetImportHandler setRowCursor(Function<Integer, Integer> handler);
@@ -63,29 +95,56 @@ public interface SheetImportHandler extends Sheet {
      * @return 准备导入
      */
     <T> SheetImportHandler setColumnFields(List<String> fields, Class<T> clazz) throws ExcelException;
+    /**
+     * 设置列对应的数据属性
+     * @param rowSpan 占用行数
+     * @param fields 属性
+     * @param clazz 数据容器
+     * @return 准备导入
+     */
+    <T> SheetImportHandler setColumnFields(int rowSpan, List<String> fields, Class<T> clazz) throws ExcelException;
 
+    /**
+     * 设置列值
+     * 注意,使用该方法读取数据,设置的field应该与对应数据的列号相同
+     * @param fields
+     * @return
+     * @throws ExcelException
+     */
     default SheetImportHandler setColumnFields(String... fields) throws ExcelException {
-        return setColumnFields(Arrays.asList(fields), Map.class);
+        return setColumnFields(Arrays.asList(fields), HashMap.class);
+    }
+
+    /**
+     * 设置列值
+     * 注意,使用该方法读取数据,设置的field应该与对应数据的列号相同
+     * @param rowSpan 占用行数
+     * @param fields
+     * @return
+     * @throws ExcelException
+     */
+    default SheetImportHandler setColumnFields(int rowSpan, String... fields) throws ExcelException {
+        return setColumnFields(rowSpan, Arrays.asList(fields), HashMap.class);
     }
 
     @Override
     default SheetImportHandler parseTitlesJson(InputStream inputStream) throws IOException, ExcelException {
-        return parseTitlesJson(inputStream, Map.class);
+        return parseTitlesJson(inputStream, HashMap.class);
     }
 
     @Override
     default SheetImportHandler parseTitlesJson(File file) throws IOException, ExcelException {
-        return parseTitlesJson(file, Map.class);
+        return parseTitlesJson(file, HashMap.class);
     }
 
     @Override
     default SheetImportHandler parseTitlesJson(String titlesJson) throws ExcelException {
-        return parseTitlesJson(titlesJson, Map.class);
+        return parseTitlesJson(titlesJson, HashMap.class);
     }
 
     @Override
     default SheetImportHandler setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException {
-        return setTitles(titles, Map.class);
+        return setTitles(titles, HashMap.class);
     }
 
     /**
@@ -94,9 +153,89 @@ public interface SheetImportHandler extends Sheet {
      */
     int getPhysicalNumberOfRows();
 
+    /**
+     * 读取数据
+     * @param clazz 数据类型
+     * @param <T>
+     * @return 当前对象
+     * @throws ExcelException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     <T> SheetImportHandler readRows(Class<T> clazz) throws ExcelException, InstantiationException, IllegalAccessException;
 
-    default SheetImportHandler readRows() throws ExcelException, IllegalAccessException, InstantiationException {
-        return this.readRows(HashMap.class);
-    }
+    /**
+     * 读取数据
+     * @param clazz 数据类型
+     * @param handlerRow 操作当前行数据
+     * @param <T>
+     * @return 当前对象
+     * @throws ExcelException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowA handlerRow) throws ExcelException, InstantiationException, IllegalAccessException;
+
+    /**
+     * 读取数据
+     * @param clazz 数据类型
+     * @param handlerRow 操作当前行数据,返回false不继续读取下一行
+     * @param <T>
+     * @return 当前对象
+     * @throws ExcelException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowB handlerRow) throws ExcelException, InstantiationException, IllegalAccessException;
+
+    /**
+     * 读取数据(使用默认数据类型或者表头设置的数据类型)
+     * @return 当前对象
+     * @throws ExcelException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    SheetImportHandler readRows() throws ExcelException, IllegalAccessException, InstantiationException;
+
+    /**
+     * 读取数据(使用默认数据类型或者表头设置的数据类型)
+     * @param handlerRow 操作当前行数据
+     * @return 当前对象
+     * @throws ExcelException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    SheetImportHandler readRows(HandlerRowA handlerRow) throws ExcelException, IllegalAccessException, InstantiationException;
+
+    /**
+     * 读取数据(使用默认数据类型或者表头设置的数据类型)
+     * @param handlerRow 操作当前行数据,返回false不继续读取下一行
+     * @return 当前对象
+     * @throws ExcelException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    SheetImportHandler readRows(HandlerRowB handlerRow) throws ExcelException, IllegalAccessException, InstantiationException;
+
+    /**
+     * 获取读到的数据
+     * @param <T> 数据类型
+     * @return
+     */
+    <T> ArrayList<T> getReadData();
+
+    /**
+     * 根据下标获取第N次读取的数据
+     * @param index 下标
+     * @param <T> 数据类型
+     * @return
+     */
+    <T> ArrayList<T> getReadData(int index);
+
+    /**
+     * 获取所有读取的数据
+     * @param <T> 数据类型
+     * @return
+     */
+    <T> ArrayList<T> getAllReadData();
 }

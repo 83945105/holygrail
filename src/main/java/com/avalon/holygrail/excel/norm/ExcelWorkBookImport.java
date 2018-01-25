@@ -13,6 +13,7 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
 
     /**
      * 解析文件
+     *
      * @param inputStream 输入流
      * @return
      * @throws IOException
@@ -24,6 +25,7 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
 
     /**
      * 解析文件
+     *
      * @param file 文件
      * @return
      * @throws IOException
@@ -34,11 +36,65 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
 
     /**
      * 解析文件
+     *
      * @param path 文件路径
      * @return
      * @throws IOException
      */
     default ExcelWorkBookImport parseFile(String path) throws IOException {
         return this.parseFile(new File(path));
+    }
+
+    @FunctionalInterface
+    interface HandlerSheetA {
+        /**
+         * 接收当前读取的Sheet
+         *
+         * @param sheet 读取的Sheet
+         * @param index 当前Sheet下标
+         */
+        void accept(ExcelSheetImport sheet, int index);
+    }
+
+    @FunctionalInterface
+    interface HandlerSheetB {
+
+        /**
+         * 接收当前读取的Sheet,返回false不继续读取
+         *
+         * @param sheet 读取的Sheet
+         * @param index 当前Sheet下标
+         * @return
+         */
+        boolean apply(ExcelSheetImport sheet, int index);
+    }
+
+    /**
+     * 批量读取Sheet
+     *
+     * @param handlerSheet 操作读取的Sheet
+     */
+    default void readSheets(HandlerSheetA handlerSheet) {
+        int totalSheetSize = this.getSheetSize();
+        for (int i = 0; i < totalSheetSize; i++) {
+            ExcelSheetImport sheet = this.getSheet(i);
+            handlerSheet.accept(sheet, i);
+        }
+    }
+
+    /**
+     * 批量读取Sheet
+     *
+     * @param handlerSheet 操作读取的Sheet,返回false不继续读取
+     */
+    default void readSheets(HandlerSheetB handlerSheet) {
+        int totalSheetSize = this.getSheetSize();
+        for (int i = 0; i < totalSheetSize; i++) {
+            ExcelSheetImport sheet = this.getSheet(i);
+            boolean goon = handlerSheet.apply(sheet, i);
+            if (!goon) {
+                break;
+            }
+        }
     }
 }

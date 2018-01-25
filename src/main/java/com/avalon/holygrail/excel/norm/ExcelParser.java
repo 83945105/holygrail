@@ -238,7 +238,7 @@ public interface ExcelParser {
      * @param columnNum 列号
      * @return 对应的合并单元格,没找到返回null
      */
-    default MergeCell serchMergeCell(Collection<MergeCell> mergeCells, int columnNum) {
+    default MergeCell searchMergeCell(Collection<MergeCell> mergeCells, int columnNum) {
         for (MergeCell mergeCell : mergeCells) {
             if(columnNum >= mergeCell.getStartCol() && columnNum <= mergeCell.getEndCol()) {
                 return mergeCell;

@@ -1,13 +1,11 @@
 package com.avalon.holygrail.excel.bean;
 
 import com.avalon.holygrail.excel.exception.ExcelException;
-import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import com.avalon.holygrail.excel.model.SXSSFExcelTitle;
 import com.avalon.holygrail.excel.model.SXSSFMergeCell;
 import com.avalon.holygrail.excel.norm.ExcelSheetExport;
-import com.avalon.holygrail.excel.norm.ExcelWorkBookExport;
 import com.avalon.holygrail.excel.norm.MergeCell;
 import com.avalon.holygrail.util.ClassUtil;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -194,6 +192,27 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             return;
         }
         this.parseObject(record);
+    }
+
+    /**
+     * 格式化单元格
+     * @param <T>
+     */
+    @FunctionalInterface
+    public interface FormatterCell<T> {
+
+        /**
+         * 格式化单元格
+         *
+         * @param value     当前单元格值
+         * @param record    当前行数据
+         * @param mergeCell 单元格信息
+         * @param field     单元格所在列值
+         * @param rowCursor 当前行游标
+         * @param index     当前数据在数据集合中的下标
+         * @return 你要设置的单元格值
+         */
+        Object apply(Object value, T record, SXSSFMergeCell mergeCell, String field, int rowCursor, int index) throws ExportException;
     }
 
     protected <T> void parseRecord(T record, int index, FormatterCell<T> formatter) throws ExcelException {
@@ -384,23 +403,6 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     @Override
     public void export(String outPath) throws IOException {
         super.export(outPath);
-    }
-
-    @FunctionalInterface
-    public interface FormatterCell<T> {
-
-        /**
-         * 格式化单元格
-         *
-         * @param value     当前单元格值
-         * @param record    当前行数据
-         * @param mergeCell 单元格信息
-         * @param field     单元格所在列值
-         * @param rowCursor 当前行游标
-         * @param index     当前数据在数据集合中的下标
-         * @return 你要设置的单元格值
-         */
-        Object apply(Object value, T record, SXSSFMergeCell mergeCell, String field, int rowCursor, int index) throws ExportException;
     }
 
     /**

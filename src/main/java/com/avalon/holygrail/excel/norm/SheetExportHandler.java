@@ -2,7 +2,6 @@ package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.bean.SXSSFExcelSheetExport;
 import com.avalon.holygrail.excel.exception.ExcelException;
-import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 
 import java.io.File;
@@ -135,7 +134,7 @@ public interface SheetExportHandler extends Sheet {
      * @param <T> 数据类型
      * @return 当前对象
      */
-    <T> SheetExportHandler importData(Collection<T> records) throws ExportException, ExcelException;
+    <T> SheetExportHandler importData(Collection<T> records) throws ExcelException;
 
     /**
      * 导入数据
