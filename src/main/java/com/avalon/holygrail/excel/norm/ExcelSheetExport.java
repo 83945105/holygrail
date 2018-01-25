@@ -74,12 +74,6 @@ public interface ExcelSheetExport extends SheetExportHandler {
     <T> ExcelSheetExport importData(Collection<T> records, SXSSFExcelSheetExport.FormatterCell<T> formatter) throws ExcelException;
 
     /**
-     * 获取所属Excel工作簿
-     * @return Excel工作簿
-     */
-    ExcelWorkBookExport getOwnerWorkBook();
-
-    /**
      * 导出Excel
      * @param outFile 目标文件
      * @return 当前对象

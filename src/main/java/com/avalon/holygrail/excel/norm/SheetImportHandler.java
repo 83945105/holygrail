@@ -16,6 +16,13 @@ import java.util.function.Function;
 public interface SheetImportHandler extends Sheet {
 
     /**
+     * 获取所属Excel工作簿
+     * @return Excel工作簿
+     */
+    @Override
+    ExcelWorkBookImport getOwnerWorkBook();
+
+    /**
      * 操作行
      */
     @FunctionalInterface

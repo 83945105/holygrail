@@ -15,6 +15,12 @@ import java.util.function.Function;
 public interface Sheet {
 
     /**
+     * 获取所属Excel工作簿
+     * @return Excel工作簿
+     */
+    ExcelWorkBook getOwnerWorkBook();
+
+    /**
      * 设置行游标
      * @param handler 接收行号,返回你想设置的行号
      */

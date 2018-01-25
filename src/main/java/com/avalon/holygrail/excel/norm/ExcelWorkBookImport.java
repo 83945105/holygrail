@@ -68,28 +68,35 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
          * @param index 当前Sheet下标
          * @return
          */
-        boolean apply(ExcelSheetImport sheet, int index);
+        boolean apply(ExcelSheetImport sheet, int index) throws ExcelException, IllegalAccessException, InstantiationException, IOException;
     }
 
     /**
      * 批量读取Sheet
      *
      * @param handlerSheet 操作读取的Sheet
+     * @return
+     * @throws IOException
+     * @throws ExcelException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
-    default void readSheets(HandlerSheetA handlerSheet) throws IOException, ExcelException, IllegalAccessException, InstantiationException {
+    default ExcelWorkBookImport readSheets(HandlerSheetA handlerSheet) throws IOException, ExcelException, IllegalAccessException, InstantiationException {
         int totalSheetSize = this.getSheetSize();
         for (int i = 0; i < totalSheetSize; i++) {
             ExcelSheetImport sheet = this.getSheet(i);
             handlerSheet.accept(sheet, i);
         }
+        return this;
     }
 
     /**
      * 批量读取Sheet
      *
      * @param handlerSheet 操作读取的Sheet,返回false不继续读取
+     * @return
      */
-    default void readSheets(HandlerSheetB handlerSheet) {
+    default ExcelWorkBookImport readSheets(HandlerSheetB handlerSheet) throws IOException, ExcelException, IllegalAccessException, InstantiationException {
         int totalSheetSize = this.getSheetSize();
         for (int i = 0; i < totalSheetSize; i++) {
             ExcelSheetImport sheet = this.getSheet(i);
@@ -98,5 +105,6 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
                 break;
             }
         }
+        return this;
     }
 }

@@ -8,7 +8,6 @@ import com.avalon.holygrail.excel.model.XSSFMergeCell;
 import com.avalon.holygrail.excel.norm.ExcelSheetImport;
 import com.avalon.holygrail.excel.norm.ExcelWorkBookImport;
 import com.avalon.holygrail.excel.norm.MergeCell;
-import com.avalon.holygrail.excel.norm.SheetImportHandler;
 import com.avalon.holygrail.util.ClassUtil;
 import com.esotericsoftware.reflectasm.MethodAccess;
 import org.apache.poi.ss.usermodel.Cell;
@@ -24,7 +23,7 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * XSSFWorkBook SheetImportHandler
+ * XSSFWorkBook
  * Created by 白超 on 2018/1/24.
  */
 public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements ExcelSheetImport {
@@ -45,7 +44,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
 
     protected int physicalNumberOfRows;//物理行数
 
-    protected Class<?> clazz = ArrayList.class;//数据容器
+    protected Class<?> defaultClass = ArrayList.class;//默认数据容器
 
     private MethodAccess access = null;//对象的ASM,用于高效调用反射
 
@@ -129,6 +128,8 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
         });
     }
 
+    private Map<String, String> setMethodNames = new HashMap<>();
+
     /**
      * 装载对象
      *
@@ -148,25 +149,39 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
             } else {
                 tMergeCell.copyCellOptionSelective(mergeCell);
                 xssfLoader.copyCellOptionSelective(mergeCell);
-                this.typeLoader(mergeCell.getValue(), ClassUtil.getSetterMethodName(mergeCell.getField()), target);
+                String field = mergeCell.getField();
+                String methodName = setMethodNames.get(field);
+                if(methodName == null) {
+                    methodName = ClassUtil.getSetterMethodName(field);
+                    setMethodNames.put(field, methodName);
+                }
+                this.typeLoader(target, methodName, mergeCell.getValue());
             }
         });
     }
 
-    protected <T> void typeLoader(Object value, String methodName, T target) throws ExcelException {
+    /**
+     * 类型装载器
+     * @param target
+     * @param methodName
+     * @param value
+     * @param <T>
+     * @throws ExcelException
+     */
+    protected <T> void typeLoader(T target, String methodName, Object value) throws ExcelException {
         try {
             this.access.invoke(target, methodName, value);
         } catch (ClassCastException e) {
             if (value instanceof Double) {//Double => Integer
-                this.typeLoader(Integer.valueOf(NumberFormat.getInstance().format(Math.rint((Double) value))), methodName, target);
+                this.typeLoader(target, methodName, Integer.valueOf(NumberFormat.getInstance().format(Math.rint((Double) value))));
                 return;
             }
             if (value instanceof Integer) {//Integer => String
-                this.typeLoader(value.toString(), methodName, target);
+                this.typeLoader(target, methodName, value.toString());
                 return;
             }
             if (value instanceof Boolean) {
-                this.typeLoader(value.toString(), methodName, target);
+                this.typeLoader(target, methodName, value.toString());
                 return;
             }
             throw new ExcelException("无法将单元格值类型放入对象,类型不匹配", e);
@@ -374,7 +389,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
         this.dataTitleMergeCells = this.searchDataTitleMergeCells(this.titleMergeCells);
         this.parseExportTitles(this.dataTitleMergeCells);
         //this.dataTitleFields = this.searchDataTitleFields(this.dataTitleMergeCells);
-        this.clazz = clazz;
+        this.defaultClass = clazz;
         return this;
     }
 
@@ -386,7 +401,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
         this.dataTitleMergeCells = this.searchDataTitleMergeCells(this.titleMergeCells);
         this.parseExportTitles(this.dataTitleMergeCells, rowSpan);
         //this.dataTitleFields = this.searchDataTitleFields(this.dataTitleMergeCells);
-        this.clazz = clazz;
+        this.defaultClass = clazz;
         return this;
     }
 
@@ -429,38 +444,38 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     }
 
     @Override
-    public <T> SheetImportHandler readRows(Class<T> clazz) throws ExcelException, InstantiationException, IllegalAccessException {
+    public <T> ExcelSheetImport readRows(Class<T> clazz) throws ExcelException, InstantiationException, IllegalAccessException {
         this.loadRows(clazz);
         return this;
     }
 
     @Override
-    public <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowA<T> handlerRow) throws ExcelException, InstantiationException, IllegalAccessException {
+    public <T> ExcelSheetImport readRows(Class<T> clazz, HandlerRowA<T> handlerRow) throws ExcelException, InstantiationException, IllegalAccessException {
         this.loadRows(clazz, handlerRow);
         return this;
     }
 
     @Override
-    public <T> SheetImportHandler readRows(Class<T> clazz, HandlerRowB<T> handlerRow) throws ExcelException, InstantiationException, IllegalAccessException {
+    public <T> ExcelSheetImport readRows(Class<T> clazz, HandlerRowB<T> handlerRow) throws ExcelException, InstantiationException, IllegalAccessException {
         this.loadRows(clazz, handlerRow);
         return this;
     }
 
     @Override
-    public SheetImportHandler readRows() throws ExcelException, IllegalAccessException, InstantiationException {
-        this.loadRows(this.clazz);
+    public ExcelSheetImport readRows() throws ExcelException, IllegalAccessException, InstantiationException {
+        this.loadRows(this.defaultClass);
         return this;
     }
 
     @Override
-    public SheetImportHandler readRows(HandlerRowA handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
-        this.loadRows(this.clazz, handlerRow);
+    public ExcelSheetImport readRows(HandlerRowA handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
+        this.loadRows(this.defaultClass, handlerRow);
         return this;
     }
 
     @Override
-    public SheetImportHandler readRows(HandlerRowB handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
-        this.loadRows(this.clazz, handlerRow);
+    public ExcelSheetImport readRows(HandlerRowB handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
+        this.loadRows(this.defaultClass, handlerRow);
         return this;
     }
 

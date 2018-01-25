@@ -18,6 +18,9 @@ import java.util.function.Function;
  */
 public interface SheetExportHandler extends Sheet {
 
+    @Override
+    ExcelWorkBookExport getOwnerWorkBook();
+
     /**
      * 只读状态
      * @param readOnly 操作只读
@@ -150,4 +153,5 @@ public interface SheetExportHandler extends Sheet {
      * @return 数据总数
      */
     int getTotalDataSize();
+
 }
