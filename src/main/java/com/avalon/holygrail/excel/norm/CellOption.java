@@ -70,6 +70,13 @@ public interface CellOption {
     }
 
     /**
+     * 设置类型
+     */
+    default void setType(short value) {
+        this.setType(CellType.getCellTypeByValue(value));
+    }
+
+    /**
      * 获取下拉框值
      */
     String[] getOptions();
@@ -130,17 +137,34 @@ public interface CellOption {
     void setColSpan(Integer colSpan);
 
     /**
-     * 拷贝属性
+     * 拷贝属性(无视null)
      *
      * @param target 目标单元格
      */
-    default void copyCellOption(CellOption target) throws ExcelException {
+    default void copyCellOptionSelective(CellOption target) throws ExcelException {
         CellType type = getType();
-        target.setType(type == null ? CellType.TEXT.name() : type.name());
-        target.setValue(getValue());
-        target.setField(getField());
-        target.setWidth(getWidth());
-        target.setRowSpan(getRowSpan());
-        target.setColSpan(getColSpan());
+        if (type != null) {
+            target.setType(type);
+        }
+        Object value = getValue();
+        if (value != null) {
+            target.setValue(value);
+        }
+        String field = getField();
+        if (field != null) {
+            target.setField(field);
+        }
+        Integer width = getWidth();
+        if (width != null) {
+            target.setWidth(width);
+        }
+        Integer rowSpan = getRowSpan();
+        if (rowSpan != null) {
+            target.setRowSpan(rowSpan);
+        }
+        Integer colSpan = getColSpan();
+        if (colSpan != null) {
+            target.setColSpan(colSpan);
+        }
     }
 }

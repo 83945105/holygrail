@@ -18,6 +18,8 @@ public class SXSSFExcelWorkBookExport extends SXSSFExcelParserAbstract implement
 
     protected ArrayList<SXSSFExcelSheetExport> sheets = new ArrayList<>();
 
+    protected boolean readyOnlyGobal = false;//全局只读状态
+
     public SXSSFExcelWorkBookExport() {
         this.sxssfWorkbook = new SXSSFWorkbook();
     }
@@ -31,13 +33,19 @@ public class SXSSFExcelWorkBookExport extends SXSSFExcelParserAbstract implement
     }
 
     @Override
+    public ExcelWorkBookExport readOnlyGobal(ReadOnly readOnly) {
+        this.readyOnlyGobal = readOnly.apply(this.readyOnlyGobal);
+        return this;
+    }
+
+    @Override
     public ExcelSheetExport createSheet() {
         return createSheet("sheet" + sheets.size());
     }
 
     @Override
     public ExcelSheetExport createSheet(String sheetName) {
-        SXSSFExcelSheetExport sheet = new SXSSFExcelSheetExport(this.sxssfWorkbook, sheetName, this);
+        SXSSFExcelSheetExport sheet = new SXSSFExcelSheetExport(sheetName, this);
         this.sheets.add(sheet);
         return sheet;
     }

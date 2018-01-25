@@ -1,10 +1,13 @@
 package com.avalon.holygrail.excel.model;
 
+import com.avalon.holygrail.excel.norm.ExcelWorkBookExport;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 
 /**
@@ -21,6 +24,15 @@ public class XSSFMergeCell extends MergeCellAbstract {
      * 数据助手
      */
     protected DataValidationHelper dataValidationHelper;
+
+    protected CellStyle cellStyle;
+
+    public XSSFMergeCell() {
+    }
+
+    public XSSFMergeCell(CellStyle cellStyle) {
+        this.cellStyle = cellStyle;
+    }
 
     /**
      * 获取数据校验对象
@@ -75,5 +87,14 @@ public class XSSFMergeCell extends MergeCellAbstract {
     @Override
     public int getEndCol() {
         return this.cellRangeAddress.getLastColumn();
+    }
+
+    @Override
+    public void readOnly(ExcelWorkBookExport.ReadOnly readOnly) {
+        this.cellStyle.setLocked(readOnly.apply(this.cellStyle.getLocked()));
+    }
+
+    public void setCellStyle(CellStyle cellStyle) {
+        this.cellStyle = cellStyle;
     }
 }

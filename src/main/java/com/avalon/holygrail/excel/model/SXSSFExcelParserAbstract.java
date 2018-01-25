@@ -36,8 +36,8 @@ public abstract class SXSSFExcelParserAbstract extends XSSFExcelParserAbstract {
 
         mergeCell.setCellRangeAddress(new CellRangeAddress(startRow, endRow, startCol, endCol));
 
-        excelTitle.copyCellOption(mergeCell);//设置属性
-        excelTitle.copyCellStyle(mergeCell);//设置样式
+        excelTitle.copyCellOptionSelective(mergeCell);//设置属性
+        excelTitle.copyCellStyleByName(mergeCell);//设置样式
 
         return mergeCell;
     }

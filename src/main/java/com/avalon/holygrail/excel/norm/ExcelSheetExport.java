@@ -19,6 +19,9 @@ import java.util.function.Function;
 public interface ExcelSheetExport extends SheetExportHandler {
 
     @Override
+    ExcelSheetExport readOnlySheet(ExcelWorkBookExport.ReadOnly readOnly);
+
+    @Override
     ExcelSheetExport setRowCursor(Function<Integer, Integer> handler);
 
     @Override

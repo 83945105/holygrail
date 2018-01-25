@@ -58,6 +58,10 @@ public class SXSSFLoader implements CellOption, CellStyle {
                 return cell.getNumericCellValue();
             case Cell.CELL_TYPE_BOOLEAN:
                 return cell.getBooleanCellValue();
+            case Cell.CELL_TYPE_BLANK:
+                return "";
+            case Cell.CELL_TYPE_ERROR:
+                return cell.getErrorCellValue();
             default:
                 throw new ExcelException("暂不支持获取该单元格类型值");
         }
@@ -99,12 +103,12 @@ public class SXSSFLoader implements CellOption, CellStyle {
 
     @Override
     public Integer getWidth() {
-        return null;
+        return sheet.getColumnWidth(cell.getColumnIndex());
     }
 
     @Override
     public void setWidth(Integer width) {
-
+        sheet.setColumnWidth(cell.getColumnIndex(), width);
     }
 
     @Override
@@ -195,15 +199,6 @@ public class SXSSFLoader implements CellOption, CellStyle {
                 this.getBorderRight(),
                 this.getBorderBottom()
         };
-    }
-
-    @Override
-    public void setBorder(String border) {
-        String[] borders = border.split(",");
-        this.setBorderLeft(borders[0]);
-        this.setBorderTop(borders[1]);
-        this.setBorderRight(borders[2]);
-        this.setBorderBottom(borders[3]);
     }
 
     public SXSSFSheet getSheet() {

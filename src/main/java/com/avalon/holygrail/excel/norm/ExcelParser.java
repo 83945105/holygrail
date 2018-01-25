@@ -8,10 +8,7 @@ import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import com.avalon.holygrail.util.SortUtil;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -233,6 +230,21 @@ public interface ExcelParser {
             }
         }
         return seat;
+    }
+
+    /**
+     * 搜寻指定列号对应的合并单元格
+     * @param mergeCells 单元格合并集合
+     * @param columnNum 列号
+     * @return 对应的合并单元格,没找到返回null
+     */
+    default MergeCell serchMergeCell(Collection<MergeCell> mergeCells, int columnNum) {
+        for (MergeCell mergeCell : mergeCells) {
+            if(columnNum >= mergeCell.getStartCol() && columnNum <= mergeCell.getEndCol()) {
+                return mergeCell;
+            }
+        }
+        return null;
     }
 
     /**

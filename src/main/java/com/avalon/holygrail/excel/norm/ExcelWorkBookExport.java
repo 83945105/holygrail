@@ -11,6 +11,22 @@ import java.io.*;
  */
 public interface ExcelWorkBookExport extends ExcelWorkBook {
 
+    interface ReadOnly {
+        /**
+         * 接收当前全局只读状态,返回你想设置的全局只读状态
+         * @param readOnly 只读状态
+         * @return 你想设置的只读状态
+         */
+        boolean apply(boolean readOnly);
+    }
+
+    /**
+     * 只读状态
+     * @param readOnly 操作只读
+     * @return 当前对象
+     */
+    ExcelWorkBookExport readOnlyGobal(ReadOnly readOnly);
+
     /**
      * 创建工作表
      * @return 工作表对象

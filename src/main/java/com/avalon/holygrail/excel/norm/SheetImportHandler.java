@@ -94,9 +94,9 @@ public interface SheetImportHandler extends Sheet {
      */
     int getPhysicalNumberOfRows();
 
-    <T> SheetImportHandler readRows(Class<T> clazz) throws ExcelException;
+    <T> SheetImportHandler readRows(Class<T> clazz) throws ExcelException, InstantiationException, IllegalAccessException;
 
-    default SheetImportHandler readRows() throws ExcelException {
+    default SheetImportHandler readRows() throws ExcelException, IllegalAccessException, InstantiationException {
         return this.readRows(HashMap.class);
     }
 }

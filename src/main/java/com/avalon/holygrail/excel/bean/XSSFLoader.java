@@ -6,6 +6,7 @@ import com.avalon.holygrail.excel.norm.CellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 /**
  * XSSF装载器
@@ -13,12 +14,15 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
  */
 public class XSSFLoader implements CellOption, CellStyle {
 
+    protected XSSFSheet sheet;
+
     protected XSSFCell cell;
 
     public XSSFLoader() {
     }
 
-    public XSSFLoader(XSSFCell cell) {
+    public XSSFLoader(XSSFSheet sheet, XSSFCell cell) {
+        this.sheet = sheet;
         this.cell = cell;
     }
 
@@ -56,6 +60,10 @@ public class XSSFLoader implements CellOption, CellStyle {
                 return cell.getNumericCellValue();
             case Cell.CELL_TYPE_BOOLEAN:
                 return cell.getBooleanCellValue();
+            case Cell.CELL_TYPE_BLANK:
+                return "";
+            case Cell.CELL_TYPE_ERROR:
+                return cell.getErrorCellValue();
             default:
                 throw new ExcelException("暂不支持获取该单元格类型值");
         }
@@ -97,12 +105,12 @@ public class XSSFLoader implements CellOption, CellStyle {
 
     @Override
     public Integer getWidth() {
-        return null;
+        return sheet.getColumnWidth(cell.getColumnIndex());
     }
 
     @Override
     public void setWidth(Integer width) {
-
+        sheet.setColumnWidth(cell.getColumnIndex(), width);
     }
 
     @Override
@@ -193,15 +201,6 @@ public class XSSFLoader implements CellOption, CellStyle {
                 this.getBorderRight(),
                 this.getBorderBottom()
         };
-    }
-
-    @Override
-    public void setBorder(String border) {
-        String[] borders = border.split(",");
-        this.setBorderLeft(borders[0]);
-        this.setBorderTop(borders[1]);
-        this.setBorderRight(borders[2]);
-        this.setBorderBottom(borders[3]);
     }
 
     public XSSFCell getCell() {

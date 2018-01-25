@@ -38,8 +38,8 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
 
         mergeCell.setCellRangeAddress(new CellRangeAddress(startRow, endRow, startCol, endCol));
 
-        excelTitle.copyCellOption(mergeCell);//设置属性
-        excelTitle.copyCellStyle(mergeCell);//设置样式
+        excelTitle.copyCellOptionSelective(mergeCell);//设置属性
+        excelTitle.copyCellStyleByName(mergeCell);//设置样式
 
         return mergeCell;
     }
@@ -49,6 +49,7 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
      * @param mergeCellList 单元格合并信息
      * @return 数据Fields
      */
+    @Deprecated
     public ArrayList<String> searchDataTitleFields(List<MergeCell> mergeCellList) {
         ArrayList<String> fs = new ArrayList<>();
         int start = 0;

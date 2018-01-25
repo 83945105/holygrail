@@ -7,6 +7,7 @@ import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import com.avalon.holygrail.excel.model.SXSSFExcelTitle;
 import com.avalon.holygrail.excel.model.SXSSFMergeCell;
 import com.avalon.holygrail.excel.norm.ExcelSheetExport;
+import com.avalon.holygrail.excel.norm.ExcelWorkBookExport;
 import com.avalon.holygrail.excel.norm.MergeCell;
 import com.avalon.holygrail.util.ClassUtil;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -45,15 +46,20 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
 
     protected int totalDataSize;//数据记录总数
 
+    protected boolean readOnlySheet = false;//工作表只读状态
+
     public SXSSFExcelSheetExport(String sheetName, SXSSFExcelWorkBookExport ownerWorkBook) {
+        super(ownerWorkBook.sxssfWorkbook);
         this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
         this.ownerWorkBook = ownerWorkBook;
+        this.readOnlySheet = this.getReadOnlyGobal();
     }
 
     public SXSSFExcelSheetExport(SXSSFWorkbook workbook, String sheetName, SXSSFExcelWorkBookExport ownerWorkBook) {
-        super(workbook);
+        super(ownerWorkBook.sxssfWorkbook);
         this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
         this.ownerWorkBook = ownerWorkBook;
+        this.readOnlySheet = this.getReadOnlyGobal();
     }
 
     @FunctionalInterface
@@ -101,8 +107,8 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
 
         mergeCell.setCellRangeAddress(new CellRangeAddress(rowCursor + startRow + 1, rowCursor + endRow + 1, colCursor + startCol + 1, colCursor + endCol + 1));
 
-        excelTitle.copyCellOption(mergeCell);//设置属性
-        excelTitle.copyCellStyle(mergeCell);//设置样式
+        excelTitle.copyCellOptionSelective(mergeCell);//设置属性
+        excelTitle.copyCellStyleByName(mergeCell);//设置样式
 
         return mergeCell;
     }
@@ -119,11 +125,18 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             this.sheet.addValidationData(mergeCell.getDataValidation());
         }
         XSSFCellStyle cellStyle = (XSSFCellStyle) this.sxssfWorkbook.createCellStyle();
+        mergeCell.setCellStyle(cellStyle);
         SXSSFLoader sxssfLoader = new SXSSFLoader(this.sheet, cell, cellStyle);
         //设置属性
-        mergeCell.copyCellOption(sxssfLoader);
+        mergeCell.copyCellOptionSelective(sxssfLoader);
         //设置样式
-        mergeCell.copyCellStyle(sxssfLoader);
+        mergeCell.copyCellStyleByName(sxssfLoader);
+        //设置是否只读
+        if(this.readOnlySheet) {//只读
+            cellStyle.setLocked(true);
+        }else {
+            cellStyle.setLocked(false);
+        }
     }
 
     /**
@@ -198,7 +211,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             for (MergeCell titleMergeCell : dataTitleMergeCells) {
                 SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
                 SXSSFMergeCell mergeCell = new SXSSFMergeCell();
-                tMergeCell.copyCellOption(mergeCell);
+                tMergeCell.copyCellOptionSelective(mergeCell);
 //                    tMergeCell.copyCellStyle(mergeCell);
                 //创建当前行的合并单元格
                 mergeCell.setCellRangeAddress(new CellRangeAddress(rowIndex, rowIndex, tMergeCell.getStartCol(), tMergeCell.getEndCol()));
@@ -234,7 +247,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             for (MergeCell titleMergeCell : dataTitleMergeCells) {
                 SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
                 SXSSFMergeCell mergeCell = new SXSSFMergeCell();
-                tMergeCell.copyCellOption(mergeCell);
+                tMergeCell.copyCellOptionSelective(mergeCell);
 //                    tMergeCell.copyCellStyle(mergeCell);
                 //创建当前行的合并单元格
                 mergeCell.setCellRangeAddress(new CellRangeAddress(rowIndex, rowIndex, tMergeCell.getStartCol(), tMergeCell.getEndCol()));
@@ -279,7 +292,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             for (MergeCell titleMergeCell : dataTitleMergeCells) {
                 SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
                 SXSSFMergeCell mergeCell = new SXSSFMergeCell();
-                tMergeCell.copyCellOption(mergeCell);
+                tMergeCell.copyCellOptionSelective(mergeCell);
 //                    tMergeCell.copyCellStyle(mergeCell);
                 //创建当前行的合并单元格
                 mergeCell.setCellRangeAddress(new CellRangeAddress(rowIndex, rowIndex, tMergeCell.getStartCol(), tMergeCell.getEndCol()));
@@ -316,7 +329,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             for (MergeCell titleMergeCell : dataTitleMergeCells) {
                 SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
                 SXSSFMergeCell mergeCell = new SXSSFMergeCell();
-                tMergeCell.copyCellOption(mergeCell);
+                tMergeCell.copyCellOptionSelective(mergeCell);
 //                    tMergeCell.copyCellStyle(mergeCell);
                 //创建当前行的合并单元格
                 mergeCell.setCellRangeAddress(new CellRangeAddress(rowIndex, rowIndex, tMergeCell.getStartCol(), tMergeCell.getEndCol()));
@@ -406,15 +419,29 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
         }
     }
 
+    /**
+     * 获取全局只读属性
+     * @return
+     */
+    public boolean getReadOnlyGobal() {
+        return this.ownerWorkBook.readyOnlyGobal;
+    }
+
+    @Override
+    public ExcelSheetExport readOnlySheet(ReadOnly readOnly) {
+        this.readOnlySheet = readOnly.apply(this.readOnlySheet);
+        return this;
+    }
+
     @Override
     public ExcelSheetExport setRowCursor(Function<Integer, Integer> handler) {
-        rowCursor = handler.apply(rowCursor);
+        this.rowCursor = handler.apply(rowCursor);
         return this;
     }
 
     @Override
     public ExcelSheetExport setColCursor(Function<Integer, Integer> handler) {
-        colCursor = handler.apply(colCursor);
+        this.colCursor = handler.apply(colCursor);
         return this;
     }
 

@@ -12,16 +12,12 @@ import java.io.IOException;
  */
 public class Test {
 
-    public static void main(String[] args) throws IOException, ExcelException {
-
-        Export.buildSXSSFExportExcelWorkBook()
-                .createSheet()
-                .parseTitlesJson("")
-                .importData(null)
-                .export("");
+    public static void main(String[] args) throws IOException, ExcelException, InstantiationException, IllegalAccessException {
 
         Import.buildXSSFImportExcelWorkBook()
-                .parseFile(new File("D://SubScoreRangeManager.xlsx"))
-                .getSheet(0).readRows();
+                .parseFile(new File("I://SubExamTimeManager.xlsx"))
+                .getSheet(0)
+                .parseTitlesJson(Test.class.getResourceAsStream("/com/avalon/holygrail/excel/model/SubExamTimeExcelTitle.js"))
+                .readRows();
     }
 }

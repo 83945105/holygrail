@@ -202,12 +202,4 @@ public abstract class ExcelCellAbstract implements CellOption, CellStyle {
         };
     }
 
-    @Override
-    public void setBorder(String border) {
-        String[] borders = border.split(",");
-        this.setBorderLeft(borders[0]);
-        this.setBorderTop(borders[1]);
-        this.setBorderRight(borders[2]);
-        this.setBorderBottom(borders[3]);
-    }
 }

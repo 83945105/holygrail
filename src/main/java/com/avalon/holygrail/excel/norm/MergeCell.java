@@ -23,4 +23,10 @@ public interface MergeCell {
      * @return
      */
     int getEndCol();
+
+    /**
+     * 只读
+     * @return 操作只读状态
+     */
+    void readOnly(ExcelWorkBookExport.ReadOnly readOnly);
 }

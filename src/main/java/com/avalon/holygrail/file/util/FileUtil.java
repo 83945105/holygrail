@@ -37,7 +37,7 @@ public class FileUtil {
      * @return 资源全路径
      */
     public static String getRealPath(String path) {
-        return PROJECT_PATH + path;
+        return PROJECT_PATH + File.separator + path;
     }
 
     /**

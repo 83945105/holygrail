@@ -11,6 +11,7 @@ import com.avalon.holygrail.excel.norm.MergeCell;
 import com.avalon.holygrail.excel.norm.SheetImportHandler;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
@@ -42,15 +43,18 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
 
     protected int physicalNumberOfRows;//物理行数
 
-    protected Class<?> clazz = HashMap.class;//数据容器
+    protected Class<?> clazz = ArrayList.class;//数据容器
+
+    protected ArrayList<ArrayList<?>> loadDatasList = new ArrayList<>();//每次读取的数据集合,按照读取次数顺序放入
 
     public XSSFExcelSheetImport(XSSFSheet sheet, XSSFExcelWorkBookImport ownerWorkBook) {
+        super(ownerWorkBook.xssfWorkbook);
         this.sheet = sheet;
         this.ownerWorkBook = ownerWorkBook;
         this.physicalNumberOfRows = this.sheet.getPhysicalNumberOfRows();
     }
 
-    protected void loadHashMap(Row row) throws ExcelException {
+    protected void loadMap(Row row, Map<String, Object> container) throws ExcelException, IllegalAccessException, InstantiationException {
         Iterator<Cell> cells = row.iterator();
         int j = 0;
         XSSFCell cell;
@@ -59,33 +63,79 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
                 continue;
             }
             cell = (XSSFCell) cells.next();
-            XSSFLoader xssfLoader = new XSSFLoader(cell);
+
+            XSSFLoader xssfLoader = new XSSFLoader(this.sheet, cell);
             XSSFMergeCell mergeCell = new XSSFMergeCell();
-            xssfLoader.copyCellOption(mergeCell);
+            xssfLoader.copyCellStyleByValue(mergeCell);
 
+            XSSFMergeCell tMergeCell = (XSSFMergeCell) this.serchMergeCell(this.dataTitleMergeCells, cell.getColumnIndex());
+
+            if(tMergeCell == null) {
+                container.put("["+cell.getRowIndex()+","+cell.getColumnIndex()+"]", xssfLoader.getValue());
+            }else {
+                tMergeCell.copyCellOptionSelective(mergeCell);
+                xssfLoader.copyCellOptionSelective(mergeCell);
+                container.put(mergeCell.getField(), mergeCell.getValue());
+            }
         }
     }
 
-    protected <T> void loadRow(Class<T> clazz, Row row) throws ExcelException {
-        if (clazz == HashMap.class || clazz == Map.class) {
-            this.loadHashMap(row);
-            return;
-        }
-        if (clazz == LinkedHashMap.class) {
+    protected void loadCollection(Row row, Collection<?> container) {
 
-            return;
-        }
     }
 
-    protected <T> void loadRows(Class<T> clazz) throws ExcelException {
+    public static void main(String[] args) {
+        Class c = Map.class;
+        System.out.println(Collection.class.isAssignableFrom(c));
+    }
+
+    protected <T> T loadRow(Class<T> clazz, Row row) throws ExcelException, InstantiationException, IllegalAccessException {
+        T rs = clazz.newInstance();
+        if (Map.class.isAssignableFrom(clazz)) {//Map集合
+            this.loadMap(row, (Map<String, Object>) rs);
+            return rs;
+        }
+        if (Collection.class.isAssignableFrom(clazz)) {//表示使用集合去装载数据,此时不记录field
+            this.loadCollection(row, (Collection<?>) rs);
+            return rs;
+        }
+        return null;
+    }
+
+    protected <T> void loadRows(Class<T> clazz) throws ExcelException, IllegalAccessException, InstantiationException {
         Iterator<Row> rows = this.sheet.iterator();
         int i = 0;
+        int start = rowCursor;//开始读取的行号
+        ArrayList<T> records = new ArrayList<>();
+        loadDatasList.add(records);//每次读取向总容器中创建一个子容器
         while (rows.hasNext()) {
-            if (i < rowCursor) {//小于行游标的不读
+            if (i++ <= start) {//小于等于行游标的不读
+                rows.next();
                 continue;
             }
-            this.loadRow(clazz, rows.next());
+            T row = this.loadRow(clazz, rows.next());
+            records.add(row);
+            rowCursor++;//读完一行游标下移
         }
+        loadDatasList.add(records);
+    }
+
+    /**
+     * 解析表头
+     *
+     * @param titles 表头合并单元格信息
+     */
+    protected void parseExportTitles(Collection<MergeCell> titles) throws ExcelException {
+        int maxRowIndex = rowCursor;
+        for (MergeCell title : titles) {
+            XSSFMergeCell mergeCell = (XSSFMergeCell) title;
+            if (mergeCell.getEndRow() > maxRowIndex) {
+                maxRowIndex = mergeCell.getEndRow();
+            }
+        }
+        //记录行号
+        int finalMaxRowIndex = maxRowIndex;
+        setRowCursor(idx -> finalMaxRowIndex);
     }
 
     @Override
@@ -130,7 +180,8 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
         }
         this.titleMergeCells = handlerExcelTitles(excelTitles);
         this.dataTitleMergeCells = this.searchDataTitleMergeCells(this.titleMergeCells);
-        this.dataTitleFields = this.searchDataTitleFields(this.dataTitleMergeCells);
+        this.parseExportTitles(this.dataTitleMergeCells);
+        //this.dataTitleFields = this.searchDataTitleFields(this.dataTitleMergeCells);
         this.clazz = clazz;
         return this;
     }
@@ -155,7 +206,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     }
 
     @Override
-    public <T> SheetImportHandler readRows(Class<T> clazz) throws ExcelException {
+    public <T> SheetImportHandler readRows(Class<T> clazz) throws ExcelException, InstantiationException, IllegalAccessException {
         this.loadRows(clazz);
         return this;
     }

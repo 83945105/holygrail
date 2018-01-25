@@ -2,11 +2,12 @@ package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.bean.SXSSFExcelSheetExport;
 import com.avalon.holygrail.excel.exception.ExcelException;
-import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +18,13 @@ import java.util.function.Function;
  * Created by 白超 on 2018/1/19.
  */
 public interface SheetExportHandler extends Sheet {
+
+    /**
+     * 只读状态
+     * @param readOnly 操作只读
+     * @return 当前对象
+     */
+    SheetExportHandler readOnlySheet(ExcelWorkBookExport.ReadOnly readOnly);
 
     /**
      * 设置行游标
