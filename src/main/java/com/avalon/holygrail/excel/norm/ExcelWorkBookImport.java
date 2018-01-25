@@ -55,7 +55,7 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
          * @param sheet 读取的Sheet
          * @param index 当前Sheet下标
          */
-        void accept(ExcelSheetImport sheet, int index) throws IOException, ExcelException;
+        void accept(ExcelSheetImport sheet, int index) throws IOException, ExcelException, InstantiationException, IllegalAccessException;
     }
 
     @FunctionalInterface
@@ -76,7 +76,7 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
      *
      * @param handlerSheet 操作读取的Sheet
      */
-    default void readSheets(HandlerSheetA handlerSheet) throws IOException, ExcelException {
+    default void readSheets(HandlerSheetA handlerSheet) throws IOException, ExcelException, IllegalAccessException, InstantiationException {
         int totalSheetSize = this.getSheetSize();
         for (int i = 0; i < totalSheetSize; i++) {
             ExcelSheetImport sheet = this.getSheet(i);
