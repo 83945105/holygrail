@@ -9,7 +9,13 @@
     <packaging>jar</packaging>
 
     <name>holygrail</name>
-    <description>Demo project for Spring Boot</description>
+    <description>
+        包含一些通用工具:
+        1、包装POI导入导出Excel,实现简简单单几行代码导出自定义样式Excel及导入Excel自动注入目标对象等若干功能
+        2、包含一套基于spring、springmvc的异常处理与数据格式约定
+        3、一些工具类
+        4、陆续开发中
+    </description>
 
     <!--    <parent>
             <groupId>org.springframework.boot</groupId>
