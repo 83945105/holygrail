@@ -105,12 +105,12 @@ public class XSSFLoader implements CellOption, CellStyle {
 
     @Override
     public Integer getWidth() {
-        return sheet.getColumnWidth(cell.getColumnIndex());
+        return null;
     }
 
     @Override
     public void setWidth(Integer width) {
-        sheet.setColumnWidth(cell.getColumnIndex(), width);
+
     }
 
     @Override
@@ -122,6 +122,7 @@ public class XSSFLoader implements CellOption, CellStyle {
     public void setRowSpan(Integer rowSpan) {
 
     }
+
 
     @Override
     public Integer getColSpan() {

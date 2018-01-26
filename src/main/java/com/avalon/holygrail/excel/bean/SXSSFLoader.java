@@ -103,12 +103,12 @@ public class SXSSFLoader implements CellOption, CellStyle {
 
     @Override
     public Integer getWidth() {
-        return sheet.getColumnWidth(cell.getColumnIndex());
+        return null;
     }
 
     @Override
     public void setWidth(Integer width) {
-        sheet.setColumnWidth(cell.getColumnIndex(), width);
+
     }
 
     @Override
