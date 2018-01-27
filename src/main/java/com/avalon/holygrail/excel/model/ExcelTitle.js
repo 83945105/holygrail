@@ -4,8 +4,7 @@
     rowSpan: 2,
     colSpan: 2,
     width: 12,
-    borderLeft: 'DASHED',
-    options:[]
+    borderLeft: 'DASHED'
 },{
     title: '学段类型',
     field: 'username',

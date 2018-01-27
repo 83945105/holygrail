@@ -62,6 +62,14 @@ public abstract class ExcelCellAbstract implements CellOption, CellStyle {
      */
     protected String borderBottom = "none";
 
+    public ExcelCellAbstract() {
+    }
+
+    public ExcelCellAbstract(Integer rowSpan, Integer colSpan) {
+        this.rowSpan = rowSpan;
+        this.colSpan = colSpan;
+    }
+
     @Override
     public CellType getType() {
         return CellType.getCellTypeByName(type);

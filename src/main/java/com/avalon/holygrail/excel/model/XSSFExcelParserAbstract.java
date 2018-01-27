@@ -34,9 +34,7 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
 
     @Override
     public XSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException {
-        XSSFMergeCell mergeCell = new XSSFMergeCell();
-
-        mergeCell.setCellRangeAddress(new CellRangeAddress(startRow, endRow, startCol, endCol));
+        XSSFMergeCell mergeCell = new XSSFMergeCell(startRow, startCol , endRow - startRow + 1, endCol - startCol + 1);
 
         excelTitle.copyCellOptionSelective(mergeCell);//设置属性
         excelTitle.copyCellStyleByName(mergeCell);//设置样式

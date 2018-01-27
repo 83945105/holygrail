@@ -14,7 +14,7 @@
         1、包装POI导入导出Excel,实现简简单单几行代码导出自定义样式Excel及导入Excel自动注入目标对象等若干功能
         2、包含一套基于spring、springmvc的异常处理与数据格式约定
         3、一些工具类
-        4、陆续开发中
+        4、其它功能陆续开发中
     </description>
 
     <!--    <parent>
@@ -138,7 +138,7 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
             <version>${spring-boot.version}</version>
@@ -154,7 +154,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build>

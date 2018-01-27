@@ -11,41 +11,25 @@ import java.io.*;
  */
 public interface ExcelWorkBookExport extends ExcelWorkBook {
 
-    interface ReadOnly {
-        /**
-         * 接收当前全局只读状态,返回你想设置的全局只读状态
-         * @param readOnly 只读状态
-         * @return 你想设置的只读状态
-         */
-        boolean apply(boolean readOnly);
-    }
-
-    /**
-     * 只读状态
-     * @param readOnly 操作只读
-     * @return 当前对象
-     */
-    ExcelWorkBookExport readOnlyGobal(ReadOnly readOnly);
-
     /**
      * 创建工作表
      * @return 工作表对象
      */
-    ExcelSheetExport createSheet();
+    SheetExportHandler createSheet();
 
     /**
      * 创建工作表
      * @param sheetName 工作表表名
      * @return 工作表对象
      */
-    ExcelSheetExport createSheet(String sheetName);
+    SheetExportHandler createSheet(String sheetName);
 
     /**
      * 获取工作表
      * @param index 下标
      * @return 工作表对象
      */
-    ExcelSheetExport getSheet(int index);
+    SheetExportHandler getSheet(int index);
 
     /**
      * 获取所有表格的数据总数
@@ -199,7 +183,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * @param path 路径
      * @throws IOException
      */
-    default void exportTemplateJavaScriptFile(String path) throws IOException {
+    static void exportTemplateJavaScriptFile(String path) throws IOException {
         InputStream is = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
@@ -210,7 +194,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
         OutputStreamWriter osw = null;
         BufferedWriter bw = null;
         try {
-            is = this.getClass().getResourceAsStream(TEMPLATE_JAVASCRIPT_FILE_PATH);
+            is = ExcelWorkBookExport.class.getResourceAsStream(TEMPLATE_JAVASCRIPT_FILE_PATH);
             isr = new InputStreamReader(is, "UTF-8");
             br = new BufferedReader(isr);
 

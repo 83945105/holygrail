@@ -70,8 +70,8 @@ public class SXSSFLoader implements CellOption, CellStyle {
     @Override
     public void setValue(Object value) {
         if (value == null) {
-            cell.setCellType(SXSSFCell.CELL_TYPE_STRING);
-            cell.setCellValue("");
+            cell.setCellType(SXSSFCell.CELL_TYPE_BLANK);
+//            cell.setCellValue("");
             return;
         }
         if (value instanceof String) {

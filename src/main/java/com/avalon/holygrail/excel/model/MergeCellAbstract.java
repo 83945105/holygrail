@@ -15,14 +15,25 @@ public abstract class MergeCellAbstract extends ExcelCellAbstract implements Mer
      */
     protected String VAlign = "center";
 
-    @Override
-    public Integer getRowSpan() {
-        return this.getEndRow() - this.getStartRow() + 1;
+    /**
+     * 开始行
+     */
+    protected Integer startRow;
+
+    /**
+     * 开始列
+     */
+    protected Integer startCol;
+
+    public MergeCellAbstract(Integer startRow, Integer startCol) {
+        this.startRow = startRow;
+        this.startCol = startCol;
     }
 
-    @Override
-    public Integer getColSpan() {
-        return this.getEndCol() - this.getStartCol() + 1;
+    public MergeCellAbstract(Integer startRow, Integer startCol, Integer rowSpan, Integer colSpan) {
+        super(rowSpan, colSpan);
+        this.startRow = startRow;
+        this.startCol = startCol;
     }
 
     @Override
@@ -33,6 +44,26 @@ public abstract class MergeCellAbstract extends ExcelCellAbstract implements Mer
     @Override
     public void setVAlign(String VAlign) {
         this.VAlign = VAlign.toLowerCase();
+    }
+
+    @Override
+    public Integer getStartRow() {
+        return this.startRow;
+    }
+
+    @Override
+    public Integer getEndRow() {
+        return this.startRow + this.rowSpan - 1;
+    }
+
+    @Override
+    public Integer getStartCol() {
+        return startCol;
+    }
+
+    @Override
+    public Integer getEndCol() {
+        return this.startCol + this.colSpan - 1;
     }
 
 }

@@ -9,24 +9,19 @@ public interface MergeCell {
     /**
      * 获取开始行
      */
-    int getStartRow();
+    Integer getStartRow();
     /**
      * 获取结束行
      */
-    int getEndRow();
+    Integer getEndRow();
     /**
      * 获取开始列
      */
-    int getStartCol();
+    Integer getStartCol();
     /**
      * 获取结束列
      * @return
      */
-    int getEndCol();
+    Integer getEndCol();
 
-    /**
-     * 只读
-     * @return 操作只读状态
-     */
-    void readOnly(ExcelWorkBookExport.ReadOnly readOnly);
 }

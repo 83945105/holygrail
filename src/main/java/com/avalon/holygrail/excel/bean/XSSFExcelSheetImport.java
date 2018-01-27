@@ -92,15 +92,11 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     protected void loadMap(Row row, Map<String, Object> container) throws ExcelException {
         this.parseRow(row, cell -> {
             XSSFLoader xssfLoader = new XSSFLoader(this.sheet, cell);
-            XSSFMergeCell mergeCell = new XSSFMergeCell();
-            xssfLoader.copyCellStyleByValue(mergeCell);
             XSSFMergeCell tMergeCell = (XSSFMergeCell) this.searchMergeCell(this.dataTitleMergeCells, cell.getColumnIndex());
             if (tMergeCell == null) {
                 container.put("[" + cell.getRowIndex() + "," + cell.getColumnIndex() + "]", xssfLoader.getValue());
             } else {
-                tMergeCell.copyCellOptionSelective(mergeCell);
-                xssfLoader.copyCellOptionSelective(mergeCell);
-                container.put(mergeCell.getField(), mergeCell.getValue());
+                container.put(tMergeCell.getField(), xssfLoader.getValue());
             }
         });
     }
@@ -115,16 +111,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     protected void loadCollection(Row row, Collection<Object> container) throws ExcelException {
         this.parseRow(row, cell -> {
             XSSFLoader xssfLoader = new XSSFLoader(this.sheet, cell);
-            XSSFMergeCell mergeCell = new XSSFMergeCell();
-            xssfLoader.copyCellStyleByValue(mergeCell);
-            XSSFMergeCell tMergeCell = (XSSFMergeCell) this.searchMergeCell(this.dataTitleMergeCells, cell.getColumnIndex());
-            if (tMergeCell == null) {
-                container.add(xssfLoader.getValue());
-            } else {
-                tMergeCell.copyCellOptionSelective(mergeCell);
-                xssfLoader.copyCellOptionSelective(mergeCell);
-                container.add(mergeCell.getValue());
-            }
+            container.add(xssfLoader.getValue());
         });
     }
 
@@ -141,27 +128,22 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     protected <T> void loadObject(Row row, T target) throws ExcelException {
         this.parseRow(row, cell -> {
             XSSFLoader xssfLoader = new XSSFLoader(this.sheet, cell);
-            XSSFMergeCell mergeCell = new XSSFMergeCell();
-            xssfLoader.copyCellStyleByValue(mergeCell);
             XSSFMergeCell tMergeCell = (XSSFMergeCell) this.searchMergeCell(this.dataTitleMergeCells, cell.getColumnIndex());
-            if (tMergeCell == null) {
-
-            } else {
-                tMergeCell.copyCellOptionSelective(mergeCell);
-                xssfLoader.copyCellOptionSelective(mergeCell);
-                String field = mergeCell.getField();
+            if (tMergeCell != null) {
+                String field = tMergeCell.getField();
                 String methodName = setMethodNames.get(field);
-                if(methodName == null) {
+                if (methodName == null) {
                     methodName = ClassUtil.getSetterMethodName(field);
                     setMethodNames.put(field, methodName);
                 }
-                this.typeLoader(target, methodName, mergeCell.getValue());
+                this.typeLoader(target, methodName, xssfLoader.getValue());
             }
         });
     }
 
     /**
      * 类型装载器
+     *
      * @param target
      * @param methodName
      * @param value
@@ -184,7 +166,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
                 this.typeLoader(target, methodName, value.toString());
                 return;
             }
-            throw new ExcelException("无法将单元格值类型放入对象,类型不匹配", e);
+            throw new ExcelException("无法将单元格类型值注入对象,类型不匹配", e);
         }
     }
 
@@ -229,19 +211,19 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     protected <T> void loadRows(Class<T> clazz, HandlerRowA<T> handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
         Iterator<Row> rows = this.sheet.iterator();
         int i = 0;
-        int start = rowCursor;//开始读取的行号
+        int start = this.rowCursor;//开始读取的行号
         ArrayList<T> records = new ArrayList<>();
         while (rows.hasNext()) {
             if (i++ <= start) {//小于等于行游标的不读
                 rows.next();
                 continue;
             }
-            rowCursor++;//读完一行游标下移
+            this.rowCursor++;//读完一行游标下移
             T row = this.loadRow(clazz, rows.next());
             records.add(row);
-            handlerRow.accept(row, records, rowCursor, records.size() - 1);
+            handlerRow.accept(row, records, this.rowCursor, records.size() - 1);
         }
-        loadDatasList.add(records);
+        this.loadDatasList.add(records);
     }
 
     /**
@@ -268,7 +250,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
             T row = this.loadRow(clazz, rows.next());
             records.add(row);
             boolean goon = handlerRow.apply(row, records, rowCursor, records.size() - 1);
-            if(!goon) {
+            if (!goon) {
                 break;
             }
         }
@@ -322,7 +304,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     /**
      * 解析表头
      *
-     * @param titles 表头合并单元格信息
+     * @param titles  表头合并单元格信息
      * @param rowSpan 占用行数
      */
     protected void parseExportTitles(Collection<MergeCell> titles, int rowSpan) throws ExcelException {
