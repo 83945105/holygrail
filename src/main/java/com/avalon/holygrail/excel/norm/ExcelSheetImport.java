@@ -24,6 +24,16 @@ public interface ExcelSheetImport extends SheetImportHandler {
     ExcelSheetImport setColCursor(Function<Integer, Integer> handler);
 
     @Override
+    default ExcelSheetImport setRowNum(Function<Integer, Integer> handler) {
+        return this.setRowCursor(rowCursor -> handler.apply(rowCursor + 1) - 1);
+    }
+
+    @Override
+    default ExcelSheetImport setColumnNum(Function<Integer, Integer> handler) {
+        return this.setColCursor(colCursor -> handler.apply(colCursor + 1) - 1);
+    }
+
+    @Override
     <T> ExcelSheetImport parseTitlesJson(String titlesJson, Class<T> clazz) throws ExcelException;
 
     @Override

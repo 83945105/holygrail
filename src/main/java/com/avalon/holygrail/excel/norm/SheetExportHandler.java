@@ -129,12 +129,12 @@ public interface SheetExportHandler extends Sheet {
     int getTotalDataSize();
 
     @Override
-    default SheetExportHandler setRowIndex(Function<Integer, Integer> handler) {
+    default SheetExportHandler setRowNum(Function<Integer, Integer> handler) {
         return this.setRowCursor(rowCursor -> handler.apply(rowCursor + 1) - 1);
     }
 
     @Override
-    default SheetExportHandler setColumnIndex(Function<Integer, Integer> handler) {
+    default SheetExportHandler setColumnNum(Function<Integer, Integer> handler) {
         return this.setColCursor(colCursor -> handler.apply(colCursor + 1) - 1);
     }
 }
