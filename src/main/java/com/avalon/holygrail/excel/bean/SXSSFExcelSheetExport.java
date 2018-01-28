@@ -5,11 +5,11 @@ import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import com.avalon.holygrail.excel.model.SXSSFExcelTitle;
 import com.avalon.holygrail.excel.model.SXSSFMergeCell;
+import com.avalon.holygrail.excel.norm.CellHandler;
 import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.ExcelSheetExport;
 import com.avalon.holygrail.excel.norm.MergeCell;
 import com.avalon.holygrail.util.ClassUtil;
-import com.esotericsoftware.reflectasm.MethodAccess;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
@@ -75,6 +75,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 throw new ExportException("SXSSFExcelSheetExport parseExportTitles rowCursor位置异常");
             }
             row = (SXSSFRow) this.sheet.createRow(rowIndex);
+            this.setRowCursor(rowCursor -> rowIndex);
         }
         return row;
     }
@@ -204,15 +205,15 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
         /**
          * 格式化单元格
          *
-         * @param value     当前单元格值
-         * @param record    当前行数据
-         * @param mergeCell 单元格信息
-         * @param field     单元格所在列值
-         * @param rowCursor 当前行游标
-         * @param index     当前数据在数据集合中的下标
+         * @param value       当前单元格值
+         * @param record      当前行数据
+         * @param cellHandler 操作单元格
+         * @param field       单元格所在列值
+         * @param rowCursor   当前行游标
+         * @param index       当前数据在数据集合中的下标
          * @return 你要设置的单元格值
          */
-        Object apply(Object value, T record, SXSSFMergeCell mergeCell, String field, int rowCursor, int index) throws ExportException;
+        Object apply(Object value, T record, CellHandler cellHandler, String field, int rowCursor, int index) throws ExportException;
     }
 
     protected <T> void parseRecord(T record, int index, FormatterCell<T> formatter) throws ExcelException {
@@ -246,12 +247,9 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 break;
             }
         }
-        //记录行游标
-        this.setRowCursor(idx -> idx + 1);
     }
 
     protected void parseMap(Map<String, Object> record, int index, FormatterCell<Map<String, Object>> formatter) throws ExcelException {
-        int maxRowSpan = 0;
         for (MergeCell titleMergeCell : dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
             //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
@@ -275,7 +273,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                     value = "";
                 }
                 //格式化
-                value = formatter.apply(value, record, mergeCell, mergeCell.getField(), rowCursor, index);
+                value = formatter.apply(value, record, mergeCell, mergeCell.getField(), this.rowCursor, index);
                 mergeCell.setValue(value);
                 this.buildCell(mergeCell);
                 //添加合并单元格
@@ -283,13 +281,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 this.sheet.addMergedRegion(cellRangeAddress);
                 break;
             }
-            if (mergeCell.getRowSpan() > maxRowSpan) {
-                maxRowSpan = mergeCell.getRowSpan();
-            }
         }
-        //记录行游标
-        int finalMaxRowSpan = maxRowSpan;
-        this.setRowCursor(idx -> idx + finalMaxRowSpan);
     }
 
     protected <T> void parseObject(T record) throws ExcelException {
@@ -318,13 +310,10 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 break;
             }
         }
-        //记录行游标
-        this.setRowCursor(idx -> idx + 1);
     }
 
     protected <T> void parseObject(T record, int index, FormatterCell<T> formatter) throws ExcelException {
         ArrayList<Field> fs = ClassUtil.getAllFields(record.getClass());
-        int maxRowSpan = 0;
         for (MergeCell titleMergeCell : this.dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
             //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
@@ -350,7 +339,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                     value = "";
                 }
                 //格式化
-                value = formatter.apply(value, record, mergeCell, mergeCell.getField(), rowCursor, index);
+                value = formatter.apply(value, record, mergeCell, mergeCell.getField(), this.rowCursor, index);
                 mergeCell.setValue(value);
                 this.buildCell(mergeCell);
                 //添加合并单元格
@@ -358,17 +347,11 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 this.sheet.addMergedRegion(cellRangeAddress);
                 break;
             }
-            if (mergeCell.getRowSpan() > maxRowSpan) {
-                maxRowSpan = mergeCell.getRowSpan();
-            }
         }
-        //记录行游标
-        int finalMaxRowSpan = maxRowSpan;
-        this.setRowCursor(idx -> idx + finalMaxRowSpan);
     }
 
-    private Class cls = Object.class;
-    private MethodAccess access = null;
+//    private Class cls = Object.class;
+//    private MethodAccess access = null;
 
     /**
      * 解析数据

@@ -96,4 +96,15 @@ public interface ExcelSheetExport extends SheetExportHandler {
      * @throws IOException
      */
     void export(String outPath) throws IOException;
+
+    @Override
+    default ExcelSheetExport setRowIndex(Function<Integer, Integer> handler) {
+        return this.setRowCursor(rowCursor -> handler.apply(rowCursor + 1) - 1);
+    }
+
+    @Override
+    default ExcelSheetExport setColumnIndex(Function<Integer, Integer> handler) {
+        return this.setColCursor(colCursor -> handler.apply(colCursor + 1) - 1);
+    }
+
 }

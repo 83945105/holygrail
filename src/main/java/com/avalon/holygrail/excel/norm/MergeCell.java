@@ -24,4 +24,15 @@ public interface MergeCell {
      */
     Integer getEndCol();
 
+    /**
+     * 设置开始行
+     * @param startRow 开始行号
+     */
+    void setStartRow(Integer startRow);
+
+    /**
+     * 设置开始列
+     * @param startCol 开始列号
+     */
+    void setStartCol(Integer startCol);
 }

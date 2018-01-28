@@ -23,12 +23,14 @@ public interface Sheet {
     /**
      * 设置行游标
      * @param handler 接收行号,返回你想设置的行号
+     * @return
      */
     Sheet setRowCursor(Function<Integer, Integer> handler);
 
     /**
      * 设置列游标
      * @param handler 接收列号,返回你想设置的列号
+     * @return
      */
     Sheet setColCursor(Function<Integer, Integer> handler);
 
@@ -59,4 +61,22 @@ public interface Sheet {
      * @return 准备导出
      */
     Sheet setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException;
+
+    /**
+     * 设置行号
+     * @param handler 接收当前行号,返回你想设置的行号
+     * @return
+     */
+    default Sheet setRowIndex(Function<Integer, Integer> handler) {
+        return this.setRowCursor(rowCursor -> handler.apply(rowCursor + 1) - 1);
+    }
+
+    /**
+     * 设置列号
+     * @param handler 接收当前列号,返回你想设置的列号
+     * @return
+     */
+    default Sheet setColumnIndex(Function<Integer, Integer> handler) {
+        return this.setColCursor(colCursor -> handler.apply(colCursor + 1) - 1);
+    }
 }
