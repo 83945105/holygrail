@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class SXSSFExcelParserAbstract extends XSSFExcelParserAbstract {
 
     /**
-     * 解析表头json数据
+     * 解析单元格json数据
      * @param titlesJson 表头json
      * @return 表头信息二维数组
      */
