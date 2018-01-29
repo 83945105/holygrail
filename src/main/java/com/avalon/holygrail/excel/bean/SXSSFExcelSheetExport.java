@@ -71,7 +71,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     protected SXSSFRow findRow(int rowIndex) throws ExcelException {
         SXSSFRow row = (SXSSFRow) this.sheet.getRow(rowIndex);
         if (row == null) {
-            if (rowCursor >= rowIndex) {
+            if (this.rowCursor >= rowIndex) {
                 throw new ExportException("SXSSFExcelSheetExport parseExportTitles rowCursor位置异常");
             }
             row = (SXSSFRow) this.sheet.createRow(rowIndex);
@@ -98,8 +98,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     //重写表头构建方法,主要关联了行游标和列游标
     @Override
     public SXSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException {
-        SXSSFMergeCell mergeCell = new SXSSFMergeCell(rowCursor + startRow + 1, rowCursor + endRow + 1, endRow - startCol + 1, endCol - startCol + 1);
-
+        SXSSFMergeCell mergeCell = new SXSSFMergeCell(this.rowCursor + startRow + 1, this.colCursor + startCol + 1, endRow - startRow + 1, endCol - startCol + 1);
         excelTitle.copyCellOptionSelective(mergeCell);//设置属性
         excelTitle.copyCellStyleByName(mergeCell);//设置样式
 
@@ -157,21 +156,14 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
      * @param titles 表头合并单元格信息
      */
     protected void parseExportTitles(Collection<MergeCell> titles) throws ExcelException {
-        int maxRowIndex = rowCursor;
         for (MergeCell title : titles) {
             SXSSFMergeCell mergeCell = (SXSSFMergeCell) title;
-            if (mergeCell.getEndRow() > maxRowIndex) {
-                maxRowIndex = mergeCell.getEndRow();
-            }
             //开始处理合并单元格
             this.buildCell(mergeCell);
             //添加合并单元格
             CellRangeAddress cellRangeAddress = new CellRangeAddress(mergeCell.getStartRow(), mergeCell.getEndRow(), mergeCell.getStartCol(), mergeCell.getEndCol());
             this.sheet.addMergedRegion(cellRangeAddress);
         }
-        //记录行号
-        int finalMaxRowIndex = maxRowIndex;
-        setRowCursor(idx -> finalMaxRowIndex);
     }
 
     /**
@@ -225,11 +217,12 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     }
 
     protected void parseMap(Map<String, Object> record) throws ExcelException {
+        int startRow = this.rowCursor + 1;
         for (MergeCell titleMergeCell : dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
             //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
-            SXSSFMergeCell mergeCell = new SXSSFMergeCell(this.rowCursor + 1, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
-            tMergeCell.copyCellOptionSelective(mergeCell);
+            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
+            mergeCell.setField(tMergeCell.getField());
             for (Map.Entry<String, Object> entry : record.entrySet()) {
                 if (!entry.getKey().equals(mergeCell.getField())) {
                     continue;
@@ -250,11 +243,12 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     }
 
     protected void parseMap(Map<String, Object> record, int index, FormatterCell<Map<String, Object>> formatter) throws ExcelException {
+        int startRow = this.rowCursor + 1;
         for (MergeCell titleMergeCell : dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
             //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
-            SXSSFMergeCell mergeCell = new SXSSFMergeCell(this.rowCursor + 1, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
-            tMergeCell.copyCellOptionSelective(mergeCell);
+            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
+            mergeCell.setField(tMergeCell.getField());
             int i = 0;
             for (Map.Entry<String, Object> entry : record.entrySet()) {
                 boolean last = i++ == record.size() - 1;
@@ -285,12 +279,13 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     }
 
     protected <T> void parseObject(T record) throws ExcelException {
+        int startRow = this.rowCursor + 1;
         ArrayList<Field> fs = ClassUtil.getAllFields(record.getClass());
         for (MergeCell titleMergeCell : dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
             //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
-            SXSSFMergeCell mergeCell = new SXSSFMergeCell(this.rowCursor + 1, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
-            tMergeCell.copyCellOptionSelective(mergeCell);
+            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
+            mergeCell.setField(tMergeCell.getField());
             for (Field f : fs) {
                 f.setAccessible(true);
                 if (!f.getName().equals(mergeCell.getField())) {
@@ -313,12 +308,13 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     }
 
     protected <T> void parseObject(T record, int index, FormatterCell<T> formatter) throws ExcelException {
+        int startRow = this.rowCursor + 1;
         ArrayList<Field> fs = ClassUtil.getAllFields(record.getClass());
         for (MergeCell titleMergeCell : this.dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
             //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
-            SXSSFMergeCell mergeCell = new SXSSFMergeCell(this.rowCursor + 1, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
-            tMergeCell.copyCellOptionSelective(mergeCell);
+            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
+            mergeCell.setField(tMergeCell.getField());
             for (int i = 0; i < fs.size(); i++) {
                 Field f = fs.get(i);
                 f.setAccessible(true);
