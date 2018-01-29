@@ -7,6 +7,19 @@ package com.avalon.holygrail.util;
 public class StringUtil {
 
     /**
+     * 验证字符串是否为空
+     * @param str
+     * @return
+     */
+    public static boolean isEmpty(String str) {
+        return str == null || str.trim().length() == 0;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(StringUtil.isEmpty(null));
+    }
+
+    /**
      * 字符串转Unicode编码
      *
      * @param str 字符串
@@ -119,12 +132,4 @@ public class StringUtil {
         return new String(bytes);
     }
 
-    public static void main(String[] args) {
-        System.out.println(stringToUnicode("awfwe你好/wefew"));
-        System.out.println(stringToHexString(stringToUnicode("awfwe你好/wefew")));
-        System.out.println(hexStringToString(stringToHexString(stringToUnicode("awfwe你好/wefew"))));
-        System.out.println(unicodeToString(hexStringToString(stringToHexString(stringToUnicode("awfwe你好/wefew")))));
-        System.out.println(stringDirectToHexString("awfwe你好/wefew"));
-        System.out.println(hexStringDirectToString(stringDirectToHexString("awfwe你好/wefew")));
-    }
 }
