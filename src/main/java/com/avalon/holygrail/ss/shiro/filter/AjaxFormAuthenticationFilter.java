@@ -111,16 +111,10 @@ public class AjaxFormAuthenticationFilter extends FormAuthenticationFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-
-        if (HttpUtil.isAjax(httpRequest)) {
-            this.shiroHandler.onAjaxAccessDenied(request, response);
-            return false;
-        } else {
-            return super.onAccessDenied(request, response);
+        if(HttpUtil.isAjax((HttpServletRequest) request)) {
+            return this.shiroHandler.onVisitorAccessDenied(request, response);
         }
-
+        return super.onAccessDenied(request, response);
     }
 
     public void setUsernameKey(String usernameKey) {

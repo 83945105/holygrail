@@ -1,13 +1,11 @@
 package com.avalon.holygrail.ss.shiro.filter;
 
 import com.avalon.holygrail.ss.shiro.plugins.ShiroHandler;
-import com.avalon.holygrail.util.HttpUtil;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,16 +32,10 @@ public class ResourceCheckFilter extends AccessControlFilter {
 
     //进入此方法说明报错
     @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 
-        HttpServletRequest hReq = (HttpServletRequest) request;
+        this.shiroHandler.onUserAccessDenied(request, response);
 
-        //String url = getPathWithinApplication(request);
-        if (HttpUtil.isAjax(hReq)) {
-            this.shiroHandler.onAjaxAccessDenied(request, response);
-        } else {
-            this.shiroHandler.onAccessDenied(request, response);
-        }
         return false;
     }
 
