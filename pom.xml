@@ -56,6 +56,7 @@
         <javax.servlet.version>4.0.0-b01</javax.servlet.version>
         <com.alibaba.fastjson.version>1.2.7</com.alibaba.fastjson.version>
         <com.alibaba.druid.version>1.0.26</com.alibaba.druid.version>
+        <shiro.version>1.2.4</shiro.version>
     </properties>
 
     <dependencies>
@@ -105,31 +106,31 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
-            <version>1.4.0</version>
+            <version>${shiro.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-web -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
-            <version>1.4.0</version>
+            <version>${shiro.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
-            <version>1.4.0</version>
+            <version>${shiro.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-ehcache -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-ehcache</artifactId>
-            <version>1.4.0</version>
+            <version>${shiro.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-quartz -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-quartz</artifactId>
-            <version>1.4.0</version>
+            <version>${shiro.version}</version>
         </dependency>
 
 
