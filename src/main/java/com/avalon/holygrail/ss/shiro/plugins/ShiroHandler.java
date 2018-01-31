@@ -197,7 +197,7 @@ public interface ShiroHandler<T> {
      */
     default boolean onVisitorAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         HttpOutputMessage outputMessage = new ServletServerHttpResponse((HttpServletResponse) response);
-        JSON_MESSAGE_CONVERTER.write(new ExceptionView(ResultUtil.createNeedLogin(NEED_LOGIN_MESSAGE)), MediaType.APPLICATION_JSON, outputMessage);
+        JSON_MESSAGE_CONVERTER.write(new ExceptionView(ResultUtil.createNeedLogin(NEED_LOGIN_MESSAGE), "view/login"), MediaType.APPLICATION_JSON, outputMessage);
         return false;
     }
 
@@ -213,7 +213,7 @@ public interface ShiroHandler<T> {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpOutputMessage outputMessage = new ServletServerHttpResponse(res);
         if (HttpUtil.isAjax(req)) {
-            JSON_MESSAGE_CONVERTER.write(new ExceptionView(ResultUtil.createNoAuthority(NEED_LOGIN_MESSAGE)), MediaType.APPLICATION_JSON, outputMessage);
+            JSON_MESSAGE_CONVERTER.write(new ExceptionView(ResultUtil.createNoAuthority(NO_AUTHENTICATION_MESSAGE), "view/noAuthority"), MediaType.APPLICATION_JSON, outputMessage);
         } else {
             req.getRequestDispatcher("/view/noAuthority?exceptionMessage=" + NO_AUTHENTICATION_MESSAGE).forward(request, response);
         }

@@ -9,6 +9,11 @@ import java.util.Map;
  */
 public class ExceptionView extends ModelView {
 
+	/**
+	 * 跳转的url
+	 */
+	protected String jumpUrl;
+
 	public ExceptionView(ResultInfo resultInfo) {
 		super(resultInfo);
 	}
@@ -16,5 +21,18 @@ public class ExceptionView extends ModelView {
 	public ExceptionView(ResultInfo resultInfo, Map<?, ?> records) {
 		super(resultInfo);
 		this.records = records;
+	}
+
+	public ExceptionView(ResultInfo resultInfo, String jumpUrl) {
+		super(resultInfo);
+		this.jumpUrl = jumpUrl;
+	}
+
+	public String getJumpUrl() {
+		return jumpUrl;
+	}
+
+	public void setJumpUrl(String jumpUrl) {
+		this.jumpUrl = jumpUrl;
 	}
 }
