@@ -99,6 +99,15 @@ public interface ShiroHandler<T> {
     Set<String> findUrls(ShiroCertificate certificate, Set<String> roles) throws Exception;
 
     /**
+     * 查询用户可见的资源
+     * @param certificate 证书
+     * @param roles       用户拥有的角色信息
+     * @return 用户可见的资源
+     * @throws Exception
+     */
+    Set<String> findVisibles(ShiroCertificate certificate, Set<String> roles) throws Exception;
+
+    /**
      * subject登录
      *
      * @param username 用户名
