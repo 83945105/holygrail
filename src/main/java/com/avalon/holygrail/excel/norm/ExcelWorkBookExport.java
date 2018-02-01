@@ -64,7 +64,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
          * @param sheetIndex            当前Sheet在WorkBook中的下标
          * @param index                 当前创建的Sheet下标
          * @param totalAllSheetDataSize WorkBook中所有Sheet已经导入的数据总数
-         * @param totalSheetDataSize    本次创建的若干Sheet已经导入的数据中暑
+         * @param totalSheetDataSize    本次创建的若干Sheet已经导入的数据总数
          */
         void accept(SheetExportHandler sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws ExcelException, IOException;
     }

@@ -166,7 +166,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
                 return;
             }
             throw new ExcelException("无法将单元格类型值注入对象,类型不匹配", e);
-        }
+        } catch (IllegalArgumentException e) {}
     }
 
     /**
