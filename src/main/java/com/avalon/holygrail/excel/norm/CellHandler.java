@@ -9,34 +9,34 @@ import com.avalon.holygrail.excel.exception.ExcelException;
 public interface CellHandler {
 
     /**
-     * 获取开始行
+     * 获取开始行号
      */
-    Integer getStartRow();
+    Integer getStartRowNum();
     /**
-     * 获取结束行
+     * 获取结束行号
      */
-    Integer getEndRow();
+    Integer getEndRowNum();
     /**
-     * 获取开始列
+     * 获取开始列号
      */
-    Integer getStartCol();
+    Integer getStartColNum();
     /**
-     * 获取结束列
+     * 获取结束列号
      * @return
      */
-    Integer getEndCol();
+    Integer getEndColNum();
 
     /**
      * 设置开始行
-     * @param startRow 开始行号
+     * @param startRowNum 开始行号
      */
-    void setStartRow(Integer startRow);
+    void setStartRowNum(Integer startRowNum);
 
     /**
      * 设置开始列
-     * @param startCol 开始列号
+     * @param startColNum 开始列号
      */
-    void setStartCol(Integer startCol);
+    void setStartColNum(Integer startColNum);
 
     /**
      * 获取类型

@@ -11,8 +11,8 @@ public class StringUtil {
      * @param str
      * @return
      */
-    public static boolean isEmpty(String str) {
-        return str == null || str.trim().length() == 0;
+    public static boolean isEmpty(Object str) {
+        return str == null || str.toString().trim().length() == 0;
     }
 
     public static void main(String[] args) {

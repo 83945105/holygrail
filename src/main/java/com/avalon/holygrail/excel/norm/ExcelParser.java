@@ -54,7 +54,7 @@ public interface ExcelParser {
                 target = targetMergeCell.get(j);
                 //比对位置
                 //如果当前源在目标下面,且二者列有交集,则当前目标不符合条件,要删除
-                if (source.getStartRow() > target.getEndRow() && !(source.getStartCol() > target.getEndCol() || source.getEndCol() < target.getStartCol())) {
+                if (source.getStartRowNum() > target.getEndRowNum() && !(source.getStartColNum() > target.getEndColNum() || source.getEndColNum() < target.getStartColNum())) {
                     //执行删除,删除后后一个元素前移,不用增加j
                     targetMergeCell.remove(j);
                 } else {
@@ -65,7 +65,7 @@ public interface ExcelParser {
             }
         }
         //排序
-        SortUtil.bubbleSort(targetMergeCell, (left, right) -> left.getStartCol() > right.getStartCol());
+        SortUtil.bubbleSort(targetMergeCell, (left, right) -> left.getStartColNum() > right.getStartColNum());
         return targetMergeCell;
     }
 
@@ -98,7 +98,7 @@ public interface ExcelParser {
                         seat[k][l] = SeatStatus.YES.value;
                     }
                 }
-                handlerMergeCell.accept(this.buildTitleMergeCell(excelTitle, cursor[0], endRow, cursor[1], endCol));
+                handlerMergeCell.accept(this.buildTitleMergeCell(excelTitle, cursor[0] + 1, endRow, cursor[1] + 1, endCol));
             }
         }
     }
@@ -235,12 +235,13 @@ public interface ExcelParser {
     /**
      * 搜寻指定列号对应的合并单元格
      * @param mergeCells 单元格合并集合
-     * @param columnNum 列号
+     * @param columnIndex 列下标
      * @return 对应的合并单元格,没找到返回null
      */
-    default MergeCell searchMergeCell(Collection<MergeCell> mergeCells, int columnNum) {
+    default MergeCell searchMergeCell(Collection<MergeCell> mergeCells, int columnIndex) {
+        int columnNum = columnIndex + 1;
         for (MergeCell mergeCell : mergeCells) {
-            if(columnNum >= mergeCell.getStartCol() && columnNum <= mergeCell.getEndCol()) {
+            if(columnNum >= mergeCell.getStartColNum() && columnNum <= mergeCell.getEndColNum()) {
                 return mergeCell;
             }
         }

@@ -287,15 +287,15 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
      * @param titles 表头合并单元格信息
      */
     protected void parseExportTitles(Collection<MergeCell> titles) throws ExcelException {
-        int maxRowIndex = this.rowCursor;
+        int maxRowNum = this.rowCursor + 1;
         for (MergeCell title : titles) {
             XSSFMergeCell mergeCell = (XSSFMergeCell) title;
-            if (mergeCell.getEndRow() > maxRowIndex) {
-                maxRowIndex = mergeCell.getEndRow();
+            if (mergeCell.getEndRowNum() > maxRowNum) {
+                maxRowNum = mergeCell.getEndRowNum();
             }
         }
         //记录行号
-        int finalMaxRowIndex = maxRowIndex;
+        int finalMaxRowIndex = maxRowNum - 1;
         setRowCursor(idx -> finalMaxRowIndex);
     }
 
@@ -306,21 +306,21 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
      * @param rowSpan 占用行数
      */
     protected void parseExportTitles(Collection<MergeCell> titles, int rowSpan) throws ExcelException {
-        Double maxRowIndex = Double.NEGATIVE_INFINITY;//无穷小
-        Double minRowIndex = Double.POSITIVE_INFINITY;//无穷大
+        Double maxRowNum = Double.NEGATIVE_INFINITY;//无穷小
+        Double minRowNum = Double.POSITIVE_INFINITY;//无穷大
         for (MergeCell title : titles) {
             XSSFMergeCell mergeCell = (XSSFMergeCell) title;
-            if (mergeCell.getEndRow() > maxRowIndex) {
-                maxRowIndex = Double.valueOf(mergeCell.getEndRow());
+            if (mergeCell.getEndRowNum() > maxRowNum) {
+                maxRowNum = Double.valueOf(mergeCell.getEndRowNum());
             }
-            if (mergeCell.getStartRow() < minRowIndex) {
-                minRowIndex = Double.valueOf(mergeCell.getStartRow());
+            if (mergeCell.getStartRowNum() < minRowNum) {
+                minRowNum = Double.valueOf(mergeCell.getStartRowNum());
             }
         }
         //记录行号
         NumberFormat nf = NumberFormat.getInstance();
-        int finalMaxRowIndex = Integer.parseInt(nf.format(maxRowIndex));
-        int finalMinRowIndex = Integer.parseInt(nf.format(minRowIndex));
+        int finalMaxRowIndex = Integer.parseInt(nf.format(maxRowNum)) - 1;
+        int finalMinRowIndex = Integer.parseInt(nf.format(minRowNum)) - 1;
         int index = finalMinRowIndex + rowSpan - 1;
         setRowCursor(idx -> finalMaxRowIndex >= index ? finalMaxRowIndex : index);
     }

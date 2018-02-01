@@ -137,6 +137,16 @@ public interface CellOption {
     void setColSpan(Integer colSpan);
 
     /**
+     * 获取是否写入空值
+     */
+    boolean isWriteEmpty();
+
+    /**
+     * 设置是否写入空值
+     */
+    void setWriteEmpty(boolean writeEmpty);
+
+    /**
      * 拷贝属性(无视null)
      *
      * @param target 目标单元格
@@ -166,5 +176,6 @@ public interface CellOption {
         if (colSpan != null) {
             target.setColSpan(colSpan);
         }
+        target.setWriteEmpty(isWriteEmpty());
     }
 }

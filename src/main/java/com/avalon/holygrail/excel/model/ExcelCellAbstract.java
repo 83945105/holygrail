@@ -62,6 +62,11 @@ public abstract class ExcelCellAbstract implements CellOption, CellStyle {
      */
     protected String borderBottom = "none";
 
+    /**
+     * 当该列值为空时,是否写入数据
+     */
+    protected boolean writeEmpty = true;
+
     public ExcelCellAbstract() {
     }
 
@@ -234,5 +239,13 @@ public abstract class ExcelCellAbstract implements CellOption, CellStyle {
         this.setBorderTop(values[1]);
         this.setBorderRight(values[2]);
         this.setBorderBottom(values[3]);
+    }
+
+    public boolean isWriteEmpty() {
+        return writeEmpty;
+    }
+
+    public void setWriteEmpty(boolean writeEmpty) {
+        this.writeEmpty = writeEmpty;
     }
 }

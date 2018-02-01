@@ -10,6 +10,7 @@ import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.ExcelSheetExport;
 import com.avalon.holygrail.excel.norm.MergeCell;
 import com.avalon.holygrail.util.ClassUtil;
+import com.avalon.holygrail.util.StringUtil;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
@@ -66,14 +67,15 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
      * 获取行
      * 存在获取,不存在创建
      *
-     * @param rowIndex
+     * @param startRowNum
      */
-    protected SXSSFRow findRow(int rowIndex) throws ExcelException {
+    protected SXSSFRow findRow(int startRowNum) throws ExcelException {
+        int rowIndex = startRowNum - 1;
         SXSSFRow row = (SXSSFRow) this.sheet.getRow(rowIndex);
         if (row == null) {
-            if (this.rowCursor >= rowIndex) {
+/*            if (this.rowCursor >= rowIndex) {
                 throw new ExportException("SXSSFExcelSheetExport parseExportTitles rowCursor位置异常");
-            }
+            }*/
             row = (SXSSFRow) this.sheet.createRow(rowIndex);
             this.setRowCursor(rowCursor -> rowIndex);
         }
@@ -85,12 +87,13 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
      * 存在获取,不存在创建
      *
      * @param row
-     * @param cellIndex
+     * @param startColumnNum
      */
-    protected SXSSFCell findCell(SXSSFRow row, int cellIndex) throws ExcelException {
-        SXSSFCell cell = (SXSSFCell) row.getCell(cellIndex);
+    protected SXSSFCell findCell(SXSSFRow row, int startColumnNum) throws ExcelException {
+        int columnIndex = startColumnNum - 1;
+        SXSSFCell cell = (SXSSFCell) row.getCell(columnIndex);
         if (cell == null) {
-            cell = (SXSSFCell) row.createCell(cellIndex, SXSSFCell.CELL_TYPE_STRING);
+            cell = (SXSSFCell) row.createCell(columnIndex);
         }
         return cell;
     }
@@ -101,7 +104,6 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
         SXSSFMergeCell mergeCell = new SXSSFMergeCell(this.rowCursor + startRow + 1, this.colCursor + startCol + 1, endRow - startRow + 1, endCol - startCol + 1);
         excelTitle.copyCellOptionSelective(mergeCell);//设置属性
         excelTitle.copyCellStyleByName(mergeCell);//设置样式
-
         return mergeCell;
     }
 
@@ -111,7 +113,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     protected DataValidation getDataValidation(SXSSFMergeCell mergeCell) {
         if (mergeCell.getType() == CellOption.CellType.COMBOBOX) {
             DataValidationHelper helper = this.sheet.getDataValidationHelper();
-            CellRangeAddressList cellRangeAddressList = new CellRangeAddressList(mergeCell.getStartRow(), mergeCell.getEndRow(), mergeCell.getStartCol(), mergeCell.getEndCol());
+            CellRangeAddressList cellRangeAddressList = new CellRangeAddressList(mergeCell.getStartRowNum() - 1, mergeCell.getEndRowNum() - 1, mergeCell.getStartColNum() - 1, mergeCell.getEndColNum() - 1);
             DataValidationConstraint constraint = helper.createExplicitListConstraint(mergeCell.getOptions());
             DataValidation dataValidation = helper.createValidation(constraint, cellRangeAddressList);
             if (dataValidation instanceof XSSFDataValidation) {
@@ -131,11 +133,14 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
      * @param mergeCell 单元格相关信息
      */
     protected void buildCell(SXSSFMergeCell mergeCell) throws ExcelException {
-
+        if(!mergeCell.isWriteEmpty() && StringUtil.isEmpty(mergeCell.getValue())) {
+            //不允许写入空值且当前值为空
+            return;
+        }
         for (int i = 0; i < mergeCell.getRowSpan(); i++) {
-            SXSSFRow row = this.findRow(mergeCell.getStartRow() + i);
+            SXSSFRow row = this.findRow(mergeCell.getStartRowNum() + i);
             for (int j = 0; j < mergeCell.getColSpan(); j++) {
-                SXSSFCell cell = this.findCell(row, mergeCell.getStartCol() + j);
+                SXSSFCell cell = this.findCell(row, mergeCell.getStartColNum() + j);
                 DataValidation dataValidation = this.getDataValidation(mergeCell);
                 if (dataValidation != null) {
                     this.sheet.addValidationData(dataValidation);
@@ -148,6 +153,9 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 mergeCell.copyCellStyleByName(sxssfLoader);
             }
         }
+        //添加合并单元格
+        CellRangeAddress cellRangeAddress = new CellRangeAddress(mergeCell.getStartRowNum() - 1, mergeCell.getEndRowNum() - 1, mergeCell.getStartColNum() - 1, mergeCell.getEndColNum() - 1);
+        this.sheet.addMergedRegion(cellRangeAddress);
     }
 
     /**
@@ -160,9 +168,6 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             SXSSFMergeCell mergeCell = (SXSSFMergeCell) title;
             //开始处理合并单元格
             this.buildCell(mergeCell);
-            //添加合并单元格
-            CellRangeAddress cellRangeAddress = new CellRangeAddress(mergeCell.getStartRow(), mergeCell.getEndRow(), mergeCell.getStartCol(), mergeCell.getEndCol());
-            this.sheet.addMergedRegion(cellRangeAddress);
         }
     }
 
@@ -173,8 +178,8 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
      */
     protected void setMergeCellColumnWidth(SXSSFMergeCell mergeCell) {
         int width = mergeCell.getWidth() * 256 / mergeCell.getColSpan();
-        for (int i = mergeCell.getStartCol(); i <= mergeCell.getEndCol(); i++) {
-            this.setColumnWidth(i, width);
+        for (int i = mergeCell.getStartColNum(); i <= mergeCell.getEndColNum(); i++) {
+            this.setColumnWidth(i - 1, width);
         }
     }
 
@@ -217,12 +222,13 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     }
 
     protected void parseMap(Map<String, Object> record) throws ExcelException {
-        int startRow = this.rowCursor + 1;
-        for (MergeCell titleMergeCell : dataTitleMergeCells) {
+        int startRow = this.rowCursor + 2;
+        for (MergeCell titleMergeCell : this.dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
-            //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
-            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
+            //创建数据单元格,默认开始行使用当前游标+2、默认开始列与title一致，默认占用一行、占用列与title一致
+            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartColNum(), 1, tMergeCell.getColSpan());
             mergeCell.setField(tMergeCell.getField());
+            mergeCell.setWriteEmpty(tMergeCell.isWriteEmpty());
             for (Map.Entry<String, Object> entry : record.entrySet()) {
                 if (!entry.getKey().equals(mergeCell.getField())) {
                     continue;
@@ -234,21 +240,19 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                     mergeCell.setValue("");
                 }
                 this.buildCell(mergeCell);
-                //添加合并单元格
-                CellRangeAddress cellRangeAddress = new CellRangeAddress(mergeCell.getStartRow(), mergeCell.getEndRow(), mergeCell.getStartCol(), mergeCell.getEndCol());
-                this.sheet.addMergedRegion(cellRangeAddress);
                 break;
             }
         }
     }
 
     protected void parseMap(Map<String, Object> record, int index, FormatterCell<Map<String, Object>> formatter) throws ExcelException {
-        int startRow = this.rowCursor + 1;
-        for (MergeCell titleMergeCell : dataTitleMergeCells) {
+        int startRow = this.rowCursor + 2;
+        for (MergeCell titleMergeCell : this.dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
-            //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
-            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
+            //创建数据单元格,默认开始行使用当前游标+2、默认开始列与title一致，默认占用一行、占用列与title一致
+            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartColNum(), 1, tMergeCell.getColSpan());
             mergeCell.setField(tMergeCell.getField());
+            mergeCell.setWriteEmpty(tMergeCell.isWriteEmpty());
             int i = 0;
             for (Map.Entry<String, Object> entry : record.entrySet()) {
                 boolean last = i++ == record.size() - 1;
@@ -270,22 +274,20 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 value = formatter.apply(value, record, mergeCell, mergeCell.getField(), this.rowCursor, index);
                 mergeCell.setValue(value);
                 this.buildCell(mergeCell);
-                //添加合并单元格
-                CellRangeAddress cellRangeAddress = new CellRangeAddress(mergeCell.getStartRow(), mergeCell.getEndRow(), mergeCell.getStartCol(), mergeCell.getEndCol());
-                this.sheet.addMergedRegion(cellRangeAddress);
                 break;
             }
         }
     }
 
     protected <T> void parseObject(T record) throws ExcelException {
-        int startRow = this.rowCursor + 1;
+        int startRow = this.rowCursor + 2;
         ArrayList<Field> fs = ClassUtil.getAllFields(record.getClass());
-        for (MergeCell titleMergeCell : dataTitleMergeCells) {
+        for (MergeCell titleMergeCell : this.dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
-            //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
-            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
+            //创建数据单元格,默认开始行使用当前游标+2、默认开始列与title一致，默认占用一行、占用列与title一致
+            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartColNum(), 1, tMergeCell.getColSpan());
             mergeCell.setField(tMergeCell.getField());
+            mergeCell.setWriteEmpty(tMergeCell.isWriteEmpty());
             for (Field f : fs) {
                 f.setAccessible(true);
                 if (!f.getName().equals(mergeCell.getField())) {
@@ -299,22 +301,20 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                     mergeCell.setValue("");
                 }
                 this.buildCell(mergeCell);
-                //添加合并单元格
-                CellRangeAddress cellRangeAddress = new CellRangeAddress(mergeCell.getStartRow(), mergeCell.getEndRow(), mergeCell.getStartCol(), mergeCell.getEndCol());
-                this.sheet.addMergedRegion(cellRangeAddress);
                 break;
             }
         }
     }
 
     protected <T> void parseObject(T record, int index, FormatterCell<T> formatter) throws ExcelException {
-        int startRow = this.rowCursor + 1;
+        int startRow = this.rowCursor + 2;
         ArrayList<Field> fs = ClassUtil.getAllFields(record.getClass());
         for (MergeCell titleMergeCell : this.dataTitleMergeCells) {
             SXSSFMergeCell tMergeCell = (SXSSFMergeCell) titleMergeCell;
-            //创建数据单元格,默认开始行使用当前游标+1、默认开始列与title一致，默认占用一行、占用列与title一致
-            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartCol(), 1, tMergeCell.getColSpan());
+            //创建数据单元格,默认开始行使用当前游标+2、默认开始列与title一致，默认占用一行、占用列与title一致
+            SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartColNum(), 1, tMergeCell.getColSpan());
             mergeCell.setField(tMergeCell.getField());
+            mergeCell.setWriteEmpty(tMergeCell.isWriteEmpty());
             for (int i = 0; i < fs.size(); i++) {
                 Field f = fs.get(i);
                 f.setAccessible(true);
@@ -338,9 +338,6 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 value = formatter.apply(value, record, mergeCell, mergeCell.getField(), this.rowCursor, index);
                 mergeCell.setValue(value);
                 this.buildCell(mergeCell);
-                //添加合并单元格
-                CellRangeAddress cellRangeAddress = new CellRangeAddress(mergeCell.getStartRow(), mergeCell.getEndRow(), mergeCell.getStartCol(), mergeCell.getEndCol());
-                this.sheet.addMergedRegion(cellRangeAddress);
                 break;
             }
         }

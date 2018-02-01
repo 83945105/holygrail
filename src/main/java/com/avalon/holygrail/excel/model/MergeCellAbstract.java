@@ -12,29 +12,24 @@ import com.avalon.holygrail.excel.norm.MergeCell;
 public abstract class MergeCellAbstract extends ExcelCellAbstract implements MergeCell, CellOption, CellStyle, CellHandler {
 
     /**
-     * 垂直对齐方式-默认顶部对齐
+     * 开始行号
      */
-    protected String VAlign = "center";
+    protected Integer startRowNum;
 
     /**
-     * 开始行
+     * 开始列号
      */
-    protected Integer startRow;
+    protected Integer startColNum;
 
-    /**
-     * 开始列
-     */
-    protected Integer startCol;
-
-    public MergeCellAbstract(Integer startRow, Integer startCol) {
-        this.startRow = startRow;
-        this.startCol = startCol;
+    public MergeCellAbstract(Integer startRowNum, Integer startColNum) {
+        this.startRowNum = startRowNum;
+        this.startColNum = startColNum;
     }
 
-    public MergeCellAbstract(Integer startRow, Integer startCol, Integer rowSpan, Integer colSpan) {
+    public MergeCellAbstract(Integer startRowNum, Integer startColNum, Integer rowSpan, Integer colSpan) {
         super(rowSpan, colSpan);
-        this.startRow = startRow;
-        this.startCol = startCol;
+        this.startRowNum = startRowNum;
+        this.startColNum = startColNum;
     }
 
     @Override
@@ -108,33 +103,33 @@ public abstract class MergeCellAbstract extends ExcelCellAbstract implements Mer
     }
 
     @Override
-    public Integer getStartRow() {
-        return this.startRow;
+    public Integer getStartRowNum() {
+        return this.startRowNum;
     }
 
     @Override
-    public Integer getEndRow() {
-        return this.startRow + this.rowSpan - 1;
+    public Integer getEndRowNum() {
+        return this.startRowNum + this.rowSpan - 1;
     }
 
     @Override
-    public Integer getStartCol() {
-        return startCol;
+    public Integer getStartColNum() {
+        return startColNum;
     }
 
     @Override
-    public Integer getEndCol() {
-        return this.startCol + this.colSpan - 1;
+    public Integer getEndColNum() {
+        return this.startColNum + this.colSpan - 1;
     }
 
     @Override
-    public void setStartRow(Integer startRow) {
-        this.startRow = startRow;
+    public void setStartRowNum(Integer startRowNum) {
+        this.startRowNum = startRowNum;
     }
 
     @Override
-    public void setStartCol(Integer startCol) {
-        this.startCol = startCol;
+    public void setStartColNum(Integer startColNum) {
+        this.startColNum = startColNum;
     }
 
     @Override

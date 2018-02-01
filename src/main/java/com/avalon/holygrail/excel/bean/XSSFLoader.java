@@ -135,6 +135,16 @@ public class XSSFLoader implements CellOption, CellStyle {
     }
 
     @Override
+    public boolean isWriteEmpty() {
+        return false;
+    }
+
+    @Override
+    public void setWriteEmpty(boolean writeEmpty) {
+
+    }
+
+    @Override
     public H_AlignType getHAlign() {
         return H_AlignType.getHAlignByValue(this.getCellStyle().getAlignment());
     }

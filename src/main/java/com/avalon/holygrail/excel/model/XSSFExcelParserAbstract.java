@@ -42,22 +42,22 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
     }
 
     /**
-     * 搜寻与数据直接相关的field名称,按照单元格顺序排列,从第0列开始,如果没有就设置为""
+     * 搜寻与数据直接相关的field名称,按照单元格顺序排列,从第1列开始,如果没有就设置为""
      * @param mergeCellList 单元格合并信息
      * @return 数据Fields
      */
     @Deprecated
     public ArrayList<String> searchDataTitleFields(List<MergeCell> mergeCellList) {
         ArrayList<String> fs = new ArrayList<>();
-        int start = 0;
+        int start = 1;
         for (MergeCell mergeCell : mergeCellList) {
-            for (int i = start; i < mergeCell.getStartCol(); i++) {
+            for (int i = start; i < mergeCell.getStartColNum(); i++) {
                 fs.add("");
             }
-            for (int i = mergeCell.getStartCol(); i <= mergeCell.getEndCol(); i++) {
+            for (int i = mergeCell.getStartColNum(); i <= mergeCell.getEndColNum(); i++) {
                 fs.add(((XSSFMergeCell)mergeCell).getField());
             }
-            start = mergeCell.getEndCol() + 1;
+            start = mergeCell.getEndColNum() + 1;
         }
         return fs;
     }

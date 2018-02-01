@@ -71,12 +71,6 @@ public class SXSSFLoader implements CellOption, CellStyle {
     public void setValue(Object value) {
         if (value == null) {
             cell.setCellType(SXSSFCell.CELL_TYPE_BLANK);
-//            cell.setCellValue("");
-            return;
-        }
-        if (value instanceof String) {
-            cell.setCellType(SXSSFCell.CELL_TYPE_STRING);
-            cell.setCellValue((String) value);
             return;
         }
         if (value instanceof Integer) {
@@ -87,6 +81,11 @@ public class SXSSFLoader implements CellOption, CellStyle {
         if (value instanceof Boolean) {
             cell.setCellType(SXSSFCell.CELL_TYPE_BOOLEAN);
             cell.setCellValue((boolean) value);
+            return;
+        }
+        if (value instanceof String) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_STRING);
+            cell.setCellValue((String) value);
             return;
         }
     }
@@ -128,6 +127,16 @@ public class SXSSFLoader implements CellOption, CellStyle {
 
     @Override
     public void setColSpan(Integer colSpan) {
+
+    }
+
+    @Override
+    public boolean isWriteEmpty() {
+        return false;
+    }
+
+    @Override
+    public void setWriteEmpty(boolean writeEmpty) {
 
     }
 
