@@ -1,5 +1,8 @@
 package com.avalon.holygrail.util;
 
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * 字符串工具
  * Created by 白超 on 2018/1/22.
@@ -7,12 +10,19 @@ package com.avalon.holygrail.util;
 public class StringUtil {
 
     /**
-     * 验证字符串是否为空
-     * @param str
-     * @return
+     * 验证对象是否为空
+     * null => true
+     * Collection size == 0 => true
+     * Map size == 0 => true
+     *
+     * @param tar 对象
+     * @return 空 => true | 非空 => false
      */
-    public static boolean isEmpty(Object str) {
-        return str == null || str.toString().trim().length() == 0;
+    public static boolean isEmpty(Object tar) {
+        return tar == null
+                || tar instanceof Collection ? ((Collection) tar).size() == 0
+                : tar instanceof Map ? ((Map) tar).size() == 0
+                : tar.toString().trim().length() == 0;
     }
 
     public static void main(String[] args) {
@@ -97,6 +107,7 @@ public class StringUtil {
 
     /**
      * 字符串转16进制字符串
+     *
      * @param str 字符串
      * @return 16进制字符串
      */
@@ -116,6 +127,7 @@ public class StringUtil {
 
     /**
      * 16进制字符串直接转字符串(无需转Unicode)
+     *
      * @param hexStr 16进制字符串
      * @return 字符串
      */
