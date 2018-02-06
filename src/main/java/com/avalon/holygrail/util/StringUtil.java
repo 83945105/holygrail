@@ -14,15 +14,17 @@ public class StringUtil {
      * null => true
      * Collection size == 0 => true
      * Map size == 0 => true
+     * Array length == 0 => true
      *
      * @param tar 对象
      * @return 空 => true | 非空 => false
      */
     public static boolean isEmpty(Object tar) {
         return tar == null
-                || tar instanceof Collection ? ((Collection) tar).size() == 0
+                || (tar instanceof Collection ? ((Collection) tar).size() == 0
                 : tar instanceof Map ? ((Map) tar).size() == 0
-                : tar.toString().trim().length() == 0;
+                : tar.getClass().isArray() ? ((Object[]) tar).length == 0
+                : tar.toString().trim().length() == 0);
     }
 
     public static void main(String[] args) {

@@ -51,15 +51,23 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
 
     protected int totalDataSize;//数据记录总数
 
-    public SXSSFExcelSheetExport(String sheetName, SXSSFExcelWorkBookExport ownerWorkBook) {
+    public SXSSFExcelSheetExport(String sheetName, SXSSFExcelWorkBookExport ownerWorkBook) throws ExportException {
         super(ownerWorkBook.sxssfWorkbook);
-        this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
+        try {
+            this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
+        } catch (IllegalArgumentException e) {
+            throw new ExportException("已经存在名为:" + sheetName + "的sheet", e);
+        }
         this.ownerWorkBook = ownerWorkBook;
     }
 
-    public SXSSFExcelSheetExport(SXSSFWorkbook workbook, String sheetName, SXSSFExcelWorkBookExport ownerWorkBook) {
+    public SXSSFExcelSheetExport(SXSSFWorkbook workbook, String sheetName, SXSSFExcelWorkBookExport ownerWorkBook) throws ExportException {
         super(ownerWorkBook.sxssfWorkbook);
-        this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
+        try {
+            this.sheet = (SXSSFSheet) this.sxssfWorkbook.createSheet(sheetName);
+        } catch (IllegalArgumentException e) {
+            throw new ExportException("已经存在名为:" + sheetName + "的sheet", e);
+        }
         this.ownerWorkBook = ownerWorkBook;
     }
 
@@ -133,7 +141,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
      * @param mergeCell 单元格相关信息
      */
     protected void buildCell(SXSSFMergeCell mergeCell) throws ExcelException {
-        if(!mergeCell.isWriteEmpty() && StringUtil.isEmpty(mergeCell.getValue())) {
+        if (!mergeCell.isWriteEmpty() && StringUtil.isEmpty(mergeCell.getValue())) {
             //不允许写入空值且当前值为空
             return;
         }

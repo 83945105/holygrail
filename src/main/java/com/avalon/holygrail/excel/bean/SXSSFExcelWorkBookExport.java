@@ -1,5 +1,6 @@
 package com.avalon.holygrail.excel.bean;
 
+import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.SXSSFExcelParserAbstract;
 import com.avalon.holygrail.excel.norm.ExcelSheetExport;
 import com.avalon.holygrail.excel.norm.ExcelWorkBookExport;
@@ -31,12 +32,12 @@ public class SXSSFExcelWorkBookExport extends SXSSFExcelParserAbstract implement
     }
 
     @Override
-    public ExcelSheetExport createSheet() {
+    public ExcelSheetExport createSheet() throws ExportException {
         return this.createSheet("sheet" + sheets.size());
     }
 
     @Override
-    public ExcelSheetExport createSheet(String sheetName) {
+    public ExcelSheetExport createSheet(String sheetName) throws ExportException {
         SXSSFExcelSheetExport sheet = new SXSSFExcelSheetExport(sheetName, this);
         this.sheets.add(sheet);
         return sheet;

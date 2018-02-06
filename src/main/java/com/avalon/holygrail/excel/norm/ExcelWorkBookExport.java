@@ -2,6 +2,7 @@ package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.bean.SXSSFExcelWorkBookExport;
 import com.avalon.holygrail.excel.exception.ExcelException;
+import com.avalon.holygrail.excel.exception.ExportException;
 
 import java.io.*;
 
@@ -15,14 +16,14 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * 创建工作表
      * @return 工作表对象
      */
-    SheetExportHandler createSheet();
+    SheetExportHandler createSheet() throws ExportException;
 
     /**
      * 创建工作表
      * @param sheetName 工作表表名
      * @return 工作表对象
      */
-    SheetExportHandler createSheet(String sheetName);
+    SheetExportHandler createSheet(String sheetName) throws ExportException;
 
     /**
      * 获取工作表

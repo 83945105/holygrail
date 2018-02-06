@@ -5,50 +5,42 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
 /**
  * 自定义结果异常
  */
-public class ResultException extends Exception implements ResultInfo {
+public class ResultException extends Exception {
 
-	protected ResultInfo resultInfo;
-	
-	public ResultException(ResultInfo resultInfo) {
-		super(resultInfo.getMessage());
-		this.resultInfo = resultInfo;
-	}
+    /**
+     * 异常信息
+     */
+    protected ResultInfo resultInfo;
 
-	public ResultInfo getResultInfo() {
-		return resultInfo;
-	}
+    /**
+     * 跳转的url
+     */
+    protected String jumpUrl;
 
-	public void setResultInfo(ResultInfo resultInfo) {
-		this.resultInfo = resultInfo;
-	}
+    public ResultException(ResultInfo resultInfo) {
+        super(resultInfo.getMessage());
+        this.resultInfo = resultInfo;
+    }
 
-	@Override
-	public boolean isSuccess() {
-		return resultInfo.isSuccess();
-	}
+    public ResultException(ResultInfo resultInfo, String jumpUrl) {
+        super(resultInfo.getMessage());
+        this.resultInfo = resultInfo;
+        this.jumpUrl = jumpUrl;
+    }
 
-	@Override
-	public boolean isFail() {
-		return resultInfo.isFail();
-	}
+    public ResultInfo getResultInfo() {
+        return resultInfo;
+    }
 
-	@Override
-	public boolean isError() {
-		return resultInfo.isError();
-	}
+    public void setResultInfo(ResultInfo resultInfo) {
+        this.resultInfo = resultInfo;
+    }
 
-	@Override
-	public int getType() {
-		return resultInfo.getType();
-	}
+    public String getJumpUrl() {
+        return jumpUrl;
+    }
 
-	@Override
-	public String getExceptionMessage() {
-		return resultInfo.getExceptionMessage();
-	}
-
-	@Override
-	public void setExceptionMessage(String exceptionMessage) {
-		resultInfo.setExceptionMessage(exceptionMessage);
-	}
+    public void setJumpUrl(String jumpUrl) {
+        this.jumpUrl = jumpUrl;
+    }
 }

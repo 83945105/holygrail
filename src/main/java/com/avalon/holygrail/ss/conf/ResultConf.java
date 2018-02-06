@@ -5,6 +5,8 @@ package com.avalon.holygrail.ss.conf;
  */
 public interface ResultConf {
 
-    /**结果集信息配置文件路径*/
-    String MESSAGE = "config.messages";
+    /**
+     * 结果集信息配置文件路径
+     */
+    String MESSAGE = "message.resultInfo";
 }
