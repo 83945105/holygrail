@@ -39,6 +39,7 @@ public class ExceptionResolver extends DefaultHandlerExceptionResolver {
     //json转换器
     private HttpMessageConverter<ExceptionView> jsonMessageConverter;
 
+    @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
                                          Exception ex) {
 
@@ -49,7 +50,11 @@ public class ExceptionResolver extends DefaultHandlerExceptionResolver {
         ExceptionView exceptionView = new ExceptionView(ResultUtil.createError(this.defaultErrorMessage));
 
         if (this.filterChain != null) {
-            this.filterChain.doFilter(ex, exceptionView);
+            try {
+                this.filterChain.doFilter(ex, exceptionView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         Method method = ((HandlerMethod) handler).getMethod();

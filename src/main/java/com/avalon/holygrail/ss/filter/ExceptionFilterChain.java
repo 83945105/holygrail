@@ -16,7 +16,7 @@ public class ExceptionFilterChain implements FilterChain<Throwable, ExceptionVie
     private int index = 0;
 
     @Override
-    public void doFilter(Throwable go, ExceptionView back) {
+    public void doFilter(Throwable go, ExceptionView back) throws Exception {
         if (this.filters == null || this.index == this.filters.size()) {
             return;
         }

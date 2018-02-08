@@ -8,7 +8,7 @@ import com.avalon.holygrail.ss.filter.ExceptionFilterChain;
  */
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         ExceptionFilterChain filterChain = new ExceptionFilterChain();
 

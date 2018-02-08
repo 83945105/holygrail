@@ -24,7 +24,7 @@ public class DefaultExceptionFilter extends ExceptionFilter {
     public static final String DEFAULT_DATA_INTEGRITY_VIOLATION_MESSAGE = "您输入的字段过长,请重新输入";
 
     @Override
-    public void doFilter(Throwable go, ExceptionView back, FilterChain filterChain) {
+    public void doFilter(Throwable go, ExceptionView back, FilterChain filterChain) throws Exception {
         if (go instanceof UndeclaredThrowableException) {
             go = ((UndeclaredThrowableException) go).getUndeclaredThrowable();
         }

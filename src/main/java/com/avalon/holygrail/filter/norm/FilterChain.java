@@ -6,5 +6,5 @@ package com.avalon.holygrail.filter.norm;
  */
 public interface FilterChain<T, V> {
 
-    void doFilter(T go, V back);
+    void doFilter(T go, V back) throws Exception;
 }

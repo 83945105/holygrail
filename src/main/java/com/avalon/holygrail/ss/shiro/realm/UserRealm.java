@@ -65,7 +65,7 @@ public class UserRealm extends AuthorizingRealm {
     protected void clearCachedAuthenticationInfo(PrincipalCollection principals) {
         ShiroCertificate certificate = (ShiroCertificate) principals.getPrimaryPrincipal();
         SimplePrincipalCollection spc = new SimplePrincipalCollection(
-                certificate, this.getName());
+                certificate.getUsername(), this.getName());
         super.clearCachedAuthenticationInfo(spc);
     }
 

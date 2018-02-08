@@ -10,7 +10,7 @@ import com.avalon.holygrail.ss.view.ExceptionView;
 public class ExceptionViewFilter extends ExceptionFilter {
 
     @Override
-    public void doFilter(Throwable go, ExceptionView back, FilterChain filterChain) {
+    public void doFilter(Throwable go, ExceptionView back, FilterChain filterChain) throws Exception {
 
     }
 }
