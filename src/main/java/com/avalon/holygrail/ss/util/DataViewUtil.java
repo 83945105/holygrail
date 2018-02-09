@@ -127,6 +127,12 @@ public class DataViewUtil {
     }
 
     //-------------------------------------构建模型视图------------------------------------------//
+    public static ModelView getModelViewSuccess(String message, Object record) {
+        return new ModelView(ResultUtil.createSuccess(message), record);
+    }
+    public static ModelView getModelViewSuccess(String message, Map<?, ?> records) {
+        return new ModelView(ResultUtil.createSuccess(message), records);
+    }
     public static ModelView getModelViewSuccess(Object record) {
         return new ModelView(ResultUtil.createSuccess("success"), record);
     }
