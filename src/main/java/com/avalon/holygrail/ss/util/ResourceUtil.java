@@ -28,7 +28,7 @@ public class ResourceUtil implements Serializable {
 	 * @param fileName 资源文件名
 	 * @param key key名
 	 */
-	private static String getProperties(String fileName, String key) {
+	public static String getValue(String fileName, String key) {
 		String retValue = "";
 		try {
 			Locale locale = getLocale();
@@ -40,15 +40,6 @@ public class ResourceUtil implements Serializable {
 		return retValue;
 	}
 	
-	/**
-	 * 通过key从资源文件读取内容
-	 * @param fileName 资源文件名
-	 * @param key 索引
-	 */
-	public static String getValue(String fileName, String key) {
-		return getProperties(fileName, key);
-	}
-
 	/**
 	 * 获取Key值集合
 	 * @param fileName
