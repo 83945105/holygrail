@@ -25,15 +25,15 @@ public class ResourceUtil implements Serializable {
 	
 	/**
 	 * 根据语言、国家、资源文件名、key名字获取资源文件值
-	 * @param baseName 资源文件名
-	 * @param section key名
+	 * @param fileName 资源文件名
+	 * @param key key名
 	 */
-	private static String getProperties(String baseName, String section) {
+	private static String getProperties(String fileName, String key) {
 		String retValue = "";
 		try {
 			Locale locale = getLocale();
-			ResourceBundle rb = ResourceBundle.getBundle(baseName, locale);
-			retValue = (String) rb.getObject(section);
+			ResourceBundle rb = ResourceBundle.getBundle(fileName, locale);
+			retValue = (String) rb.getObject(key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,13 +48,17 @@ public class ResourceUtil implements Serializable {
 	public static String getValue(String fileName, String key) {
 		return getProperties(fileName, key);
 	}
-	
-	public static List<String> getKeyList(String baseName) {
+
+	/**
+	 * 获取Key值集合
+	 * @param fileName
+	 * @return
+	 */
+	public static ArrayList<String> getKeyArrayList(String fileName) {
 		Locale locale = getLocale();
-		ResourceBundle rb = ResourceBundle.getBundle(baseName, locale);
-		
-		List<String> list = new ArrayList<>();
-		
+		ResourceBundle rb = ResourceBundle.getBundle(fileName, locale);
+
+		ArrayList<String> list = new ArrayList<>();
 		Set<String> keySet = rb.keySet();
 		for(Iterator<String> it = keySet.iterator(); it.hasNext();) {
 			list.add(it.next());
@@ -66,11 +70,27 @@ public class ResourceUtil implements Serializable {
 	 * 通过key从资源文件读取内容并格式化
 	 * @param fileName 资源文件名
 	 * @param key 索引
-	 * @param objs 格式化参数
+	 * @param params 格式化参数
 	 */
-	public static String getValue(String fileName, String key, Object[] objs) {
+	public static String getValue(String fileName, String key, Object[] params) {
 		String pattern = getValue(fileName, key);
-		return MessageFormat.format(pattern, objs);
+		return MessageFormat.format(pattern, params);
 	}
-	
+
+	/**
+	 * 获取所有key-value
+	 * @param fileName
+	 * @param params
+	 * @return
+	 */
+	public static HashMap<String, Object> getKeyValues(String fileName, Object[] params) {
+		Locale locale = getLocale();
+		ResourceBundle rb = ResourceBundle.getBundle(fileName, locale);
+		HashMap<String, Object> rs = new HashMap<>();
+		Set<String> keySet = rb.keySet();
+		for (String key : keySet) {
+			rs.put(MessageFormat.format(key, params), rb.getObject(key));
+		}
+		return rs;
+	}
 }
