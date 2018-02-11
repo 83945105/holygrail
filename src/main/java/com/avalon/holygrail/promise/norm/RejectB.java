@@ -1,10 +1,11 @@
 package com.avalon.holygrail.promise.norm;
 
 /**
+ * 失败-无返回值
  * Created by 白超 on 2018/2/10.
  */
 @FunctionalInterface
-public interface PromiseRun<T, V> {
+public interface RejectB<T> extends CallBack {
 
-    void start(ResolveB<T> resolve, RejectB<V> reject) throws Exception;
+    void accept(T err);
 }

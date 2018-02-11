@@ -1,11 +1,11 @@
 package com.avalon.holygrail.promise.norm;
 
 /**
- * 完成
+ * 完成-需要返回值
  * Created by 白超 on 2018/2/10.
  */
 @FunctionalInterface
-public interface Resolve<T> {
+public interface ResolveA<T> extends CallBack {
 
-    void accept(T res);
+    Object apply(T res);
 }

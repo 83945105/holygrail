@@ -14,7 +14,7 @@ public enum PromiseStatus {
      */
     RESOLVED,
     /**
-     * 以失败
+     * 已失败
      */
     REJECTED
 }
