@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  * new Promise((resolve, reject) -> {resolve.accept('成功') or reject.accept('失败')})
  * .then(res -> {...do something}) 用于获取resolve.accept设置的值,可以返回一个对象或者Promise给下一个.then
  * .then(res -> {...do something}) 连续调用该方法可以获取上一个.then返回的对象或者Promise成功后的结果
- * .Catch(err -> {...do something}) 用于捕获调用该方法之前的异常
+ * .Catch(err -> {...do something}) 用于捕获调用该方法之前的最后一个异常
  * Created by 白超 on 2018/2/10.
  */
 public class Promise<T, V> implements Callable<T> {
@@ -53,22 +53,22 @@ public class Promise<T, V> implements Callable<T> {
     }
 
 
-    public Promise<T, V> then(ResolveA resolve) {
+    public Promise<T, V> then(ResolveA<?> resolve) {
         this.callBacks.add(resolve);
         return this;
     }
 
-    public Promise<T, V> then(ResolveB resolve) {
+    public Promise<T, V> then(ResolveB<?> resolve) {
         this.callBacks.add(resolve);
         return this;
     }
 
-    public Promise<T, V> Catch(RejectA reject) {
+    public Promise<T, V> Catch(RejectA<?> reject) {
         this.callBacks.add(reject);
         return this;
     }
 
-    public Promise<T, V> Catch(RejectB reject) {
+    public Promise<T, V> Catch(RejectB<?> reject) {
         this.callBacks.add(reject);
         return this;
     }
@@ -149,6 +149,7 @@ public class Promise<T, V> implements Callable<T> {
             this.promiseStatus = PromiseStatus.REJECTED;
             this.err = e;
             this.doCallBacks(this.err, true);
+            this.executorService.shutdown();
             return this.res;
         }
         if (this.promiseStatus == PromiseStatus.RESOLVED) {
