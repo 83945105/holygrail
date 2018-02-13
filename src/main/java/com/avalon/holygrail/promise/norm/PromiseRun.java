@@ -6,5 +6,5 @@ package com.avalon.holygrail.promise.norm;
 @FunctionalInterface
 public interface PromiseRun<T, V> {
 
-    void start(ResolveB<T> resolve, RejectB<V> reject) throws Exception;
+    void start(ResolveA<T> resolve, RejectA<V> reject) throws Exception;
 }

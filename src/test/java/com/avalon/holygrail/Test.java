@@ -12,20 +12,29 @@ import java.util.concurrent.ExecutionException;
 public class Test {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        new Promise<String, HashMap>((resolve, reject) -> {
 
-            System.out.println("准备查询数据");
-            Thread.sleep(3000);
-            System.out.println("数据查询完毕");
-            resolve.accept("OK");
+        Promise promise = new Promise<String, String>((resolve, reject) -> {
+            resolve.apply("666");
+//            int a = 1 / 0;
+            reject.apply("777");
+//            throw new Exception("233");
         }).then(res -> {
-            return res;
+            System.out.println(res);
+            return new Promise<>((resolve, reject) -> {
+                Thread.sleep(3000);
+                reject.apply("5555");
+            });
         }).then(res -> {
             System.out.println(res);
         }).Catch(err -> {
+            return "233";
+        }).Catch(err -> {
 
+        }).then(res -> {
+            System.out.println(res);
         });
 
         System.out.println("启动");
+
     }
 }
