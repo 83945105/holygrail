@@ -53,4 +53,8 @@ public class PromiseException extends Exception {
         super(message, cause, enableSuppression, writableStackTrace);
         this.error = error;
     }
+
+    public Object getError() {
+        return error;
+    }
 }

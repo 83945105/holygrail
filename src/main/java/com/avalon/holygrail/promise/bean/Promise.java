@@ -1,10 +1,12 @@
 package com.avalon.holygrail.promise.bean;
 
 import com.avalon.holygrail.promise.exception.PromiseException;
+import com.avalon.holygrail.promise.exception.RejectedException;
 import com.avalon.holygrail.promise.model.PromiseStatus;
 import com.avalon.holygrail.promise.norm.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.*;
 
 /**
@@ -34,6 +36,10 @@ public class Promise<T, V> implements Callable<T> {
     private Boolean isReturn = false;//是否是返回的Promise
 
     protected ArrayList<CallBack> callBacks = new ArrayList<>();
+
+    protected int waitForSetCallBackCount = 3;//等待设置回调的次数
+
+    protected long waitForSetCallBackTime = 100;//等待设置回调的时间(毫秒)
 
     protected ResolveA<T> resolve = res -> {
         if (this.promiseStatus == PromiseStatus.PENDING && this.promiseStatus != PromiseStatus.REJECTED) {
@@ -67,7 +73,7 @@ public class Promise<T, V> implements Callable<T> {
             @Override
             protected void afterExecute(Runnable r, Throwable t) {
                 super.afterExecute(r, t);
-                if(Promise.this.isReturn) {
+                if (Promise.this.isReturn) {
                     return;
                 }
                 if (t == null && r instanceof Future<?>) {
@@ -88,6 +94,8 @@ public class Promise<T, V> implements Callable<T> {
                     t.printStackTrace();
                 }
             }
+
+
         };
         this.future = this.executorService.submit(this);
     }
@@ -121,9 +129,47 @@ public class Promise<T, V> implements Callable<T> {
         return this;
     }
 
-    public static <T, V> Promise<T, V> all(Promise... promises) {
+    public static Promise all(Promise... promises) {
+        System.out.println("Promise All 启动");
+        return new Promise<>((resolve, reject) -> {
+            Object[] rs = new Object[promises.length];
+            if (promises == null) {
+                resolve.apply(rs);
+            }
+            for (int i = 0; i < promises.length; i++) {
+                try {
+                    rs[i] = promises[i].get();
+                } catch (ExecutionException e) {
+                    if (e.getCause() instanceof RejectedException) {
+                        reject.apply(((RejectedException) e.getCause()).getError());
+                    } else {
+                        reject.apply(e.getCause());
+                    }
+                } catch (InterruptedException e) {
+                    reject.apply(e);
+                }
+            }
+            resolve.apply(rs);
+        });
+    }
 
-        return null;
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        Long startTime = System.currentTimeMillis();
+        Promise.all(new Promise((resolve, reject) -> {
+//            Thread.sleep(1000);
+            resolve.apply(100);
+        }), new Promise((resolve, reject) -> {
+//            Thread.sleep(1000);
+//            resolve.apply(200);
+            reject.apply(1);
+        })).then(res -> {
+            System.out.println(Arrays.toString((Object[]) res));
+            System.out.println("耗时:" + (System.currentTimeMillis() - startTime));
+        }).Catch(err -> {
+            System.out.println(err);
+            System.out.println("耗时:" + (System.currentTimeMillis() - startTime));
+        });
+        System.out.println("启动");
     }
 
     public static <T, V> Promise<T, V> race(Promise... promises) {
@@ -136,12 +182,10 @@ public class Promise<T, V> implements Callable<T> {
             if (result instanceof Exception) {
                 throw new PromiseException((Exception) result);
             }
-            throw new PromiseException(result);
+            throw new RejectedException(result);
         }
         if (size > 0) {
             this.doCallBacks(result, rejected);
-            this.res = null;//清空结果
-            this.err = null;//清空异常
         }
     }
 
@@ -167,19 +211,16 @@ public class Promise<T, V> implements Callable<T> {
                 promise = ((Promise) result);
                 promise.isReturn = true;
                 try {
-                    result = promise.get();//等待Promise的结果
+                    promise.get();//等待Promise的结果
                 } catch (Exception e) {
                     rejected = true;
                     result = e;
-                    continue;//等待过程出异常了,寻找下一个回调来处理
-                }
-                if (promise.promiseStatus == PromiseStatus.RESOLVED) {
                     continue;
                 }
-                if (promise.promiseStatus == PromiseStatus.REJECTED) {
-                    rejected = true;
-                    result = promise.err;
-                    continue;
+                if (promise.callBacks.size() > 0) {
+                    result = null;
+                } else {
+                    result = promise.res;
                 }
             }
         }
@@ -204,8 +245,11 @@ public class Promise<T, V> implements Callable<T> {
     //异步执行
     @Override
     public T call() throws Exception {
-        if(this.callBacks.size() == 0) {
-            Thread.sleep(100);
+        System.out.println("Promise启动");
+        //用来保证所有预先设置的回调函数成功设置
+        int i = 0;
+        for (; i < this.waitForSetCallBackCount && this.callBacks.size() == 0; i++) {
+            Thread.sleep(this.waitForSetCallBackTime);
         }
         Object result = null;
         boolean rejected = false;
@@ -235,6 +279,13 @@ public class Promise<T, V> implements Callable<T> {
         return this.res;
     }
 
+    /**
+     * 获取执行结果
+     *
+     * @return
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     public T get() throws ExecutionException, InterruptedException {
         return this.future.get();
     }
