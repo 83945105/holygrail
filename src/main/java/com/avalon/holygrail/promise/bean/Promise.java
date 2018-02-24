@@ -59,7 +59,17 @@ public final class Promise<V, E> implements Promiser<V, E> {
     public Promise() {
     }
 
+    public Promise(String name) {
+        this.name = name;
+    }
+
     public Promise(Promise owner, CallBack callBack) {
+        this.owner = owner;
+        this.callBack = callBack;
+    }
+
+    public Promise(String name, Promise owner, CallBack callBack) {
+        this.name = name;
         this.owner = owner;
         this.callBack = callBack;
     }
@@ -68,9 +78,21 @@ public final class Promise<V, E> implements Promiser<V, E> {
         this.start(promiseRun);
     }
 
+    public Promise(String name, PromiseRun<V, E> promiseRun) {
+        this.name = name;
+        this.start(promiseRun);
+    }
+
     @Override
     public <P> Promiser<P, Object> then(ResolveA<V, P> resolve) {
         Promise<P, Object> next = new Promise<>(this, resolve);
+        this.nextList.add(next);
+        return next;
+    }
+
+    @Override
+    public <P> Promiser<P, Object> then(PromiseName nameHandler, ResolveA<V, P> resolve) {
+        Promise<P, Object> next = new Promise<>(nameHandler.apply(this.name), this, resolve);
         this.nextList.add(next);
         return next;
     }
@@ -83,6 +105,13 @@ public final class Promise<V, E> implements Promiser<V, E> {
     }
 
     @Override
+    public Promiser<Object, Object> then(PromiseName nameHandler, ResolveB<V> resolve) {
+        Promise<Object, Object> next = new Promise<>(nameHandler.apply(this.name), this, resolve);
+        this.nextList.add(next);
+        return next;
+    }
+
+    @Override
     public <P> Promiser<P, Object> Catch(RejectA<E, P> reject) {
         Promise<P, Object> next = new Promise<>(this, reject);
         this.nextList.add(next);
@@ -90,8 +119,22 @@ public final class Promise<V, E> implements Promiser<V, E> {
     }
 
     @Override
+    public <P> Promiser<P, Object> Catch(PromiseName nameHandler, RejectA<E, P> reject) {
+        Promise<P, Object> next = new Promise<>(nameHandler.apply(this.name), this, reject);
+        this.nextList.add(next);
+        return next;
+    }
+
+    @Override
     public Promiser<Object, Object> Catch(RejectB<E> reject) {
         Promise<Object, Object> next = new Promise<>(this, reject);
+        this.nextList.add(next);
+        return next;
+    }
+
+    @Override
+    public Promiser<Object, Object> Catch(PromiseName nameHandler, RejectB<E> reject) {
+        Promise<Object, Object> next = new Promise<>(nameHandler.apply(this.name), this, reject);
         this.nextList.add(next);
         return next;
     }
@@ -196,16 +239,7 @@ public final class Promise<V, E> implements Promiser<V, E> {
                     return;
                 }
                 if (callBack instanceof ResolveA) {
-                    Object rs = ((ResolveA) callBack).apply(param);
-                    if (rs instanceof Promise) {
-                        Promise promise = (Promise) rs;
-                        while (promise.future == null) {
-                            Thread.sleep(1000);
-                        }
-                        resolve.apply((V) promise.future.get());
-                    } else {
-                        resolve.apply((V) rs);
-                    }
+                    resolve.apply((V) ((ResolveA) callBack).apply(param));
                     return;
                 }
                 if (callBack instanceof ResolveB) {
@@ -220,16 +254,7 @@ public final class Promise<V, E> implements Promiser<V, E> {
                     return;
                 }
                 if (callBack instanceof RejectA) {
-                    Object rs = ((RejectA) callBack).apply(param);
-                    if (rs instanceof Promise) {
-                        Promise promise = (Promise) rs;
-                        while (promise.future == null) {
-                            Thread.sleep(1000);
-                        }
-                        resolve.apply((V) promise.future.get());
-                    } else {
-                        resolve.apply((V) rs);
-                    }
+                    resolve.apply((V) ((RejectA) callBack).apply(param));
                     return;
                 }
                 if (callBack instanceof RejectB) {
@@ -244,9 +269,22 @@ public final class Promise<V, E> implements Promiser<V, E> {
     @Override
     public V call() throws Exception {
         if (this.name == null) {
-            this.name = Thread.currentThread().getName();
+            if (this.owner != null) {
+                this.name = this.owner.name + " > " + Thread.currentThread().getName();
+            } else {
+                this.name = Thread.currentThread().getName();
+            }
         }
         this.promiseRun.start(this.resolve, this.reject);
+        System.out.println(this.name);
+        if (this.res instanceof Promise) {
+            Promise promise = (Promise) this.res;
+            while (promise.future == null) {
+                Thread.sleep(1000);
+                System.out.println(this.name);
+            }
+            return (V) promise.future.get();
+        }
         return this.res;
     }
 

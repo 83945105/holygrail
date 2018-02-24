@@ -10,18 +10,18 @@ import java.util.concurrent.ExecutionException;
 public class Test {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        Promiser p = new Promise<>((resolve, reject) -> {
+        Promiser p = new Promise<>("起始线程", (resolve, reject) -> {
             Thread.sleep(1000);
             resolve.apply(123);
 //            reject.apply(666);
 //            int a = 1 / 0;
-        }).then(res -> {
+        }).then(ownerName -> ownerName + "> 起始线程1", res -> {
             System.out.println(res);
             Thread.sleep(1000);
             return 222;
-        }).then(res -> {
+        }).then(ownerName -> ownerName + "> 起始线程2", res -> {
             System.out.println("233666");
-            return new Promise((resolve, reject) -> {
+            return new Promise("返回的Promise", (resolve, reject) -> {
                 System.out.println("开始");
                 resolve.apply(99999);
             }).then(res1 -> {
