@@ -24,7 +24,7 @@ public class Test {
             return new Promise("返回的Promise", (resolve, reject) -> {
                 System.out.println("开始");
                 resolve.apply(99999);
-            }).then(res1 -> {
+            }).then(ownerName -> "特殊线程", res1 -> {
                 System.out.println("98797897897979");
                 return 101010;
             });

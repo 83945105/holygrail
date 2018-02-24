@@ -276,15 +276,15 @@ public final class Promise<V, E> implements Promiser<V, E> {
             }
         }
         this.promiseRun.start(this.resolve, this.reject);
-        System.out.println(this.name);
-        if (this.res instanceof Promise) {
+        System.out.println("Promise:" + this.name + " => 启动");
+/*        if (this.res instanceof Promise) {
             Promise promise = (Promise) this.res;
             while (promise.future == null) {
                 Thread.sleep(1000);
                 System.out.println(this.name);
             }
             return (V) promise.future.get();
-        }
+        }*/
         return this.res;
     }
 
