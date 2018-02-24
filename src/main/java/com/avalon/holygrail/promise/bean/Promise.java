@@ -197,6 +197,7 @@ public final class Promise<V, E> implements Promiser<V, E> {
                         break;
                 }
                 Promise.this.executorService.shutdown();
+                System.out.println("Promise:" + Promise.this.name + " => 结束");
             }
 
 
