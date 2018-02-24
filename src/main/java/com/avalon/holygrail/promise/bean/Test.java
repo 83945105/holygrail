@@ -10,6 +10,10 @@ import java.util.concurrent.ExecutionException;
 public class Test {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+        method2();
+    }
+
+    public static void method1() {
         Promiser p = new Promise<>("起始线程", (resolve, reject) -> {
             Thread.sleep(1000);
             resolve.apply(123);
@@ -43,5 +47,12 @@ public class Test {
             return 555;
         });
 //        System.out.println(p.get());
+    }
+
+    public static void method2() {
+        new Promise<>((resolve, reject) -> {
+            resolve.apply(1);
+            System.out.println(666);
+        });
     }
 }
