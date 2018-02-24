@@ -5,7 +5,7 @@ package com.avalon.holygrail.promise.norm;
  * Created by 白超 on 2018/2/10.
  */
 @FunctionalInterface
-public interface RejectB<T> extends CallBack {
+public interface RejectB<T> extends Reject {
 
-    void accept(T err);
+    void accept(T err) throws Exception;
 }

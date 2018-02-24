@@ -6,7 +6,6 @@ import com.avalon.holygrail.promise.model.PromiseStatus;
 import com.avalon.holygrail.promise.norm.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.*;
 
 /**
@@ -17,31 +16,31 @@ import java.util.concurrent.*;
  * .then(res -> {...do something}) 用于获取resolve.accept设置的值,可以返回一个对象或者Promise给下一个.then
  * .then(res -> {...do something}) 连续调用该方法可以获取上一个.then返回的对象或者Promise成功后的结果
  * .Catch(err -> {...do something}) 用于捕获调用该方法之前的最后一个异常
- * Created by 白超 on 2018/2/10.
+ * Created by 白超 on 2018/2/23.
  */
-public class Promise<T, V> implements Callable<T> {
+public final class Promise<V, E> implements Promiser<V, E> {
 
-    protected ExecutorService executorService;
+    private String name;
 
-    protected Future<T> future;
+    private PromiseStatus promiseStatus;
 
-    protected PromiseStatus promiseStatus;
+    private ExecutorService executorService;
 
-    protected PromiseRun<T, V> promiseRun;
+    private Future<V> future;
 
-    private T res;
+    private PromiseRun<V, E> promiseRun;
 
-    private Object err;
+    private V res;
 
-    private Boolean isReturn = false;//是否是返回的Promise
+    private E err;
 
-    protected ArrayList<CallBack> callBacks = new ArrayList<>();
+    private Promise owner;
 
-    protected int waitForSetCallBackCount = 3;//等待设置回调的次数
+    private ArrayList<Promise> nextList = new ArrayList<>();
 
-    protected long waitForSetCallBackTime = 100;//等待设置回调的时间(毫秒)
+    private CallBack callBack;
 
-    protected ResolveA<T> resolve = res -> {
+    private ResolveA<V, Object> resolve = res -> {
         if (this.promiseStatus == PromiseStatus.PENDING && this.promiseStatus != PromiseStatus.REJECTED) {
             this.promiseStatus = PromiseStatus.RESOLVED;
             this.res = res;
@@ -49,7 +48,7 @@ public class Promise<T, V> implements Callable<T> {
         return null;
     };
 
-    protected RejectA<V> reject = err -> {
+    private RejectA<E, Object> reject = err -> {
         if (this.promiseStatus == PromiseStatus.PENDING && this.promiseStatus != PromiseStatus.RESOLVED) {
             this.promiseStatus = PromiseStatus.REJECTED;
             this.err = err;
@@ -57,7 +56,48 @@ public class Promise<T, V> implements Callable<T> {
         return null;
     };
 
-    public Promise(PromiseRun<T, V> promiseRun) {
+    public Promise() {
+    }
+
+    public Promise(Promise owner, CallBack callBack) {
+        this.owner = owner;
+        this.callBack = callBack;
+    }
+
+    public Promise(PromiseRun<V, E> promiseRun) {
+        this.start(promiseRun);
+    }
+
+    @Override
+    public <P> Promiser<P, Object> then(ResolveA<V, P> resolve) {
+        Promise<P, Object> next = new Promise<>(this, resolve);
+        this.nextList.add(next);
+        return next;
+    }
+
+    @Override
+    public Promiser<Object, Object> then(ResolveB<V> resolve) {
+        Promise<Object, Object> next = new Promise<>(this, resolve);
+        this.nextList.add(next);
+        return next;
+    }
+
+    @Override
+    public <P> Promiser<P, Object> Catch(RejectA<E, P> reject) {
+        Promise<P, Object> next = new Promise<>(this, reject);
+        this.nextList.add(next);
+        return next;
+    }
+
+    @Override
+    public Promiser<Object, Object> Catch(RejectB<E> reject) {
+        Promise<Object, Object> next = new Promise<>(this, reject);
+        this.nextList.add(next);
+        return next;
+    }
+
+    @Override
+    public Promiser<V, E> start(PromiseRun<V, E> promiseRun) {
         this.promiseRun = promiseRun;
         this.executorService = new ThreadPoolExecutor(1, 1,
                 0L, TimeUnit.MILLISECONDS,
@@ -73,9 +113,6 @@ public class Promise<T, V> implements Callable<T> {
             @Override
             protected void afterExecute(Runnable r, Throwable t) {
                 super.afterExecute(r, t);
-                if (Promise.this.isReturn) {
-                    return;
-                }
                 if (t == null && r instanceof Future<?>) {
                     try {
                         Future<?> future = (Future<?>) r;
@@ -90,204 +127,128 @@ public class Promise<T, V> implements Callable<T> {
                         Thread.currentThread().interrupt();
                     }
                 }
-                if (t != null) {
-                    t.printStackTrace();
+                switch (Promise.this.promiseStatus) {
+                    case PENDING://运行中,表示没有使用resolve和reject
+                        if (t != null) {//报错了
+                            try {
+                                Promise.this.doNextList(true, t);
+                            } catch (PromiseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        break;
+                    case RESOLVED://成功,使用了resolve
+                        try {
+                            Promise.this.doNextList(false, Promise.this.res);
+                        } catch (PromiseException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                    case REJECTED://失败,使用了reject
+                        try {
+                            Promise.this.doNextList(true, Promise.this.err);
+                        } catch (PromiseException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                 }
+                Promise.this.executorService.shutdown();
             }
 
 
         };
         this.future = this.executorService.submit(this);
-    }
-
-
-    public Promise<T, V> then(ResolveA<?> resolve) {
-        if (resolve != null) {
-            this.callBacks.add(resolve);
-        }
         return this;
-    }
-
-    public Promise<T, V> then(ResolveB<?> resolve) {
-        if (resolve != null) {
-            this.callBacks.add(resolve);
-        }
-        return this;
-    }
-
-    public Promise<T, V> Catch(RejectA<?> reject) {
-        if (reject != null) {
-            this.callBacks.add(reject);
-        }
-        return this;
-    }
-
-    public Promise<T, V> Catch(RejectB<?> reject) {
-        if (reject != null) {
-            this.callBacks.add(reject);
-        }
-        return this;
-    }
-
-    public static Promise all(Promise... promises) {
-        System.out.println("Promise All 启动");
-        return new Promise<>((resolve, reject) -> {
-            Object[] rs = new Object[promises.length];
-            if (promises == null) {
-                resolve.apply(rs);
-            }
-            for (int i = 0; i < promises.length; i++) {
-                try {
-                    rs[i] = promises[i].get();
-                } catch (ExecutionException e) {
-                    if (e.getCause() instanceof RejectedException) {
-                        reject.apply(((RejectedException) e.getCause()).getError());
-                    } else {
-                        reject.apply(e.getCause());
-                    }
-                } catch (InterruptedException e) {
-                    reject.apply(e);
-                }
-            }
-            resolve.apply(rs);
-        });
-    }
-
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        Long startTime = System.currentTimeMillis();
-        Promise.all(new Promise((resolve, reject) -> {
-//            Thread.sleep(1000);
-            resolve.apply(100);
-        }), new Promise((resolve, reject) -> {
-//            Thread.sleep(1000);
-//            resolve.apply(200);
-            reject.apply(1);
-        })).then(res -> {
-            System.out.println(Arrays.toString((Object[]) res));
-            System.out.println("耗时:" + (System.currentTimeMillis() - startTime));
-        }).Catch(err -> {
-            System.out.println(err);
-            System.out.println("耗时:" + (System.currentTimeMillis() - startTime));
-        });
-        System.out.println("启动");
-    }
-
-    public static <T, V> Promise<T, V> race(Promise... promises) {
-
-        return null;
-    }
-
-    protected void doCallBacks(Object result, boolean rejected, int size) throws Exception {
-        if (rejected && size == 0) {//失败了且无回调可以处理,抛出异常
-            if (result instanceof Exception) {
-                throw new PromiseException((Exception) result);
-            }
-            throw new RejectedException(result);
-        }
-        if (size > 0) {
-            this.doCallBacks(result, rejected);
-        }
-    }
-
-    protected void doCallBacks(Object result, boolean rejected) throws Exception {
-        CallBack callBack;
-        Promise promise;
-        for (int i = 0; i < this.callBacks.size(); i++) {
-            callBack = this.callBacks.get(i);
-            if (rejected && !(callBack instanceof RejectA || callBack instanceof RejectB)) {
-                continue;//如果是失败状态且当前回调不是处理失败的回调,略过
-            } else if (!rejected && (callBack instanceof RejectA || callBack instanceof RejectB)) {
-                continue;//如果不是失败状态且当前回调是处理失败的回调,略过
-            }
-            try {
-                result = doCallBack(callBack, result);//使用给当前回调处理结果
-            } catch (Exception e) {
-                rejected = true;
-                result = e;
-                continue;//处理过程出异常了,寻找下一个回调来处理
-            }
-            rejected = false;//能走到这步说明异常已经处理完了
-            if (result instanceof Promise) {//如果回调返回的是Promise对象
-                promise = ((Promise) result);
-                promise.isReturn = true;
-                try {
-                    promise.get();//等待Promise的结果
-                } catch (Exception e) {
-                    rejected = true;
-                    result = e;
-                    continue;
-                }
-                if (promise.callBacks.size() > 0) {
-                    result = null;
-                } else {
-                    result = promise.res;
-                }
-            }
-        }
-        this.doCallBacks(result, rejected, 0);
-    }
-
-    protected Object doCallBack(CallBack callBack, Object result) throws Exception {
-        if (callBack instanceof ResolveA) {
-            result = ((ResolveA) callBack).apply(result);
-        } else if (callBack instanceof ResolveB) {
-            ((ResolveB) callBack).accept(result);
-            result = null;
-        } else if (callBack instanceof RejectA) {
-            result = ((RejectA) callBack).apply(result);
-        } else if (callBack instanceof RejectB) {
-            ((RejectB) callBack).accept(result);
-            result = null;
-        }
-        return result;
-    }
-
-    //异步执行
-    @Override
-    public T call() throws Exception {
-        System.out.println("Promise启动");
-        //用来保证所有预先设置的回调函数成功设置
-        int i = 0;
-        for (; i < this.waitForSetCallBackCount && this.callBacks.size() == 0; i++) {
-            Thread.sleep(this.waitForSetCallBackTime);
-        }
-        Object result = null;
-        boolean rejected = false;
-        try {
-            this.promiseRun.start(this.resolve, this.reject);
-        } catch (Exception e) {//发生异常
-            //只有当Promise状态为运行中才处理异常,否则表示在出现异常前,已经执行了resolve或reject改变了Promise状态
-            if (this.promiseStatus == PromiseStatus.PENDING) {
-                this.promiseStatus = PromiseStatus.REJECTED;//先将Promise状态改为失败
-                this.err = e;//记录
-            }
-        }
-        if (this.promiseStatus == PromiseStatus.RESOLVED) {
-            result = this.res;
-            rejected = false;
-        } else if (this.promiseStatus == PromiseStatus.REJECTED) {
-            result = this.err;
-            rejected = true;
-        }
-        try {
-            this.doCallBacks(result, rejected, this.callBacks.size());
-        } catch (Exception e) {
-            throw e;//回调没有处理掉异常,抛出
-        } finally {
-            this.executorService.shutdown();
-        }
-        return this.res;
     }
 
     /**
-     * 获取执行结果
+     * 处理兄弟级别回调
+     * 所谓兄弟级别,一般情况链式调用只有一个,如果有多个,同时执行
      *
-     * @return
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * @param rejected
+     * @param param
+     * @throws PromiseException
      */
-    public T get() throws ExecutionException, InterruptedException {
-        return this.future.get();
+    private void doNextList(boolean rejected, Object param) throws PromiseException {
+        if (rejected && this.nextList.size() == 0) {//有错误,但是没有可以处理的回调,抛异常
+            if (param instanceof Exception) {
+                throw new PromiseException("未找到Catch处理发生的错误", (Exception) param);
+            }
+            throw new RejectedException("未找到Catch处理发生的错误", param);
+        }
+        for (int i = 0; i < this.nextList.size(); i++) {
+            this.nextList.get(i).doCallBack(rejected, param);
+        }
     }
+
+    /**
+     * 处理Promise的回调
+     * 用于将Promise的CallBack放入Promise的执行体中异步执行
+     *
+     * @param param
+     */
+    private void doCallBack(boolean rejected, Object param) {
+        this.start((resolve, reject) -> {
+            if (callBack instanceof Resolve) {
+                if (rejected) {
+                    reject.apply((E) param);
+                    return;
+                }
+                if (callBack instanceof ResolveA) {
+                    Object rs = ((ResolveA) callBack).apply(param);
+                    if (rs instanceof Promise) {
+                        Promise promise = (Promise) rs;
+                        while (promise.future == null) {
+                            Thread.sleep(1000);
+                        }
+                        resolve.apply((V) promise.future.get());
+                    } else {
+                        resolve.apply((V) rs);
+                    }
+                    return;
+                }
+                if (callBack instanceof ResolveB) {
+                    ((ResolveB) callBack).accept(param);
+                    resolve.apply(null);
+                    return;
+                }
+            }
+            if (callBack instanceof Reject) {
+                if (!rejected) {
+                    resolve.apply((V) param);
+                    return;
+                }
+                if (callBack instanceof RejectA) {
+                    Object rs = ((RejectA) callBack).apply(param);
+                    if (rs instanceof Promise) {
+                        Promise promise = (Promise) rs;
+                        while (promise.future == null) {
+                            Thread.sleep(1000);
+                        }
+                        resolve.apply((V) promise.future.get());
+                    } else {
+                        resolve.apply((V) rs);
+                    }
+                    return;
+                }
+                if (callBack instanceof RejectB) {
+                    ((RejectB) callBack).accept(param);
+                    resolve.apply(null);
+                    return;
+                }
+            }
+        });
+    }
+
+    @Override
+    public V call() throws Exception {
+        if (this.name == null) {
+            this.name = Thread.currentThread().getName();
+        }
+        this.promiseRun.start(this.resolve, this.reject);
+        return this.res;
+    }
+
 
 }

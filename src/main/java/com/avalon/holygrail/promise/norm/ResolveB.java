@@ -5,7 +5,7 @@ package com.avalon.holygrail.promise.norm;
  * Created by 白超 on 2018/2/10.
  */
 @FunctionalInterface
-public interface ResolveB<T> extends CallBack {
+public interface ResolveB<T> extends Resolve {
 
-    void accept(T res);
+    void accept(T res) throws Exception;
 }
