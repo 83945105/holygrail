@@ -50,9 +50,8 @@ public class Test {
     }
 
     public static void method2() {
-        new Promise<>((resolve, reject) -> {
-            resolve.apply(1);
-            System.out.println(666);
-        });
+        int count = 250000;
+        int pageSize = count / 1000;
+        System.out.println(pageSize);
     }
 }
