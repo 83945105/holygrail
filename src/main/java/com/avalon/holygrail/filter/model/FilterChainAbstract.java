@@ -30,9 +30,10 @@ public abstract class FilterChainAbstract<T, V> implements FilterChain<T, V> {
     @Override
     public void doFilter(T go, V back) throws Exception {
         if(this.filters == null || this.index == this.filters.size()) {
+            this.index = 0;
             return;
         }
-        this.filters.get(index++).doFilter(go, back, this);
+        this.filters.get(this.index++).doFilter(go, back, this);
     }
 
     public List<Filter<T, V>> getFilters() {
