@@ -2,6 +2,8 @@ package com.avalon.holygrail.db.bean;
 
 import com.avalon.holygrail.db.model.Column;
 import com.avalon.holygrail.db.norm.ColumnType;
+import com.avalon.holygrail.db.norm.IndexMethod;
+import com.avalon.holygrail.db.norm.IndexType;
 import com.avalon.holygrail.util.StringUtil;
 
 /**
@@ -19,6 +21,11 @@ public class MySqlColumn extends Column {
 
     public MySqlColumn(String name, ColumnType columnType, int length, String comment) {
         super(name, columnType, length, comment);
+    }
+
+    @Override
+    public boolean isPrimaryKey() {
+        return this.primaryKey;
     }
 
     @Override
@@ -47,6 +54,11 @@ public class MySqlColumn extends Column {
     }
 
     @Override
+    public int getAuto_increment_start_value() {
+        return this.auto_increment_start_value;
+    }
+
+    @Override
     public boolean isUnsigned() {
         return this.unsigned;
     }
@@ -58,7 +70,7 @@ public class MySqlColumn extends Column {
 
     @Override
     public boolean isNot_null() {
-        return this.not_null;
+        return isPrimaryKey() ? true : this.not_null;
     }
 
     @Override
@@ -72,7 +84,32 @@ public class MySqlColumn extends Column {
     }
 
     @Override
-    public String toString() {
+    public boolean isUseIndex() {
+        return this.useIndex;
+    }
+
+    @Override
+    public String getIndexName() {
+        return StringUtil.isEmpty(this.indexName) ? "idx_" + this.getName() : this.indexName;
+    }
+
+    @Override
+    public IndexType getIndexType() {
+        return this.indexType != null ? this.indexType : this.isPrimaryKey() ? MySqlIndexType.Unique : MySqlIndexType.Normal;
+    }
+
+    @Override
+    public IndexMethod getIndexMethod() {
+        return this.indexMethod != null ? this.indexMethod : MySqlIndexMethod.BTREE;
+    }
+
+    @Override
+    public String getIndexComment() {
+        return this.indexComment;
+    }
+
+    @Override
+    public String buildColumnCreateSql() {
         StringBuilder rs = new StringBuilder();
         if (StringUtil.isEmpty(this.getName())) {
             System.err.println("MySqlColumn name is empty");
@@ -82,7 +119,7 @@ public class MySqlColumn extends Column {
         rs.append(" ").append(this.getColumnType().toString()).append("(").append(this.getLength());
         if (this.getDecimalLength() != 0 && this.getDecimalLength() < this.getLength()) {
             rs.append(",").append(this.getDecimalLength());
-        } else if(this.getDecimalLength() != 0) {
+        } else if (this.getDecimalLength() != 0) {
             System.err.println("MySqlColumn decimalLength must less then length");
         }
         rs.append(")");
@@ -98,9 +135,9 @@ public class MySqlColumn extends Column {
         if (this.auto_increment) {
             rs.append(" AUTO_INCREMENT");
         }
-        if(this.getDefaultValue() == null) {
+        if (!this.not_null && this.getDefaultValue() == null) {
             rs.append(" DEFAULT NULL");
-        }else {
+        } else if (this.getDefaultValue() != null) {
             rs.append(" DEFAULT ").append("'").append(this.getDefaultValue()).append("'");
         }
         if (!StringUtil.isEmpty(this.getComment())) {

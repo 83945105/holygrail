@@ -1,9 +1,8 @@
 package com.avalon.holygrail.db.model;
 
+import com.avalon.holygrail.db.exception.DBException;
 import com.avalon.holygrail.db.norm.CharacterSet;
 import com.avalon.holygrail.db.norm.Engine;
-
-import java.util.Iterator;
 
 /**
  * 数据库表
@@ -17,9 +16,19 @@ public abstract class Table {
     protected String name;
 
     /**
+     * 是否构建主键列
+     */
+    protected boolean buildPrimaryKey;
+
+    /**
      * 主键列
      */
     protected Column primaryKey;
+
+    /**
+     * 是否构建自增长列
+     */
+    protected boolean buildAutoIncrement;
 
     /**
      * 自增长列
@@ -29,7 +38,7 @@ public abstract class Table {
     /**
      * 列
      */
-    protected Iterator<Column> columns;
+    protected Iterable<Column> columns;
 
     /**
      * 数据库引擎
@@ -53,7 +62,27 @@ public abstract class Table {
         return primaryKey;
     }
 
-    public void setPrimaryKey(Column primaryKey) {
+    public boolean isBuildPrimaryKey() {
+        return buildPrimaryKey;
+    }
+
+    public void setBuildPrimaryKey(boolean buildPrimaryKey) {
+        this.buildPrimaryKey = buildPrimaryKey;
+    }
+
+    public boolean isBuildAutoIncrement() {
+        return buildAutoIncrement;
+    }
+
+    public void setBuildAutoIncrement(boolean buildAutoIncrement) {
+        this.buildAutoIncrement = buildAutoIncrement;
+    }
+
+    public void setPrimaryKey(Column primaryKey) throws DBException {
+        if (!primaryKey.isPrimaryKey()) {
+            throw new DBException("Column未设置为primaryKey,columnName:" + primaryKey.getName());
+        }
+        this.buildPrimaryKey = true;
         this.primaryKey = primaryKey;
     }
 
@@ -61,15 +90,19 @@ public abstract class Table {
         return auto_increment;
     }
 
-    public void setAuto_increment(Column auto_increment) {
+    public void setAuto_increment(Column auto_increment) throws DBException {
+        if (!auto_increment.isAuto_increment()) {
+            throw new DBException("Column未设置为autoIncrement,columnName:" + primaryKey.getName());
+        }
+        this.buildAutoIncrement = true;
         this.auto_increment = auto_increment;
     }
 
-    public Iterator<Column> getColumns() {
+    public Iterable<Column> getColumns() {
         return columns;
     }
 
-    public void setColumns(Iterator<Column> columns) {
+    public void setColumns(Iterable<Column> columns) {
         this.columns = columns;
     }
 
@@ -91,12 +124,14 @@ public abstract class Table {
 
     /**
      * 构建创建语句
+     *
      * @return
      */
-    abstract public String buildCreateSql();
+    abstract public String buildCreateSql() throws DBException;
 
     /**
      * 构建删除语句
+     *
      * @return
      */
     abstract public String buildDropSql();
