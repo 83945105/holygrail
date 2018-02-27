@@ -3,6 +3,11 @@ package com.avalon.holygrail.db.model;
 import com.avalon.holygrail.db.exception.DBException;
 import com.avalon.holygrail.db.norm.CharacterSet;
 import com.avalon.holygrail.db.norm.Engine;
+import com.avalon.holygrail.util.StringUtil;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * 数据库表
@@ -135,4 +140,67 @@ public abstract class Table {
      * @return
      */
     abstract public String buildDropSql();
+
+    /**
+     * 构建批量插入预编译语句
+     *
+     * @param tableName   表名
+     * @param columns     列
+     * @param valueLength 数据长度
+     * @return
+     * @throws DBException
+     */
+    public static String buildBatchInsertPrecompileSql(String tableName, Iterable<Column> columns, int valueLength) throws DBException {
+        if (StringUtil.isEmpty(tableName)) {
+            throw new DBException("未指定tableName");
+        }
+        if (columns == null) {
+            throw new DBException("未指定columns");
+        }
+        if (valueLength < 1) {
+            throw new DBException("valueLength必须大于0");
+        }
+        StringBuilder sql = new StringBuilder("INSERT INTO `").append(tableName).append("` (");
+        Iterator<Column> iterator = columns.iterator();
+        Column column;
+        int len = 0;
+        while (iterator.hasNext()) {
+            column = iterator.next();
+            sql.append("`").append(column.getName()).append("`,");
+            len++;
+        }
+        if (len == 0) {
+            throw new DBException("columns长度必须大于0");
+        }
+        sql.replace(0, sql.length(), sql.substring(0, sql.length() - 1)).append(") VALUES ");
+        for (int i = 0; i < valueLength; i++) {
+            sql.append("(");
+            for (int j = len; j > 0; --j) {
+                sql.append("?");
+                if (j > 1) {
+                    sql.append(",");
+                }
+            }
+            sql.append("),");
+        }
+        return sql.substring(0, sql.length() - 1);
+    }
+
+    /**
+     * 构建批量插入语句
+     *
+     * @param values 数据
+     * @return
+     */
+    abstract public String buildBatchInsertSql(Collection<Map<String, Object>> values) throws DBException;
+
+    /**
+     * 构建批量插入语句
+     *
+     * @param values            数据
+     * @param insertColumnNames 指定插入列
+     * @return
+     */
+    abstract public String buildBatchInsertSql(Collection<Map<String, Object>> values, String... insertColumnNames) throws DBException;
+
 }

@@ -7,10 +7,7 @@ import com.avalon.holygrail.db.norm.CharacterSet;
 import com.avalon.holygrail.db.norm.Engine;
 import com.avalon.holygrail.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * MySql表
@@ -168,4 +165,72 @@ public class MySqlTable extends Table {
         }
         return "DROP TABLE IF EXISTS `" + this.getName() + "`;";
     }
+
+    @Override
+    public String buildBatchInsertSql(Collection<Map<String, Object>> values) throws DBException {
+        LinkedHashSet<Column> columns = new LinkedHashSet<>();
+        if (this.getPrimaryKey() != null) {
+            columns.add(this.getPrimaryKey());
+        }
+        if (this.getAuto_increment() != null) {
+            columns.add(this.getAuto_increment());
+        }
+        this.getColumns().forEach(column -> columns.add(column));
+        String precompileSql = Table.buildBatchInsertPrecompileSql(this.getName(), columns, values.size());
+        //使用正则表达式填充?
+        StringBuilder value = new StringBuilder(32);
+        for (Map<String, Object> map : values) {
+            value.replace(0, value.length(), "(");
+            for (Column column : columns) {
+                if (map.get(column.getName()) == null) {
+                    value.append(map.get(column.getName())).append(",");
+                } else {
+                    value.append("'").append(map.get(column.getName())).append("'").append(",");
+                }
+            }
+            value.replace(0, value.length(), value.substring(0, value.length() - 1)).append(")");
+            precompileSql = precompileSql.replaceFirst("\\([?,\\,]+\\)", value.toString());
+        }
+        return precompileSql;
+    }
+
+    @Override
+    public String buildBatchInsertSql(Collection<Map<String, Object>> values, String... insertColumnNames) throws DBException {
+        LinkedList<Column> columns = new LinkedList<>();
+        if (this.getPrimaryKey() != null) {
+            columns.add(this.getPrimaryKey());
+        }
+        if (this.getAuto_increment() != null) {
+            columns.add(this.getAuto_increment());
+        }
+        this.getColumns().forEach(column -> columns.add(column));
+        boolean removed = true;
+        for (int i = 0; i < columns.size(); ) {
+            for (String insertColumnName : insertColumnNames) {
+                if (insertColumnName.equals(columns.get(i))) {
+                    removed = false;
+                    break;
+                }
+            }
+            if (removed) {
+                columns.remove(i);
+            } else {
+                removed = true;
+                i++;
+            }
+        }
+        String precompileSql = Table.buildBatchInsertPrecompileSql(this.getName(), columns, values.size());
+        //使用正则表达式填充?
+        StringBuilder value = new StringBuilder(32);
+        for (Map<String, Object> map : values) {
+            value.replace(0, value.length(), "(");
+            for (Column column : columns) {
+                value.append("'").append(map.get(column.getName())).append("'").append(",");
+            }
+            value.replace(0, value.length(), value.substring(0, value.length() - 1)).append(")");
+            precompileSql = precompileSql.replaceFirst("\\([?,\\,]+\\)", value.toString());
+        }
+        return precompileSql;
+    }
+
 }

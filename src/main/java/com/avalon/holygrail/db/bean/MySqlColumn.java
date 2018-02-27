@@ -45,6 +45,9 @@ public class MySqlColumn extends Column {
 
     @Override
     public int getDecimalLength() {
+        if (this.getColumnType() == MySqlColumnType.double_) {
+            return this.decimalLength > 0 ? this.decimalLength : 1;
+        }
         return this.decimalLength;
     }
 
