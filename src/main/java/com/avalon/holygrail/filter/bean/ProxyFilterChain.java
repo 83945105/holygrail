@@ -1,4 +1,4 @@
-package com.avalon.holygrail.filter.model;
+package com.avalon.holygrail.filter.bean;
 
 import com.avalon.holygrail.filter.norm.Filter;
 import com.avalon.holygrail.filter.norm.FilterChain;

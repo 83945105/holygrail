@@ -2,6 +2,8 @@ package com.avalon.holygrail.excel.model;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.avalon.holygrail.excel.bean.SXSSFExcelTitle;
+import com.avalon.holygrail.excel.bean.SXSSFMergeCell;
 import com.avalon.holygrail.excel.exception.ExcelException;
 
 import java.util.List;

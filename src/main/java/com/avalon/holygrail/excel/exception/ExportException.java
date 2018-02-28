@@ -25,23 +25,4 @@ public class ExportException extends ExcelException {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
-    public ExportException(Exception realException) {
-        super(realException);
-    }
-
-    public ExportException(String message, Exception realException) {
-        super(message, realException);
-    }
-
-    public ExportException(String message, Throwable cause, Exception realException) {
-        super(message, cause, realException);
-    }
-
-    public ExportException(Throwable cause, Exception realException) {
-        super(cause, realException);
-    }
-
-    public ExportException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, Exception realException) {
-        super(message, cause, enableSuppression, writableStackTrace, realException);
-    }
 }

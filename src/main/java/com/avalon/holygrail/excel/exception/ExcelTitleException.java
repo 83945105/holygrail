@@ -1,6 +1,6 @@
 package com.avalon.holygrail.excel.exception;
 
-import com.avalon.holygrail.excel.model.ExcelCellError;
+import com.avalon.holygrail.excel.bean.ExcelCellError;
 
 /**
  * Excel表头异常
@@ -29,26 +29,6 @@ public class ExcelTitleException extends ExcelException {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
-    public ExcelTitleException(Exception realException) {
-        super(realException);
-    }
-
-    public ExcelTitleException(String message, Exception realException) {
-        super(message, realException);
-    }
-
-    public ExcelTitleException(String message, Throwable cause, Exception realException) {
-        super(message, cause, realException);
-    }
-
-    public ExcelTitleException(Throwable cause, Exception realException) {
-        super(cause, realException);
-    }
-
-    public ExcelTitleException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, Exception realException) {
-        super(message, cause, enableSuppression, writableStackTrace, realException);
-    }
-
     public ExcelTitleException(ExcelCellError excelCellError) {
         this.excelCellError = excelCellError;
     }
@@ -70,31 +50,6 @@ public class ExcelTitleException extends ExcelException {
 
     public ExcelTitleException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, ExcelCellError excelCellError) {
         super(message, cause, enableSuppression, writableStackTrace);
-        this.excelCellError = excelCellError;
-    }
-
-    public ExcelTitleException(Exception realException, ExcelCellError excelCellError) {
-        super(realException);
-        this.excelCellError = excelCellError;
-    }
-
-    public ExcelTitleException(String message, Exception realException, ExcelCellError excelCellError) {
-        super(message, realException);
-        this.excelCellError = excelCellError;
-    }
-
-    public ExcelTitleException(String message, Throwable cause, Exception realException, ExcelCellError excelCellError) {
-        super(message, cause, realException);
-        this.excelCellError = excelCellError;
-    }
-
-    public ExcelTitleException(Throwable cause, Exception realException, ExcelCellError excelCellError) {
-        super(cause, realException);
-        this.excelCellError = excelCellError;
-    }
-
-    public ExcelTitleException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, Exception realException, ExcelCellError excelCellError) {
-        super(message, cause, enableSuppression, writableStackTrace, realException);
         this.excelCellError = excelCellError;
     }
 

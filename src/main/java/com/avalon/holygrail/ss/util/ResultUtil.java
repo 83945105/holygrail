@@ -5,8 +5,8 @@ import com.avalon.holygrail.ss.exception.NotFoundException;
 import com.avalon.holygrail.ss.exception.NeedLoginException;
 import com.avalon.holygrail.ss.exception.NoAuthorityException;
 import com.avalon.holygrail.ss.exception.ResultException;
-import com.avalon.holygrail.ss.model.ResultCodeEnum;
-import com.avalon.holygrail.ss.model.ResultInfoRealization;
+import com.avalon.holygrail.ss.bean.ResultCodeEnum;
+import com.avalon.holygrail.ss.bean.ResultInfoRealization;
 import com.avalon.holygrail.ss.norm.ResultInfo;
 
 /**

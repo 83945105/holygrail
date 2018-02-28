@@ -3,7 +3,7 @@ package com.avalon.holygrail.excel.norm;
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.model.ExcelCellAbstract;
-import com.avalon.holygrail.excel.model.ExcelCellError;
+import com.avalon.holygrail.excel.bean.ExcelCellError;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import com.avalon.holygrail.util.SortUtil;
 

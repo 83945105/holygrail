@@ -6,11 +6,6 @@ package com.avalon.holygrail.excel.exception;
  */
 public class ExcelException extends Exception {
 
-    /**
-     * 真实异常
-     */
-    protected Exception realException = this;
-
     public ExcelException() {
     }
 
@@ -30,27 +25,4 @@ public class ExcelException extends Exception {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
-    public ExcelException(Exception realException) {
-        this.realException = realException;
-    }
-
-    public ExcelException(String message, Exception realException) {
-        super(message);
-        this.realException = realException;
-    }
-
-    public ExcelException(String message, Throwable cause, Exception realException) {
-        super(message, cause);
-        this.realException = realException;
-    }
-
-    public ExcelException(Throwable cause, Exception realException) {
-        super(cause);
-        this.realException = realException;
-    }
-
-    public ExcelException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, Exception realException) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        this.realException = realException;
-    }
 }

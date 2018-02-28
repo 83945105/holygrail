@@ -1,4 +1,4 @@
-package com.avalon.holygrail.ss.model;
+package com.avalon.holygrail.ss.bean;
 
 import com.avalon.holygrail.ss.norm.ResultCode;
 

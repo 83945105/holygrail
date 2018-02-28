@@ -1,4 +1,4 @@
-package com.avalon.holygrail.promise.model;
+package com.avalon.holygrail.promise.bean;
 
 /**
  * Promise状态

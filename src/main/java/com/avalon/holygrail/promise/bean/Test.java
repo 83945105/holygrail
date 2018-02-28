@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 public class Test {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        method2();
+        method1();
     }
 
     public static void method1() {
@@ -24,9 +24,12 @@ public class Test {
             Thread.sleep(1000);
             return 222;
         }).then(ownerName -> ownerName + "> 起始线程2", res -> {
-            System.out.println("233666");
             return new Promise("返回的Promise", (resolve, reject) -> {
-                System.out.println("开始");
+                int i = 0;
+                while (i++ < 3) {
+                    Thread.sleep(1000);
+                    System.out.println("~~~~:" + i);
+                }
                 resolve.apply(99999);
             }).then(ownerName -> "特殊线程", res1 -> {
                 System.out.println("98797897897979");
@@ -49,9 +52,12 @@ public class Test {
 //        System.out.println(p.get());
     }
 
-    public static void method2() {
-        int count = 250000;
-        int pageSize = count / 1000;
-        System.out.println(pageSize);
+    public static void method2() throws ExecutionException, InterruptedException {
+        Promise p = new Promise<>((resolve, reject) -> {
+            Thread.sleep(3000);
+        });
+        System.out.println("11111111111111");
+        System.out.println(p.get());
+        System.out.println("22222222222222");
     }
 }

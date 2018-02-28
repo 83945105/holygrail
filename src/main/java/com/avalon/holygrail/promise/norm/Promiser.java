@@ -1,6 +1,7 @@
 package com.avalon.holygrail.promise.norm;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
 /**
  * 承诺模式
@@ -34,5 +35,7 @@ public interface Promiser<V, E> extends Callable<V> {
     Promiser<Object, Object> Catch(PromiseName nameHandler, RejectB<E> reject);
 
     Promiser<V, E> start(PromiseRun<V, E> promiseRun);
+
+    V get() throws ExecutionException, InterruptedException;
 
 }

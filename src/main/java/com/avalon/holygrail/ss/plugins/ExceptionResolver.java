@@ -1,14 +1,9 @@
 package com.avalon.holygrail.ss.plugins;
 
-import com.avalon.holygrail.ss.exception.ResultException;
 import com.avalon.holygrail.ss.filter.ExceptionFilterChain;
-import com.avalon.holygrail.ss.norm.ResultCode;
-import com.avalon.holygrail.ss.norm.ResultInfo;
 import com.avalon.holygrail.ss.util.ResultUtil;
 import com.avalon.holygrail.ss.view.ExceptionView;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -21,11 +16,7 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.Method;
-import java.lang.reflect.UndeclaredThrowableException;
-import java.util.Map;
 
 /**
  * 统一异常处理器

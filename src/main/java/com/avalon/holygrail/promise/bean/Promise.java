@@ -2,7 +2,6 @@ package com.avalon.holygrail.promise.bean;
 
 import com.avalon.holygrail.promise.exception.PromiseException;
 import com.avalon.holygrail.promise.exception.RejectedException;
-import com.avalon.holygrail.promise.model.PromiseStatus;
 import com.avalon.holygrail.promise.norm.*;
 
 import java.util.ArrayList;
@@ -158,6 +157,9 @@ public final class Promise<V, E> implements Promiser<V, E> {
                 super.afterExecute(r, t);
                 if (t == null && r instanceof Future<?>) {
                     try {
+                        if(Promise.this.res instanceof Promise) {
+                            Promise.this.res = (V) ((Promise) Promise.this.res).get();
+                        }
                         Future<?> future = (Future<?>) r;
                         if (future.isDone()) {
                             future.get();
@@ -204,6 +206,14 @@ public final class Promise<V, E> implements Promiser<V, E> {
         };
         this.future = this.executorService.submit(this);
         return this;
+    }
+
+    @Override
+    public V get() throws ExecutionException, InterruptedException {
+        if (this.owner != null) {
+            this.owner.get();
+        }
+        return this.future.get();
     }
 
     /**
@@ -276,16 +286,8 @@ public final class Promise<V, E> implements Promiser<V, E> {
                 this.name = Thread.currentThread().getName();
             }
         }
-        this.promiseRun.start(this.resolve, this.reject);
         System.out.println("Promise:" + this.name + " => 启动");
-/*        if (this.res instanceof Promise) {
-            Promise promise = (Promise) this.res;
-            while (promise.future == null) {
-                Thread.sleep(1000);
-                System.out.println(this.name);
-            }
-            return (V) promise.future.get();
-        }*/
+        this.promiseRun.start(this.resolve, this.reject);
         return this.res;
     }
 

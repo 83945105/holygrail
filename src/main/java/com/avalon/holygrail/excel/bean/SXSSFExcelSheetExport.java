@@ -3,8 +3,6 @@ package com.avalon.holygrail.excel.bean;
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
-import com.avalon.holygrail.excel.model.SXSSFExcelTitle;
-import com.avalon.holygrail.excel.model.SXSSFMergeCell;
 import com.avalon.holygrail.excel.norm.CellHandler;
 import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.ExcelSheetExport;
