@@ -1,4 +1,4 @@
-package com.avalon.holygrail.excel.model;
+package com.avalon.holygrail.excel.bean;
 
 /**
  * SXSSFWorkbook 合并单元格
@@ -13,4 +13,5 @@ public class SXSSFMergeCell extends XSSFMergeCell {
     public SXSSFMergeCell(Integer startRow, Integer startCol, Integer rowSpan, Integer colSpan) {
         super(startRow, startCol, rowSpan, colSpan);
     }
+
 }

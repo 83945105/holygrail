@@ -1,4 +1,6 @@
-package com.avalon.holygrail.excel.model;
+package com.avalon.holygrail.excel.bean;
+
+import com.avalon.holygrail.excel.model.MergeCellAbstract;
 
 /**
  * XSSFWorkbook 合并单元格
