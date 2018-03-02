@@ -1,5 +1,6 @@
 package com.avalon.holygrail.excel.bean;
 
+import com.alibaba.druid.sql.visitor.functions.Char;
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.CellStyle;
@@ -73,9 +74,9 @@ public class SXSSFLoader implements CellOption, CellStyle {
             cell.setCellType(SXSSFCell.CELL_TYPE_BLANK);
             return;
         }
-        if (value instanceof Integer) {
-            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
-            cell.setCellValue((int) value);
+        if (value instanceof String) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_STRING);
+            cell.setCellValue((String) value);
             return;
         }
         if (value instanceof Boolean) {
@@ -83,11 +84,45 @@ public class SXSSFLoader implements CellOption, CellStyle {
             cell.setCellValue((boolean) value);
             return;
         }
-        if (value instanceof String) {
-            cell.setCellType(SXSSFCell.CELL_TYPE_STRING);
-            cell.setCellValue((String) value);
+        if (value instanceof Integer) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellValue((int) value);
             return;
         }
+        if (value instanceof Long) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellValue((long) value);
+            return;
+        }
+
+        if (value instanceof Double) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellValue((double) value);
+            return;
+        }
+        if (value instanceof Float) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellValue((float) value);
+            return;
+        }
+        if (value instanceof Short) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellValue((short) value);
+            return;
+        }
+        if (value instanceof Byte) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellValue((byte) value);
+            return;
+        }
+        if (value instanceof Char) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellValue((char) value);
+            return;
+        }
+        cell.setCellType(SXSSFCell.CELL_TYPE_STRING);
+        cell.setCellValue((String) value);
+        return;
     }
 
     @Override
