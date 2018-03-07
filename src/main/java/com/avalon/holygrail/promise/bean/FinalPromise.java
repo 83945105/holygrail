@@ -157,9 +157,6 @@ public final class FinalPromise<V, E> implements Promiser<V, E> {
                 super.afterExecute(r, t);
                 if (t == null && r instanceof Future<?>) {
                     try {
-                        if(FinalPromise.this.res instanceof FinalPromise) {
-                            FinalPromise.this.res = (V) ((FinalPromise) FinalPromise.this.res).get();
-                        }
                         Future<?> future = (Future<?>) r;
                         if (future.isDone()) {
                             future.get();
@@ -242,8 +239,58 @@ public final class FinalPromise<V, E> implements Promiser<V, E> {
      *
      * @param param
      */
-    private void doCallBack(boolean rejected, Object param) {
-        this.start((resolve, reject) -> {
+    private void doCallBack(boolean rejected, Object param) throws PromiseException {
+        if (this.callBack instanceof Resolve) {//.then设置的
+            if (rejected) {//失败跳过
+                this.doNextList(rejected, param);
+            }
+            if (this.callBack instanceof ResolveA) {//有返回值
+                try {
+                    param = ((ResolveA) this.callBack).apply(param);
+                } catch (Exception e) {
+                    param = e;
+                    rejected = true;
+                }
+                this.doNextList(rejected, param);
+            }
+            if (this.callBack instanceof ResolveB) {//无返回值
+                try {
+                    ((ResolveB) this.callBack).accept(param);
+                    param = null;
+                } catch (Exception e) {
+                    param = e;
+                    rejected = true;
+                }
+                this.doNextList(rejected, param);
+            }
+            return;
+        }
+        if (this.callBack instanceof Reject) {//.Catch设置的
+            if (!rejected) {
+                this.doNextList(rejected, param);
+            }
+            if (this.callBack instanceof RejectA) {//有返回值
+                try {
+                    param = ((RejectA) this.callBack).apply(param);
+                    rejected = false;
+                } catch (Exception e) {
+                    param = e;
+                }
+                this.doNextList(rejected, param);
+            }
+            if (this.callBack instanceof RejectB) {//无返回值
+                try {
+                    ((RejectB) this.callBack).accept(param);
+                    param = null;
+                    rejected = false;
+                } catch (Exception e) {
+                    param = e;
+                }
+                this.doNextList(rejected, param);
+            }
+            return;
+        }
+/*        this.start((resolve, reject) -> {
             if (callBack instanceof Resolve) {
                 if (rejected) {
                     reject.apply((E) param);
@@ -274,7 +321,7 @@ public final class FinalPromise<V, E> implements Promiser<V, E> {
                     return;
                 }
             }
-        });
+        });*/
     }
 
     @Override

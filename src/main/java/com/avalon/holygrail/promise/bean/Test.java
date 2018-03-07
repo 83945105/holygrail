@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 public class Test {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        method1();
+        method2();
     }
 
     public static void method1() {
@@ -53,11 +53,30 @@ public class Test {
     }
 
     public static void method2() throws ExecutionException, InterruptedException {
-        Promise p = new Promise<>((resolve, reject) -> {
-            Thread.sleep(3000);
+        new FinalPromise<>((resolve, reject) -> {
+            resolve.apply("1");
+//            reject.apply("2");
+        }).then(res -> {
+            System.out.println(res);
+            return "2";
+        }).then(res -> {
+            System.out.println(res);
+            return "3";
+        }).then(res -> {
+            System.out.println(res);
+            return "4";
+        }).then(res -> {
+            System.out.println(res);
+            return "5";
+        }).then(res -> {
+            System.out.println(res);
+            return "6";
+        }).then(res -> {
+            System.out.println(res);
+            return "7";
+        }).then(res -> {
+            System.out.println(res);
+            return "8";
         });
-        System.out.println("11111111111111");
-        System.out.println(p.get());
-        System.out.println("22222222222222");
     }
 }
