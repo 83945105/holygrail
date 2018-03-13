@@ -1,6 +1,5 @@
 package com.avalon.holygrail.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +14,7 @@ public class SortUtil {
          *
          * @param left  左边的参数
          * @param right 右边的参数
-         * @return left < right = true,从大到小排序
+         * @return left > right = true,从小到大排序, left < right = true,从大到小排序
          */
         boolean apply(T left, T right);
     }
@@ -26,7 +25,7 @@ public class SortUtil {
      * left < right = true,从大到小排序
      *
      * @param targets 排序对象
-     * @param compare 比较值
+     * @param compare 比较函数
      * @param <T>
      * @return
      */
@@ -39,7 +38,7 @@ public class SortUtil {
             for (int j = 0; j < maxIndex; j++) {
                 left = targets[j];
                 right = targets[j + 1];
-                if (compare.apply(left, right)) {//左边比右边大
+                if (compare.apply(left, right)) {
                     targets[j] = right;
                     targets[j + 1] = left;
                 }
@@ -54,7 +53,7 @@ public class SortUtil {
      * left < right = true,从大到小排序
      *
      * @param targets 排序对象
-     * @param compare 比较值,接收当前排序left和right的值,返回true表示left>right,此时交换位置
+     * @param compare 比较函数
      * @param <T>
      * @return
      */
@@ -67,7 +66,7 @@ public class SortUtil {
             for (int j = 0; j < maxIndex; j++) {
                 left = targets.get(j);
                 right = targets.get(j + 1);
-                if (compare.apply(left, right)) {//左边比右边大
+                if (compare.apply(left, right)) {
                     targets.set(j, right);
                     targets.set(j + 1, left);
                 }
@@ -76,14 +75,63 @@ public class SortUtil {
         return targets;
     }
 
-    public static void main(String[] args) {
-        ArrayList<Integer> r = new ArrayList<>();
-        r.add(3);
-        r.add(2);
-        r.add(4);
-        r.add(1);
-        r = (ArrayList<Integer>) SortUtil.bubbleSort(r, (left, right) -> left > right);
-        System.out.println(r);
+    public interface CompareB<T> {
+        /**
+         * 比较俩个参数大小
+         *
+         * @param current 当前元素
+         * @param target  比较元素
+         * @return current < target = true,从小到大排序, current > target = true,从大到小排序
+         */
+        boolean apply(T current, T target);
+    }
+
+    /**
+     * 插入排序
+     * left < right = true,从小到大排序
+     * left > right = true,从大到小排序
+     *
+     * @param targets 排序对象
+     * @param compare 比较函数
+     * @param <T>
+     * @return
+     */
+    public static <T> T[] insertSort(T[] targets, CompareB<T> compare) {
+        int len = targets.length;
+        T current;
+        int j;
+        for (int i = 1; i < len; i++) {
+            current = targets[i];//当前元素,从第二个元素开始
+            for (j = i; j > 0 && compare.apply(current, targets[j - 1]); j--) {
+                targets[j] = targets[j - 1];
+            }
+            targets[j] = current;
+        }
+        return targets;
+    }
+
+    /**
+     * 插入排序
+     * left < right = true,从小到大排序
+     * left > right = true,从大到小排序
+     *
+     * @param targets 排序对象
+     * @param compare 比较函数
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> insertSort(List<T> targets, CompareB<T> compare) {
+        int len = targets.size();
+        T current;
+        int j;
+        for (int i = 1; i < len; i++) {
+            current = targets.get(i);//当前元素,从第二个元素开始
+            for (j = i; j > 0 && compare.apply(current, targets.get(j - 1)); j--) {
+                targets.set(j, targets.get(j - 1));
+            }
+            targets.set(j, current);
+        }
+        return targets;
     }
 
 }

@@ -1,6 +1,9 @@
 package com.avalon.holygrail.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 集合工具
@@ -109,6 +112,36 @@ public class CollectionUtil {
      */
     public static <T> void batchProcess(List<T> records, int size, ListHandlerA<T> handler) throws Exception {
         CollectionUtil.batchProcess(records, 0, Math.abs(size), handler);
+    }
+
+    /**
+     * 新建ArrayList集合
+     *
+     * @param targets 集合元素
+     * @param <T>
+     * @return
+     */
+    public static <T> ArrayList<T> newArrayList(T... targets) {
+        ArrayList<T> list = new ArrayList<>();
+        for (T target : targets) {
+            list.add(target);
+        }
+        return list;
+    }
+
+    /**
+     * 新建HashMap集合
+     *
+     * @param key
+     * @param value
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K, V> HashMap<K, V> newHashMap(K key, V value) {
+        HashMap<K, V> map = new HashMap<>();
+        map.put(key, value);
+        return map;
     }
 
 }
