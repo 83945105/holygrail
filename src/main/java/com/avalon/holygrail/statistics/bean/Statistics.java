@@ -3,6 +3,7 @@ package com.avalon.holygrail.statistics.bean;
 import com.avalon.holygrail.statistics.exception.StatisticsException;
 import com.avalon.holygrail.statistics.model.AdvancedStatisticsFilter;
 import com.avalon.holygrail.statistics.model.BasicStatisticsFilter;
+import com.avalon.holygrail.statistics.model.SeniorStatisticsFilter;
 import com.avalon.holygrail.statistics.norm.Formatter;
 import com.avalon.holygrail.statistics.norm.RawDataHandler;
 
@@ -40,6 +41,10 @@ public final class Statistics<T> {
         return this.advancedStatisticsFilterList.get(this.filterIndex);
     }
 
+    private List<SeniorStatisticsFilter> getSeniorFilters() {
+        return this.seniorStatisticsFilterList.get(this.filterIndex);
+    }
+
     /**
      * 基础统计过滤器
      */
@@ -61,6 +66,16 @@ public final class Statistics<T> {
     private AdvancedFilterChain advancedFilterChain = new AdvancedFilterChain();
 
     /**
+     * 高阶过滤器
+     */
+    private List<List<SeniorStatisticsFilter>> seniorStatisticsFilterList = new ArrayList<>();
+
+    /**
+     * 高阶过滤链
+     */
+    private SeniorFilterChain seniorFilterChain = new SeniorFilterChain();
+
+    /**
      * 开始统计
      *
      * @param records 数据
@@ -74,6 +89,8 @@ public final class Statistics<T> {
         }
         this.advancedFilterChain.setFilters(this.getAdvancedFilters());
         this.advancedFilterChain.doFilter(this.statisticsData, this.statisticsData);
+        this.seniorFilterChain.setFilters(this.getSeniorFilters());
+        this.seniorFilterChain.doFilter(this.statisticsData, this.statisticsData);
         this.initFilters();
         return this;
     }
@@ -111,6 +128,8 @@ public final class Statistics<T> {
         for (StatisticsData statisticsData : statisticsDataArrayList) {
             this.advancedFilterChain.setFilters(this.getAdvancedFilters());
             this.advancedFilterChain.doFilter(statisticsData, statisticsData);
+            this.seniorFilterChain.setFilters(this.getSeniorFilters());
+            this.seniorFilterChain.doFilter(statisticsData, statisticsData);
         }
         this.initFilters();
         return this;
@@ -375,8 +394,48 @@ public final class Statistics<T> {
      * @return
      * @throws StatisticsException
      */
-    public Statistics<T> addStandardDeviation(String name, String valueCountName) throws StatisticsException {
+    public Statistics<T> addStandardDeviation(String name, String valueCountName) {
         this.getAdvancedFilters().add(new StandardDeviation(name, statisticsData, valueCountName));
+        return this;
+    }
+
+    /**
+     * 添加一个标准分统计
+     *
+     * @param name              统计名
+     * @param originalValueName 原值值名称
+     * @param averageScore      参考范围平均值
+     * @param standardDeviation 参考范围标准差
+     * @return
+     */
+    public Statistics<T> addStandardScore(String name, String originalValueName, BigDecimal averageScore, BigDecimal standardDeviation) {
+        this.getSeniorFilters().add(new StandardScore(name, statisticsData, originalValueName, averageScore, standardDeviation));
+        return this;
+    }
+
+    /**
+     * 添加一个得分率统计
+     *
+     * @param name              统计名
+     * @param originalValueName 原值值名称
+     * @param totalValueName    总值名称
+     * @return
+     */
+    public Statistics<T> addScoreRate(String name, String originalValueName, String totalValueName) {
+        this.getSeniorFilters().add(new ScoreRate(name, statisticsData, originalValueName, totalValueName));
+        return this;
+    }
+
+    /**
+     * 添加一个超均率统计
+     *
+     * @param name              统计名
+     * @param originalValueName 原值值名称
+     * @param averageScore      参考范围平均值
+     * @return
+     */
+    public Statistics<T> addHyperAverageRate(String name, String originalValueName, BigDecimal averageScore) {
+        this.getSeniorFilters().add(new HyperAverageRate(name, statisticsData, originalValueName, averageScore));
         return this;
     }
 }
