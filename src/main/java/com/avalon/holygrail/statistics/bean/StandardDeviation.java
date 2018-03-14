@@ -61,7 +61,7 @@ public class StandardDeviation extends AdvancedStatisticsFilter<BigDecimal> {
                 break;
             }
             BigDecimal total = new BigDecimal(tc);
-            avg = avg.divide(total, this.scale, this.roundingMode);
+            avg = avg.divide(total, 16, this.roundingMode);
             //计算标准差
             //标准差= sqrt( ( (A - avg) * (A - avg) + (B - avg) * (B - avg) + ... + (N - avg) * (N - avg) ) / N )
             BigDecimal v;
@@ -75,9 +75,12 @@ public class StandardDeviation extends AdvancedStatisticsFilter<BigDecimal> {
                     standardDeviation = standardDeviation.add(v.multiply(v));
                 }
             }
-            standardDeviation = standardDeviation.divide(total, this.scale, this.roundingMode);
+            standardDeviation = standardDeviation.divide(total, 16, this.roundingMode);
             standardDeviation = new BigDecimal(Math.sqrt(standardDeviation.doubleValue()));
         }
-        this.setValue(this.getName(), standardDeviation.setScale(this.scale, this.roundingMode));
+        standardDeviation = standardDeviation.setScale(this.scale, this.roundingMode);
+        this.setValue(this.getName(), standardDeviation);
+        int hc = this.getValueCount(this.getName(), standardDeviation);
+        this.setValueCount(this.getName(), standardDeviation, hc + count);
     }
 }

@@ -9,6 +9,8 @@ import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
+import java.math.BigDecimal;
+
 /**
  * SXSSF装载器
  * Created by 白超 on 2018/1/18.
@@ -118,6 +120,11 @@ public class SXSSFLoader implements CellOption, CellStyle {
         if (value instanceof Char) {
             cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
             cell.setCellValue((char) value);
+            return;
+        }
+        if(value instanceof BigDecimal) {
+            cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellValue(((BigDecimal) value).doubleValue());
             return;
         }
         cell.setCellType(SXSSFCell.CELL_TYPE_STRING);

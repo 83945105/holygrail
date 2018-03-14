@@ -21,7 +21,10 @@ public final class TotalCount<T> extends StatisticsIntegerFilter<T> {
 
     @Override
     public void doStatistics(Integer oldValue, Integer newValue, int count) {
-        this.setValue(this.getName(), oldValue + newValue * count);
+        Integer totalCount = oldValue + newValue;
+        this.setValue(this.getName(), totalCount);
+        int hc = this.getValueCount(this.getName(), totalCount);
+        this.setValueCount(this.getName(), totalCount, hc + count);
     }
 
 }

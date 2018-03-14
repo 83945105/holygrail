@@ -29,7 +29,7 @@ public class ScoreRate extends SeniorStatisticsFilter<BigDecimal> {
         this.totalValueName = totalValueName;
     }
 
-    public ScoreRate(String name, DataContainer<BigDecimal> dataContainer, Formatter<DataContainer, DataContainer> formatter, String originalValueName, String totalValueName) {
+    public ScoreRate(String name, DataContainer<BigDecimal> dataContainer, String originalValueName, String totalValueName, Formatter<DataContainer, DataContainer> formatter) {
         super(name, dataContainer, formatter);
         this.originalValueName = originalValueName;
         this.totalValueName = totalValueName;
@@ -41,7 +41,7 @@ public class ScoreRate extends SeniorStatisticsFilter<BigDecimal> {
         this.totalValueName = totalValueName;
     }
 
-    public ScoreRate(String name, DataContainer<BigDecimal> dataContainer, int scale, RoundingMode roundingMode, Formatter<DataContainer, DataContainer> formatter, String originalValueName, String totalValueName) {
+    public ScoreRate(String name, DataContainer<BigDecimal> dataContainer, int scale, RoundingMode roundingMode, String originalValueName, String totalValueName, Formatter<DataContainer, DataContainer> formatter) {
         super(name, dataContainer, scale, roundingMode, formatter);
         this.originalValueName = originalValueName;
         this.totalValueName = totalValueName;
@@ -74,9 +74,11 @@ public class ScoreRate extends SeniorStatisticsFilter<BigDecimal> {
             if (totalValue.compareTo(new BigDecimal(0)) == 0) {
                 break;
             }
-            scoreRate = originalValue.divide(totalValue, this.scale, this.roundingMode);
+            scoreRate = originalValue.divide(totalValue, 16, this.roundingMode);
         }
-
-        this.setValue(this.getName(), scoreRate.setScale(this.scale, this.roundingMode));
+        scoreRate = scoreRate.setScale(this.scale, this.roundingMode);
+        this.setValue(this.getName(), scoreRate);
+        int hc = this.getValueCount(this.getName(), scoreRate);
+        this.setValueCount(this.getName(), scoreRate, hc + count);
     }
 }

@@ -21,9 +21,8 @@ public class IntegerValue<T> extends StatisticsIntegerFilter<T> {
 
     @Override
     public void doStatistics(Integer oldValue, Integer newValue, int count) {
-        for (; count > 0; count--) {
-            newValue += newValue;
-        }
         this.setValue(this.getName(), newValue);
+        int hc = this.getValueCount(this.getName(), newValue);
+        this.setValueCount(this.getName(), newValue, hc + count);
     }
 }

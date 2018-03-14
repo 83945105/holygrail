@@ -53,19 +53,12 @@ public interface DataContainer<T> {
     ValueCounts<T> getValueCounts(String name);
 
     /**
-     * 获取数据值出现次数集合
-     *
-     * @return
-     */
-    Collection<ValueCounts<T>> getValueCounts();
-
-    /**
-     * 合并指定的值出现次数集合
+     * 获取指定的值出现次数集合
      *
      * @param names
      * @return
      */
-    ValueCounts<?> mergeValueCounts(String... names);
+    ValueCounts<?> getValueCounts(String... names);
 
 
     final class ValueCounts<K> extends HashMap<K, Integer> {

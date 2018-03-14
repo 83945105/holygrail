@@ -32,7 +32,10 @@ public final class TotalValue<T> extends StatisticsBigDecimalFilter<T> {
 
     @Override
     public void doStatistics(BigDecimal oldValue, BigDecimal newValue, int count) {
-        this.setValue(this.getName(), oldValue.add(newValue.multiply(new BigDecimal(count))));
+        BigDecimal totalValue = oldValue.add(newValue);
+        this.setValue(this.getName(), totalValue);
+        int hc = this.getValueCount(this.getName(), totalValue);
+        this.setValueCount(this.getName(), totalValue, hc + count);
     }
 
 }

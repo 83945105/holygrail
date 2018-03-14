@@ -21,10 +21,9 @@ public class StringValue<T> extends StatisticsStringFilter<T> {
 
     @Override
     public void doStatistics(String oldValue, String newValue, int count) {
-        for (; count > 1; count--) {
-            newValue += newValue;
-        }
         this.setValue(this.getName(), newValue);
+        int hc = this.getValueCount(this.getName(), newValue);
+        this.setValueCount(this.getName(), newValue, hc + count);
     }
 
 }

@@ -97,7 +97,7 @@ public final class AverageValue extends AdvancedStatisticsFilter<BigDecimal> {
                 if (totalCount == null || totalCount == 0) {
                     break;
                 }
-                averageValue = totalValue.divide(new BigDecimal(totalCount), this.scale, this.roundingMode);
+                averageValue = totalValue.divide(new BigDecimal(totalCount), 16, this.roundingMode);
                 break;
             case 2:
                 ValueCounts<Object> valueCounts = value.getValueCounts(this.valueCountName);
@@ -118,11 +118,14 @@ public final class AverageValue extends AdvancedStatisticsFilter<BigDecimal> {
                 if (totalCount == 0) {
                     break;
                 }
-                averageValue = totalValue.divide(new BigDecimal(totalCount), this.scale, this.roundingMode);
+                averageValue = totalValue.divide(new BigDecimal(totalCount), 16, this.roundingMode);
                 break;
             default:
                 throw new StatisticsException("AverageValue type类型不正确:" + this.getName());
         }
-        this.setValue(this.getName(), averageValue.setScale(this.scale, this.roundingMode));
+        averageValue = averageValue.setScale(this.scale, this.roundingMode);
+        this.setValue(this.getName(), averageValue);
+        int hc = this.getValueCount(this.getName(), averageValue);
+        this.setValueCount(this.getName(), averageValue, hc + count);
     }
 }

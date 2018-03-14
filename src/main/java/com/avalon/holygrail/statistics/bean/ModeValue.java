@@ -64,6 +64,9 @@ public class ModeValue extends AdvancedStatisticsFilter<String> {
                 modeValue.append(bigDecimal.setScale(this.scale, this.roundingMode).doubleValue()).append(",");
             }
         }
-        this.setValue(this.getName(), modeValue.substring(0, modeValue.length() - 1));
+        modeValue.replace(0, modeValue.length(), modeValue.substring(0, modeValue.length() - 1));
+        this.setValue(this.getName(), modeValue.toString());
+        int hc = this.getValueCount(this.getName(), modeValue.toString());
+        this.setValueCount(this.getName(), modeValue.toString(), hc + count);
     }
 }

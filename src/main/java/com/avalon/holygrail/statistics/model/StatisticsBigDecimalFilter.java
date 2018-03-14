@@ -55,7 +55,7 @@ public abstract class StatisticsBigDecimalFilter<T> extends BasicStatisticsFilte
     public void doStatistics(BigDecimal value, int count) throws Exception {
         BigDecimal hv = this.getValue(this.getName());
         if (hv == null) {
-            hv = new BigDecimal(0).setScale(this.scale, this.roundingMode);
+            hv = new BigDecimal(0);
         }
         if (value == null) {
             value = new BigDecimal(0);

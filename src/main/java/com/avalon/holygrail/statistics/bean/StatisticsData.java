@@ -13,6 +13,8 @@ import java.util.Map;
  */
 public class StatisticsData<V> extends HashMap<String, V> implements DataContainer<V> {
 
+    private String key;
+
     private HashMap<String, ValueCounts<V>> valueCounts = new HashMap<>();
 
     private ArrayList<StatisticsData> statisticsDataList = new ArrayList<>();
@@ -59,12 +61,7 @@ public class StatisticsData<V> extends HashMap<String, V> implements DataContain
     }
 
     @Override
-    public Collection<ValueCounts<V>> getValueCounts() {
-        return this.valueCounts.values();
-    }
-
-    @Override
-    public ValueCounts<?> mergeValueCounts(String... names) {
+    public ValueCounts<?> getValueCounts(String... names) {
         ValueCounts vcs = new ValueCounts();
         for (String name : names) {
             for (Map.Entry<V, Integer> vc : this.getValueCounts(name).entrySet()) {
@@ -72,6 +69,29 @@ public class StatisticsData<V> extends HashMap<String, V> implements DataContain
             }
         }
         return vcs;
+    }
+
+    public StatisticsData<V> merge(StatisticsData<Object> statisticsData) {
+        if (statisticsData == null) {
+            return this;
+        }
+        for (Entry<String, Object> entry : statisticsData.entrySet()) {
+            this.put(entry.getKey(), (V) entry.getValue());
+        }
+        for (Entry<String, ValueCounts<Object>> entry : statisticsData.valueCounts.entrySet()) {
+            for (Entry<Object, Integer> valueCount : entry.getValue().entrySet()) {
+                this.setValueCount(entry.getKey(), (V) valueCount.getKey(), valueCount.getValue());
+            }
+        }
+        return this;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public ArrayList<StatisticsData> getStatisticsDataList() {

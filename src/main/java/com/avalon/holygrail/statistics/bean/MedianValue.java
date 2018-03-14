@@ -64,13 +64,16 @@ public class MedianValue extends AdvancedStatisticsFilter<BigDecimal> {
             if (size % 2 == 0) {//偶数
                 medianValue = values.get(size / 2 - 1)
                         .add(values.get(size / 2))
-                        .divide(new BigDecimal(2), this.scale, this.roundingMode);
+                        .divide(new BigDecimal(2), 16, this.roundingMode);
                 break;
             }
             //奇数
             medianValue = values.get((size - 1) / 2);
         }
-        this.setValue(this.getName(), medianValue.setScale(this.scale, this.roundingMode));
+        medianValue = medianValue.setScale(this.scale, this.roundingMode);
+        this.setValue(this.getName(), medianValue);
+        int hc = this.getValueCount(this.getName(), medianValue);
+        this.setValueCount(this.getName(), medianValue, hc + count);
     }
 
 }

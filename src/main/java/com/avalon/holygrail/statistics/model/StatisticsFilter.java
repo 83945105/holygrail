@@ -86,12 +86,7 @@ public abstract class StatisticsFilter<T, V, K> implements Filter<T, DataContain
     }
 
     @Override
-    public Collection<ValueCounts<V>> getValueCounts() {
-        return this.dataContainer.getValueCounts();
-    }
-
-    @Override
-    public ValueCounts<?> mergeValueCounts(String... names) {
-        return this.dataContainer.mergeValueCounts(names);
+    public ValueCounts<?> getValueCounts(String... names) {
+        return this.dataContainer.getValueCounts(names);
     }
 }
