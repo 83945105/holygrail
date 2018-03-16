@@ -11,7 +11,7 @@ import java.math.RoundingMode;
  * 得分率
  * Created by 白超 on 2018/3/13.
  */
-public class ScoreRate extends SeniorStatisticsFilter<BigDecimal> {
+public final class ScoreRate extends SeniorStatisticsFilter<BigDecimal> {
 
     /**
      * 原始值名称

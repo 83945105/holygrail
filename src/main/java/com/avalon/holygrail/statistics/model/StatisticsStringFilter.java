@@ -18,6 +18,14 @@ public abstract class StatisticsStringFilter<T> extends BasicStatisticsFilter<T,
         super(name, dataContainer, formatter);
     }
 
+    public StatisticsStringFilter(FormatterName<T, String> formatterName, DataContainer<String> dataContainer, RawDataHandler<T, String> rawDataHandler) {
+        super(formatterName, dataContainer, rawDataHandler);
+    }
+
+    public StatisticsStringFilter(FormatterName<T, String> formatterName, DataContainer<String> dataContainer, Formatter<T, String> formatter) {
+        super(formatterName, dataContainer, formatter);
+    }
+
     public abstract void doStatistics(String oldValue, String newValue, int count);
 
     @Override

@@ -6,10 +6,10 @@ import com.avalon.holygrail.statistics.norm.Formatter;
 import java.math.RoundingMode;
 
 /**
- * 进阶统计
+ * 最终统计
  * Created by 白超 on 2018-3-10.
  */
-public abstract class AdvancedStatisticsFilter<V> extends StatisticsFilter<DataContainer, V, DataContainer> {
+public abstract class FinalStatisticsFilter<V> extends StatisticsFilter<DataContainer, V, DataContainer> {
 
     /**
      * 小数位数
@@ -25,34 +25,25 @@ public abstract class AdvancedStatisticsFilter<V> extends StatisticsFilter<DataC
      */
     private Formatter<DataContainer, DataContainer> formatter = (record, filter) -> filter.doStatistics(record, 1);
 
-    public AdvancedStatisticsFilter(String name, DataContainer<V> dataContainer) {
+    public FinalStatisticsFilter(String name, DataContainer<V> dataContainer) {
         super(name, dataContainer);
     }
 
-    public AdvancedStatisticsFilter(String name, DataContainer<V> dataContainer, Formatter<DataContainer, DataContainer> formatter) {
+    public FinalStatisticsFilter(String name, DataContainer<V> dataContainer, Formatter<DataContainer, DataContainer> formatter) {
         super(name, dataContainer);
         this.formatter = formatter;
     }
 
-    public AdvancedStatisticsFilter(String name, DataContainer<V> dataContainer, int scale, RoundingMode roundingMode) {
+    public FinalStatisticsFilter(String name, DataContainer<V> dataContainer, int scale, RoundingMode roundingMode) {
         super(name, dataContainer);
         this.scale = scale;
         this.roundingMode = roundingMode;
     }
 
-    public AdvancedStatisticsFilter(String name, DataContainer<V> dataContainer, int scale, RoundingMode roundingMode, Formatter<DataContainer, DataContainer> formatter) {
+    public FinalStatisticsFilter(String name, DataContainer<V> dataContainer, int scale, RoundingMode roundingMode, Formatter<DataContainer, DataContainer> formatter) {
         super(name, dataContainer);
         this.scale = scale;
         this.roundingMode = roundingMode;
-        this.formatter = formatter;
-    }
-
-    public AdvancedStatisticsFilter(FormatterName<DataContainer, V> formatterName, DataContainer<V> dataContainer) {
-        super(formatterName, dataContainer);
-    }
-
-    public AdvancedStatisticsFilter(FormatterName<DataContainer, V> formatterName, DataContainer<V> dataContainer, Formatter<DataContainer, DataContainer> formatter) {
-        super(formatterName, dataContainer);
         this.formatter = formatter;
     }
 

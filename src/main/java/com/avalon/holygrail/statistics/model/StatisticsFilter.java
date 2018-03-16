@@ -3,6 +3,7 @@ package com.avalon.holygrail.statistics.model;
 import com.avalon.holygrail.filter.norm.Filter;
 import com.avalon.holygrail.filter.norm.FilterChain;
 import com.avalon.holygrail.statistics.norm.DataContainer;
+import com.avalon.holygrail.statistics.norm.Formatter;
 import com.avalon.holygrail.statistics.norm.Statistics;
 
 import java.util.Collection;
@@ -13,10 +14,20 @@ import java.util.Collection;
  */
 public abstract class StatisticsFilter<T, V, K> implements Filter<T, DataContainer<V>>, DataContainer<V>, Statistics<K> {
 
+    public interface FormatterName<T, V> {
+
+        String apply(T record, DataContainer<V> container);
+    }
+
     /**
      * 统计名
      */
     private String name;
+
+    /**
+     * 格式化统计名
+     */
+    private FormatterName formatterName = (record, container) -> name;
 
     /**
      * 数据容器
@@ -38,6 +49,11 @@ public abstract class StatisticsFilter<T, V, K> implements Filter<T, DataContain
         this.dataContainer = dataContainer;
     }
 
+    public StatisticsFilter(FormatterName<T, V> formatterName, DataContainer<V> dataContainer) {
+        this.formatterName = formatterName;
+        this.dataContainer = dataContainer;
+    }
+
     public abstract void doStatistics(T go, DataContainer<V> back) throws Exception;
 
     @Override
@@ -45,6 +61,7 @@ public abstract class StatisticsFilter<T, V, K> implements Filter<T, DataContain
         if (back != null) {
             this.dataContainer = back;
         }
+        this.name = this.formatterName.apply(go, back);
         this.doStatistics(go, back);
         filterChain.doFilter(go, back);
     }
@@ -56,6 +73,11 @@ public abstract class StatisticsFilter<T, V, K> implements Filter<T, DataContain
      */
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

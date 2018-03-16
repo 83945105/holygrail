@@ -80,6 +80,18 @@ public final class AverageValue extends AdvancedStatisticsFilter<BigDecimal> {
         this.type = 2;
     }
 
+    public AverageValue(FormatterName<DataContainer, BigDecimal> formatterName, DataContainer<BigDecimal> dataContainer, String valueCountName) {
+        super(formatterName, dataContainer);
+        this.valueCountName = valueCountName;
+        this.type = 2;
+    }
+
+    public AverageValue(FormatterName<DataContainer, BigDecimal> formatterName, DataContainer<BigDecimal> dataContainer, Formatter<DataContainer, DataContainer> formatter, String valueCountName) {
+        super(formatterName, dataContainer, formatter);
+        this.valueCountName = valueCountName;
+        this.type = 2;
+    }
+
     @Override
     public void doStatistics(DataContainer value, int count) throws Exception {
         BigDecimal averageValue = new BigDecimal(0);

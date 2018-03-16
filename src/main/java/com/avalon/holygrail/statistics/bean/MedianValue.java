@@ -14,7 +14,7 @@ import java.util.Map;
  * 中位数统计
  * Created by 白超 on 2018/3/12.
  */
-public class MedianValue extends AdvancedStatisticsFilter<BigDecimal> {
+public final class MedianValue extends AdvancedStatisticsFilter<BigDecimal> {
 
     private String valueCountName;
 

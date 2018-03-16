@@ -9,7 +9,7 @@ import com.avalon.holygrail.statistics.norm.RawDataHandler;
  * 记录Integer类型值
  * Created by 白超 on 2018/3/12.
  */
-public class IntegerValue<T> extends StatisticsIntegerFilter<T> {
+public final class IntegerValue<T> extends StatisticsIntegerFilter<T> {
 
     public IntegerValue(String name, DataContainer<Integer> dataContainer, RawDataHandler<T, Integer> rawDataHandler) {
         super(name, dataContainer, rawDataHandler);

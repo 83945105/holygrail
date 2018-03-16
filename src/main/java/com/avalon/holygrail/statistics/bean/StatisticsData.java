@@ -11,7 +11,7 @@ import java.util.Map;
  * 统计容器
  * Created by 白超 on 2018/3/9.
  */
-public class StatisticsData<V> extends HashMap<String, V> implements DataContainer<V> {
+public final class StatisticsData<V> extends HashMap<String, V> implements DataContainer<V> {
 
     private String key;
 

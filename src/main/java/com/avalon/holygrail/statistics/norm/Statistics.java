@@ -13,4 +13,11 @@ public interface Statistics<V> {
      * @param count 统计值数量
      */
     void doStatistics(V value, int count) throws Exception;
+
+    /**
+     * 设置统计名
+     *
+     * @param name 统计名
+     */
+    void setName(String name);
 }

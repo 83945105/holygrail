@@ -1,12 +1,11 @@
 package com.avalon.holygrail.statistics.bean;
 
 import com.avalon.holygrail.statistics.exception.StatisticsException;
-import com.avalon.holygrail.statistics.model.AdvancedStatisticsFilter;
-import com.avalon.holygrail.statistics.model.BasicStatisticsFilter;
-import com.avalon.holygrail.statistics.model.SeniorStatisticsFilter;
+import com.avalon.holygrail.statistics.model.*;
 import com.avalon.holygrail.statistics.norm.DataContainer;
 import com.avalon.holygrail.statistics.norm.Formatter;
 import com.avalon.holygrail.statistics.norm.RawDataHandler;
+import com.avalon.holygrail.util.CollectionUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -56,14 +55,34 @@ public final class Statistics<T> {
     private AdvancedFilterChain advancedFilterChain = new AdvancedFilterChain();
 
     /**
-     * 高阶过滤器
+     * 高阶统计过滤器
      */
     private List<List<SeniorStatisticsFilter>> seniorStatisticsFilterList = new ArrayList<>();
 
     /**
-     * 高阶过滤链
+     * 高阶统计过滤链
      */
     private SeniorFilterChain seniorFilterChain = new SeniorFilterChain();
+
+    /**
+     * 最终统计过滤器
+     */
+    private List<List<FinalStatisticsFilter>> finalStatisticsFilterList = new ArrayList<>();
+
+    /**
+     * 最终统计过滤链
+     */
+    private FinalFilterChain finalFilterChain = new FinalFilterChain();
+
+    /**
+     * 汇总过滤器
+     */
+    private List<List<CollectStatisticsFilter>> collectStatisticsFilterList = new ArrayList<>();
+
+    /**
+     * 汇总过滤链
+     */
+    private CollectFilterChain collectFilterChain = new CollectFilterChain();
 
     /**
      * 用于记录获取最新统计所需参数的下标
@@ -74,9 +93,12 @@ public final class Statistics<T> {
         this.index++;
         this.statisticsDataList.add(this.index, new StatisticsData());
         this.statisticsDataMapList.add(this.index, new LinkedHashMap<>());
+
         this.basicStatisticsFilterList.add(this.index, new ArrayList<>());
         this.advancedStatisticsFilterList.add(this.index, new ArrayList<>());
         this.seniorStatisticsFilterList.add(this.index, new ArrayList<>());
+        this.finalStatisticsFilterList.add(this.index, new ArrayList<>());
+        this.collectStatisticsFilterList.add(this.index, new ArrayList<>());
     }
 
     private StatisticsData getStatisticsData() {
@@ -107,6 +129,14 @@ public final class Statistics<T> {
         return this.seniorStatisticsFilterList.get(this.index);
     }
 
+    private List<FinalStatisticsFilter> getFinalFilters() {
+        return this.finalStatisticsFilterList.get(this.index);
+    }
+
+    private List<CollectStatisticsFilter> getCollectFilters() {
+        return this.collectStatisticsFilterList.get(this.index);
+    }
+
     /**
      * 开始统计
      *
@@ -121,14 +151,24 @@ public final class Statistics<T> {
             this.basicFilterChain.doFilter(iterator.next(), container);
         }
         List<AdvancedStatisticsFilter> advancedStatisticsFilters = this.getAdvancedFilters();
-        if(advancedStatisticsFilters.size() > 0) {
+        if (advancedStatisticsFilters.size() > 0) {
             this.advancedFilterChain.setFilters(this.getAdvancedFilters());
             this.advancedFilterChain.doFilter(container, container);
         }
         List<SeniorStatisticsFilter> seniorStatisticsFilters = this.getSeniorFilters();
-        if(seniorStatisticsFilters.size() > 0) {
+        if (seniorStatisticsFilters.size() > 0) {
             this.seniorFilterChain.setFilters(this.getSeniorFilters());
             this.seniorFilterChain.doFilter(container, container);
+        }
+        List<FinalStatisticsFilter> finalStatisticsFilters = this.getFinalFilters();
+        if (finalStatisticsFilters.size() > 0) {
+            this.finalFilterChain.setFilters(finalStatisticsFilters);
+            this.finalFilterChain.doFilter(container, container);
+        }
+        List<CollectStatisticsFilter> collectStatisticsFilters = this.getCollectFilters();
+        if (collectStatisticsFilters.size() > 0) {
+            this.collectFilterChain.setFilters(collectStatisticsFilters);
+            this.collectFilterChain.doFilter(CollectionUtil.newArrayList(container), container);
         }
         this.init();
         return this;
@@ -177,25 +217,37 @@ public final class Statistics<T> {
         StatisticsData param;//参数
         List<AdvancedStatisticsFilter> advancedStatisticsFilters = this.getAdvancedFilters();
         List<SeniorStatisticsFilter> seniorStatisticsFilters = this.getSeniorFilters();
+        List<FinalStatisticsFilter> finalStatisticsFilters = this.getFinalFilters();
+        List<CollectStatisticsFilter> collectStatisticsFilters = this.getCollectFilters();
         for (Map.Entry<String, StatisticsData> entry : containers.entrySet()) {
             //尝试获取上一次统计结果
             param = previousContainers.get(entry.getKey());
             //上一次分组统计没找到,使用单次统计的
             if (param == null) {
-                param = previousContainer;
+                param = new StatisticsData().merge(previousContainer);
             }
             //合并上次统计结果+本次基础统计结果作为参数,如果key相同,最新的优先
             container = entry.getValue();
-            if(advancedStatisticsFilters.size() > 0) {
+            if (advancedStatisticsFilters.size() > 0) {
                 param.merge(container);
                 this.advancedFilterChain.setFilters(this.getAdvancedFilters());
                 this.advancedFilterChain.doFilter(param, container);
             }
-            if(seniorStatisticsFilters.size() > 0) {
+            if (seniorStatisticsFilters.size() > 0) {
                 param.merge(container);
                 this.seniorFilterChain.setFilters(this.getSeniorFilters());
                 this.seniorFilterChain.doFilter(param, container);
             }
+            if (finalStatisticsFilters.size() > 0) {
+                param.merge(container);
+                this.finalFilterChain.setFilters(finalStatisticsFilters);
+                this.finalFilterChain.doFilter(param, container);
+            }
+            container.merge(param);
+        }
+        if (collectStatisticsFilters.size() > 0) {
+            this.collectFilterChain.setFilters(collectStatisticsFilters);
+            this.collectFilterChain.doFilter(containers.values(), null);
         }
         this.init();
         return this;
@@ -234,6 +286,18 @@ public final class Statistics<T> {
     /**
      * 添加一个String类型值
      *
+     * @param formatterName 统计名回调
+     * @param handler       原始数据回调
+     * @return
+     */
+    public Statistics<T> addStringValue(StatisticsFilter.FormatterName<T, String> formatterName, RawDataHandler<T, String> handler) {
+        this.getBasicFilters().add(new StringValue(formatterName, this.getStatisticsData(), handler));
+        return this;
+    }
+
+    /**
+     * 添加一个String类型值
+     *
      * @param name      统计名
      * @param formatter 格式化回调
      * @return
@@ -250,7 +314,7 @@ public final class Statistics<T> {
      * @param handler 原始数据回调
      * @return
      */
-    public Statistics<T> addIntegerValue(String name, RawDataHandler<T, String> handler) {
+    public Statistics<T> addIntegerValue(String name, RawDataHandler<T, Integer> handler) {
         this.getBasicFilters().add(new IntegerValue(name, this.getStatisticsData(), handler));
         return this;
     }
@@ -262,7 +326,7 @@ public final class Statistics<T> {
      * @param formatter 格式化回调
      * @return
      */
-    public Statistics<T> addIntegerValue(String name, Formatter<T, String> formatter) {
+    public Statistics<T> addIntegerValue(String name, Formatter<T, Integer> formatter) {
         this.getBasicFilters().add(new IntegerValue(name, this.getStatisticsData(), formatter));
         return this;
     }
@@ -274,7 +338,7 @@ public final class Statistics<T> {
      * @param handler 原始数据回调
      * @return
      */
-    public Statistics<T> addBigDecimalValue(String name, RawDataHandler<T, String> handler) {
+    public Statistics<T> addBigDecimalValue(String name, RawDataHandler<T, BigDecimal> handler) {
         this.getBasicFilters().add(new BigDecimalValue(name, this.getStatisticsData(), handler));
         return this;
     }
@@ -286,7 +350,7 @@ public final class Statistics<T> {
      * @param formatter 格式化回调
      * @return
      */
-    public Statistics<T> addBigDecimalValue(String name, Formatter<T, String> formatter) {
+    public Statistics<T> addBigDecimalValue(String name, Formatter<T, BigDecimal> formatter) {
         this.getBasicFilters().add(new BigDecimalValue(name, this.getStatisticsData(), formatter));
         return this;
     }
@@ -440,6 +504,19 @@ public final class Statistics<T> {
     }
 
     /**
+     * 添加一个平均值统计
+     *
+     * @param formatterName  统计名回调
+     * @param valueCountName 依赖的总次数统计名
+     * @return
+     * @throws StatisticsException
+     */
+    public Statistics<T> addAverageValue(StatisticsFilter.FormatterName<DataContainer, BigDecimal> formatterName, String valueCountName) {
+        this.getAdvancedFilters().add(new AverageValue(formatterName, this.getStatisticsData(), valueCountName));
+        return this;
+    }
+
+    /**
      * 添加一个中位数统计
      *
      * @param name           统计名
@@ -531,4 +608,43 @@ public final class Statistics<T> {
         this.getSeniorFilters().add(new HyperAverageRate(name, this.getStatisticsData(), originalValueName, referAverageScoreName));
         return this;
     }
+
+    /**
+     * 添加一个排名统计
+     *
+     * @param name                统计名
+     * @param originalValueName   原值值名称
+     * @param referValueCountName 参考值集合名称
+     * @return
+     */
+    public Statistics<T> addRank(String name, String originalValueName, String referValueCountName) {
+        this.getFinalFilters().add(new Rank(name, this.getStatisticsData(), originalValueName, referValueCountName));
+        return this;
+    }
+
+    /**
+     * 添加汇总值汇总到值次数
+     *
+     * @param name            汇总名
+     * @param targetValueName 目标数据名称
+     * @return
+     */
+    public Statistics<T> addCollectValueToValueCount(String name, String targetValueName) {
+        this.getCollectFilters().add(new CollectValueToValueCount(name, this.getStatisticsData(), targetValueName));
+        return this;
+    }
+
+    /**
+     * 添加汇总值汇总到值次数
+     *
+     * @param name            汇总名
+     * @param targetValueName 目标数据名称
+     * @param formatter       格式化回调函数
+     * @return
+     */
+    public Statistics<T> addCollectValueToValueCount(String name, String targetValueName, Formatter<Collection<DataContainer>, Collection<DataContainer>> formatter) {
+        this.getCollectFilters().add(new CollectValueToValueCount(name, this.getStatisticsData(), targetValueName, formatter));
+        return this;
+    }
+
 }

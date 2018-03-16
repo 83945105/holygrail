@@ -9,7 +9,7 @@ import com.avalon.holygrail.statistics.norm.RawDataHandler;
  * 统计String类型值次数
  * Created by 白超 on 2018-3-12.
  */
-public class StringValueCount<T> extends StatisticsValueCount<T, String> {
+public final class StringValueCount<T> extends StatisticsValueCount<T, String> {
 
     public StringValueCount(String name, DataContainer<String> dataContainer, RawDataHandler<T, String> rawDataHandler) {
         super(name, dataContainer, rawDataHandler);

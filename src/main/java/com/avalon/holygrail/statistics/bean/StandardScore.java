@@ -11,7 +11,7 @@ import java.math.RoundingMode;
  * 标准分
  * Created by 白超 on 2018/3/12.
  */
-public class StandardScore extends SeniorStatisticsFilter<BigDecimal> {
+public final class StandardScore extends SeniorStatisticsFilter<BigDecimal> {
 
     /**
      * 原始值名称

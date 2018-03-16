@@ -12,7 +12,7 @@ import java.math.RoundingMode;
  * 记录BigDecimal类型值
  * Created by 白超 on 2018/3/12.
  */
-public class BigDecimalValue<T> extends StatisticsBigDecimalFilter<T> {
+public final class BigDecimalValue<T> extends StatisticsBigDecimalFilter<T> {
 
     public BigDecimalValue(String name, DataContainer<BigDecimal> dataContainer, RawDataHandler<T, BigDecimal> rawDataHandler) {
         super(name, dataContainer, rawDataHandler);
@@ -32,9 +32,8 @@ public class BigDecimalValue<T> extends StatisticsBigDecimalFilter<T> {
 
     @Override
     public void doStatistics(BigDecimal oldValue, BigDecimal newValue, int count) {
-        for (; count > 0; count--) {
-            newValue.add(newValue);
-        }
         this.setValue(this.getName(), newValue);
+        int hc = this.getValueCount(this.getName(), newValue);
+        this.setValueCount(this.getName(), newValue, hc + count);
     }
 }

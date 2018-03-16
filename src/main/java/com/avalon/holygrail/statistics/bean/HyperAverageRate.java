@@ -11,7 +11,7 @@ import java.math.RoundingMode;
  * 超均率
  * Created by 白超 on 2018/3/13.
  */
-public class HyperAverageRate extends SeniorStatisticsFilter<BigDecimal> {
+public final class HyperAverageRate extends SeniorStatisticsFilter<BigDecimal> {
 
     /**
      * 原始值名称

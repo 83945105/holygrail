@@ -12,7 +12,7 @@ import java.util.Map;
  * 标准差
  * Created by 白超 on 2018/3/12.
  */
-public class StandardDeviation extends AdvancedStatisticsFilter<BigDecimal> {
+public final class StandardDeviation extends AdvancedStatisticsFilter<BigDecimal> {
 
     private String valueCountName;
 

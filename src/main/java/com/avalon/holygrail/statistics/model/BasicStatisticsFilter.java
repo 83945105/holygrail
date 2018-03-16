@@ -32,6 +32,16 @@ public abstract class BasicStatisticsFilter<T, V> extends StatisticsFilter<T, V,
         this.formatter = formatter;
     }
 
+    public BasicStatisticsFilter(FormatterName<T, V> formatterName, DataContainer<V> dataContainer, RawDataHandler<T, V> rawDataHandler) {
+        super(formatterName, dataContainer);
+        this.rawDataHandler = rawDataHandler;
+    }
+
+    public BasicStatisticsFilter(FormatterName<T, V> formatterName, DataContainer<V> dataContainer, Formatter<T, V> formatter) {
+        super(formatterName, dataContainer);
+        this.formatter = formatter;
+    }
+
     @Override
     public void doStatistics(T go, DataContainer<V> back) throws Exception {
         this.formatter.accept(go, this);

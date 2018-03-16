@@ -14,7 +14,7 @@ import java.util.Map;
  * 众数值统计
  * Created by 白超 on 2018-3-11.
  */
-public class ModeValue extends AdvancedStatisticsFilter<String> {
+public final class ModeValue extends AdvancedStatisticsFilter<String> {
 
     private String valueCountName;
 

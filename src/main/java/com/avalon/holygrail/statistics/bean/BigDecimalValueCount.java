@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * 统计BigDecimal类型值次数
  * Created by 白超 on 2018/3/12.
  */
-public class BigDecimalValueCount<T> extends StatisticsValueCount<T, BigDecimal> {
+public final class BigDecimalValueCount<T> extends StatisticsValueCount<T, BigDecimal> {
 
     public BigDecimalValueCount(String name, DataContainer<BigDecimal> dataContainer, RawDataHandler<T, BigDecimal> rawDataHandler) {
         super(name, dataContainer, rawDataHandler);
