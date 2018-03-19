@@ -29,8 +29,4 @@ public class DateUtil {
         return new Date().getTime();
     }
 
-    public static void main(String[] args) {
-        System.out.println(DateUtil.getTimeStamp());
-        System.out.println(DateUtil.getTimeString());
-    }
 }

@@ -4,6 +4,7 @@ import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -78,6 +79,22 @@ public interface SheetExportHandler extends Sheet {
     void setColumnWidth(int columnIndex, int width);
 
     /**
+     * 插入图片
+     * @param inputStream 图片流
+     * @param pictureType 图片类型
+     * @param dx1 起始单元格的x偏移量
+     * @param dy1 起始单元格的y偏移量
+     * @param dx2 终止单元格的x偏移量
+     * @param dy2 终止单元格的y偏移量
+     * @param col1 起始单元格列序号,从0开始计算
+     * @param row1 起始单元格行序号,从0开始计算
+     * @param col2 终止单元格列序号,从0开始计算
+     * @param row2 终止单元格行序号,从0开始计算
+     * @throws IOException
+     */
+    ExcelSheetExport insertPicture(InputStream inputStream, ExcelWorkBook.PictureType pictureType, int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2) throws IOException;
+
+    /**
      * 设置列对应的数据属性
      * @param fields 属性
      * @return 准备导出
@@ -121,6 +138,43 @@ public interface SheetExportHandler extends Sheet {
     default ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException {
         return setTitles(titles, true);
     }
+
+    /**
+     * 插入图片
+     * @param file 图片文件
+     * @param pictureType 图片类型
+     * @param dx1 起始单元格的x偏移量
+     * @param dy1 起始单元格的y偏移量
+     * @param dx2 终止单元格的x偏移量
+     * @param dy2 终止单元格的y偏移量
+     * @param col1 起始单元格列序号,从0开始计算
+     * @param row1 起始单元格行序号,从0开始计算
+     * @param col2 终止单元格列序号,从0开始计算
+     * @param row2 终止单元格行序号,从0开始计算
+     * @throws IOException
+     */
+    default ExcelSheetExport insertPicture(File file, ExcelWorkBook.PictureType pictureType, int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2) throws IOException {
+        return insertPicture(new FileInputStream(file), pictureType, dx1, dy1, dx2, dy2, col1, row1, col2, row2);
+    }
+
+    /**
+     * 插入图片
+     * @param filePath 图片路径
+     * @param pictureType 图片类型
+     * @param dx1 起始单元格的x偏移量
+     * @param dy1 起始单元格的y偏移量
+     * @param dx2 终止单元格的x偏移量
+     * @param dy2 终止单元格的y偏移量
+     * @param col1 起始单元格列序号,从0开始计算
+     * @param row1 起始单元格行序号,从0开始计算
+     * @param col2 终止单元格列序号,从0开始计算
+     * @param row2 终止单元格行序号,从0开始计算
+     * @throws IOException
+     */
+    default ExcelSheetExport insertPicture(String filePath, ExcelWorkBook.PictureType pictureType, int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2) throws IOException {
+        return insertPicture(new File(filePath), pictureType, dx1, dy1, dx2, dy2, col1, row1, col2, row2);
+    }
+
 
     /**
      * 获取表格导入的数据总数

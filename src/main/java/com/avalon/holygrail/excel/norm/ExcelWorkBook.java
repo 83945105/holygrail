@@ -18,4 +18,26 @@ public interface ExcelWorkBook {
      * @return 工作表对象
      */
     Sheet getSheet(int index);
+
+    /**
+     * 图片类型
+     */
+    enum PictureType {
+
+        EMF("emf", 2),
+        WMF("wmf", 3),
+        PICT("pict", 4),
+        JPEG("jpeg", 5),
+        PNG("png", 6),
+        DIB("dib", 7);
+
+        public String suffix;
+
+        public int value;
+
+        PictureType(String suffix, int value) {
+            this.suffix = suffix;
+            this.value = value;
+        }
+    }
 }

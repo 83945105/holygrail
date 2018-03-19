@@ -2,6 +2,10 @@ package com.avalon.holygrail.file.util;
 
 import com.avalon.holygrail.file.bean.DownloadRecord;
 import com.avalon.holygrail.file.exception.DownLoadException;
+import com.avalon.holygrail.file.exception.FileException;
+import com.avalon.holygrail.util.StringUtil;
+import org.apache.commons.io.FilenameUtils;
+import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -104,5 +108,47 @@ public class FileUtil {
     public static DownloadRecord download(String fileName, String suffix, String filePath,
                                 HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, DownLoadException, FileNotFoundException {
         return download(fileName, suffix, filePath, new FileInputStream(filePath), request, response);
+    }
+
+    /**
+     * 将base64保存为图片
+     *
+     * @param base64
+     * @param savePath     文件保存路径(不包含项目路径,不包含文件名和后缀名,尾部不用加/)
+     * @param saveFileName 保存文件名(不包含后缀名)
+     * @param suffix       文件后缀
+     */
+    public static void base64ToImage(String base64, String savePath, String saveFileName, String suffix) throws Exception {
+        if (StringUtil.isEmpty(base64)) {
+            throw new FileException("图片base64数据为空");
+        }
+        base64 = base64.replace("data:image/" + suffix + ";base64,", "");
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] b = decoder.decodeBuffer(base64);
+        for (int i = 0; i < b.length; ++i) {
+            if (b[i] < 0) {
+                b[i] += 256;
+            }
+        }
+        savePath = getRealPath(savePath);
+        File file = new File(savePath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        String saveFile = new StringBuilder().append(savePath).append(File.separator).append(saveFileName).append(FilenameUtils.EXTENSION_SEPARATOR).append(suffix).toString();
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(saveFile);
+            out.write(b);
+            out.flush();
+        } catch (IOException e) {
+            throw new FileException(e);
+        } finally {
+            try {
+                if (out != null) out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

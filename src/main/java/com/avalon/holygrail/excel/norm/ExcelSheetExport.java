@@ -40,6 +40,9 @@ public interface ExcelSheetExport extends SheetExportHandler {
     ExcelSheetExport setColumnFields(List<String> fields) throws ExcelException;
 
     @Override
+    ExcelSheetExport insertPicture(InputStream inputStream, ExcelWorkBook.PictureType pictureType, int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2) throws IOException;
+
+    @Override
     default ExcelSheetExport setColumnFields(String... fields) throws ExcelException {
         return setColumnFields(Arrays.asList(fields));
     }

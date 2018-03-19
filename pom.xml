@@ -57,9 +57,17 @@
         <com.alibaba.fastjson.version>1.2.7</com.alibaba.fastjson.version>
         <com.alibaba.druid.version>1.0.26</com.alibaba.druid.version>
         <shiro.version>1.2.4</shiro.version>
+        <commons-io.version>2.6</commons-io.version>
     </properties>
 
     <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.esotericsoftware</groupId>

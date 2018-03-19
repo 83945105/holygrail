@@ -3,12 +3,12 @@ package com.avalon.holygrail.excel.bean;
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
-import com.avalon.holygrail.excel.norm.CellHandler;
-import com.avalon.holygrail.excel.norm.CellOption;
-import com.avalon.holygrail.excel.norm.ExcelSheetExport;
-import com.avalon.holygrail.excel.norm.MergeCell;
+import com.avalon.holygrail.excel.norm.*;
 import com.avalon.holygrail.util.ClassUtil;
 import com.avalon.holygrail.util.StringUtil;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
@@ -19,9 +19,14 @@ import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyDescriptor;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -454,6 +459,23 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             excelTitles[0][i] = new SXSSFExcelTitle(fields.get(i));
         }
         return setTitles(excelTitles, false);
+    }
+
+    @Override
+    public ExcelSheetExport insertPicture(InputStream inputStream, ExcelWorkBook.PictureType pictureType, int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2) throws IOException {
+
+        BufferedImage bufferedImage;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bufferedImage = ImageIO.read(inputStream);
+        ImageIO.write(bufferedImage, pictureType.suffix, byteArrayOutputStream);
+
+        XSSFDrawing drawing = (XSSFDrawing) this.sheet.createDrawingPatriarch();
+        XSSFClientAnchor anchor = new XSSFClientAnchor(dx1, dy1, dx2, dy2, (short) col1, row1, (short) col2, row2);
+        anchor.setAnchorType(3);
+
+        drawing.createPicture(anchor, this.sxssfWorkbook.addPicture(byteArrayOutputStream.toByteArray(), pictureType.value));
+
+        return this;
     }
 
     @Override
