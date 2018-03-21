@@ -464,16 +464,32 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     @Override
     public ExcelSheetExport insertPicture(InputStream inputStream, ExcelWorkBook.PictureType pictureType, int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2) throws IOException {
 
-        BufferedImage bufferedImage;
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bufferedImage = ImageIO.read(inputStream);
-        ImageIO.write(bufferedImage, pictureType.suffix, byteArrayOutputStream);
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        try {
+            BufferedImage bufferedImage;
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            bufferedImage = ImageIO.read(inputStream);
+            ImageIO.write(bufferedImage, pictureType.suffix, byteArrayOutputStream);
 
-        XSSFDrawing drawing = (XSSFDrawing) this.sheet.createDrawingPatriarch();
-        XSSFClientAnchor anchor = new XSSFClientAnchor(dx1, dy1, dx2, dy2, (short) col1, row1, (short) col2, row2);
-        anchor.setAnchorType(3);
+            XSSFDrawing drawing = (XSSFDrawing) this.sheet.createDrawingPatriarch();
+            XSSFClientAnchor anchor = new XSSFClientAnchor(dx1, dy1, dx2, dy2, (short) col1, row1, (short) col2, row2);
+            anchor.setAnchorType(3);
 
-        drawing.createPicture(anchor, this.sxssfWorkbook.addPicture(byteArrayOutputStream.toByteArray(), pictureType.value));
+            drawing.createPicture(anchor, this.sxssfWorkbook.addPicture(byteArrayOutputStream.toByteArray(), pictureType.value));
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            try {
+                if(byteArrayOutputStream != null) byteArrayOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if(inputStream != null) inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         return this;
     }
