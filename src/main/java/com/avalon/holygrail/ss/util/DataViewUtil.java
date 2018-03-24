@@ -33,6 +33,18 @@ public class DataViewUtil {
         return new MessageView(ResultUtil.createFail(messageCode, params));
     }
 
+    public static MessageView getMessageViewError() {
+        return new MessageView(ResultUtil.createError("error"));
+    }
+
+    public static MessageView getMessageViewError(String message) {
+        return new MessageView(ResultUtil.createError(message));
+    }
+
+    public static MessageView getMessageViewError(int messageCode, String... params) {
+        return new MessageView(ResultUtil.createError(messageCode, params));
+    }
+
     public static MessageView getMessageViewWarn() {
         return new MessageView(ResultUtil.createWarn("warn"));
     }
