@@ -56,12 +56,32 @@ public class ClassUtil {
     }
 
     /**
+     * 获取对象指定方法
+     * @param clazz
+     * @param methodName
+     * @return
+     */
+    public static Method getMethod(Class<?> clazz, String methodName) {
+        for (Class<?> cla = clazz; cla != Object.class; cla = cla.getSuperclass()) {
+            for (Method method : cla.getDeclaredMethods()) {
+                if(methodName.equals(method.getName())) {
+                    return method;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * 根据属性名称和java类型，获取对应的getter方法名
      * @param property 属性名称
      * @param javaType 属性类型
      * @return
      */
     public static String getGetterMethodName(String property, String javaType) {
+        if(property == null || "".equals(property.trim())) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(property);
         if (Character.isLowerCase(sb.charAt(0))) {
@@ -83,6 +103,9 @@ public class ClassUtil {
      * @return
      */
     public static String getSetterMethodName(String property) {
+        if(property == null || "".equals(property.trim())) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(property);
         if (Character.isLowerCase(sb.charAt(0))) {

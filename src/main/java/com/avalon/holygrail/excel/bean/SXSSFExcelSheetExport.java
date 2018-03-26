@@ -6,9 +6,6 @@ import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
 import com.avalon.holygrail.excel.norm.*;
 import com.avalon.holygrail.util.ClassUtil;
 import com.avalon.holygrail.util.StringUtil;
-import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.usermodel.HSSFPatriarch;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
@@ -31,6 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 
@@ -299,18 +298,41 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, tMergeCell.getStartColNum(), 1, tMergeCell.getColSpan());
             mergeCell.setField(tMergeCell.getField());
             mergeCell.setWriteEmpty(tMergeCell.isWriteEmpty());
-            for (Field f : fs) {
+            for (int i = 0; i < fs.size(); i++) {
+                Field f = fs.get(i);
                 f.setAccessible(true);
-                if (!f.getName().equals(mergeCell.getField())) {
+                boolean last = i == fs.size() - 1;
+                boolean equal = f.getName().equals(mergeCell.getField());
+                if (!equal && !last) {
                     continue;
                 }
-                try {
-                    Object value = new PropertyDescriptor(f.getName(), record.getClass()).getReadMethod().invoke(record);
-                    //Object value = this.access.invoke(record, ClassUtil.getGetterMethodName(f.getName(), null));
-                    mergeCell.setValue(value == null ? "" : value.toString());
-                } catch (Exception e) {
-                    mergeCell.setValue("");
+                Object value;
+                if (equal) {
+                    try {
+                        value = new PropertyDescriptor(f.getName(), record.getClass()).getReadMethod().invoke(record);
+                        //Object value = this.access.invoke(record, ClassUtil.getGetterMethodName(f.getName(), null));
+                    } catch (Exception e) {
+                        value = "";
+                    }
+                } else {
+                    //能进入这里,说明已经是最后一个属性了,但是还是没找到orz...尝试获取属性对应get方法
+                    Method getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(mergeCell.getField(), ""));
+                    if (getMethod == null) {
+                        getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(mergeCell.getField(), "boolean"));
+                    }
+                    if (getMethod != null) {
+                        try {
+                            value = getMethod.invoke(record);
+                        } catch (IllegalAccessException e) {
+                            value = "";
+                        } catch (InvocationTargetException e) {
+                            value = "";
+                        }
+                    } else {
+                        value = "";
+                    }
                 }
+                mergeCell.setValue(value == null ? "": value);
                 this.buildCell(mergeCell);
                 break;
             }
@@ -343,7 +365,22 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                         value = "";
                     }
                 } else {//最后一条依然不等于,给个默认值""
-                    value = "";
+                    //能进入这里,说明已经是最后一个属性了,但是还是没找到orz...尝试获取属性对应get方法
+                    Method getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(mergeCell.getField(), ""));
+                    if (getMethod == null) {
+                        getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(mergeCell.getField(), "boolean"));
+                    }
+                    if (getMethod != null) {
+                        try {
+                            value = getMethod.invoke(record);
+                        } catch (IllegalAccessException e) {
+                            value = "";
+                        } catch (InvocationTargetException e) {
+                            value = "";
+                        }
+                    } else {
+                        value = "";
+                    }
                 }
                 //格式化
                 value = formatter.apply(value, record, mergeCell, mergeCell.getField(), this.rowCursor, index);
@@ -480,12 +517,12 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             throw e;
         } finally {
             try {
-                if(byteArrayOutputStream != null) byteArrayOutputStream.close();
+                if (byteArrayOutputStream != null) byteArrayOutputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if(inputStream != null) inputStream.close();
+                if (inputStream != null) inputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
