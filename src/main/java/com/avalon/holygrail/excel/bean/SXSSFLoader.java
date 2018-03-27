@@ -4,10 +4,13 @@ import com.alibaba.druid.sql.visitor.functions.Char;
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.CellStyle;
+import com.avalon.holygrail.excel.norm.Font;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 
 import java.math.BigDecimal;
 
@@ -15,8 +18,9 @@ import java.math.BigDecimal;
  * SXSSF装载器
  * Created by 白超 on 2018/1/18.
  */
-public class SXSSFLoader implements CellOption, CellStyle {
+public class SXSSFLoader implements CellOption, CellStyle, Font {
 
+    protected SXSSFWorkbook sxssfWorkbook;
     /**
      * SXSSF工作表
      */
@@ -25,11 +29,44 @@ public class SXSSFLoader implements CellOption, CellStyle {
      * SXSSF单元格
      */
     protected SXSSFCell cell;
+    /**
+     * 单元格样式
+     */
+    protected XSSFCellStyle cellStyle;
+    /**
+     * 字体属性
+     */
+    protected XSSFFont font;
 
-    public SXSSFLoader(SXSSFSheet sheet, SXSSFCell cell, XSSFCellStyle cellStyle) {
+    public SXSSFLoader(SXSSFWorkbook sxssfWorkbook, SXSSFSheet sheet, SXSSFCell cell) {
+        this.sxssfWorkbook = sxssfWorkbook;
         this.sheet = sheet;
         this.cell = cell;
-        this.setCellStyle(cellStyle);
+        this.cellStyle = (XSSFCellStyle) this.sxssfWorkbook.createCellStyle();
+        this.font = (XSSFFont) this.sxssfWorkbook.createFont();
+    }
+
+    @Override
+    public void getCellStyleByName(CellStyle source) {
+        this.setHAlign(source.getHAlign().name());
+        this.setVAlign(source.getVAlign().name());
+        this.setBorderLeft(source.getBorderLeft().name());
+        this.setBorderTop(source.getBorderTop().name());
+        this.setBorderRight(source.getBorderRight().name());
+        this.setBorderBottom(source.getBorderBottom().name());
+        this.setCellStyle(this.cellStyle);
+    }
+
+    @Override
+    public void getFontByName(Font source) {
+        this.setColor(source.getColor());
+        this.setStrikeout(source.getStrikeout());
+        this.setItalic(source.getItalic());
+        this.setFontHeightInPoints(source.getFontHeightInPoints());
+        this.setFontName(source.getFontName());
+        this.setBoldWeight(source.getBoldWeight());
+        this.setUnderLine(source.getUnderLine());
+        this.setFont(this.font);
     }
 
     @Override
@@ -122,7 +159,7 @@ public class SXSSFLoader implements CellOption, CellStyle {
             cell.setCellValue((char) value);
             return;
         }
-        if(value instanceof BigDecimal) {
+        if (value instanceof BigDecimal) {
             cell.setCellType(SXSSFCell.CELL_TYPE_NUMERIC);
             cell.setCellValue(((BigDecimal) value).doubleValue());
             return;
@@ -274,5 +311,100 @@ public class SXSSFLoader implements CellOption, CellStyle {
 
     public void setCellStyle(XSSFCellStyle cellStyle) {
         this.cell.setCellStyle(cellStyle);
+    }
+
+    public XSSFFont getFont() {
+        return this.cellStyle.getFont();
+    }
+
+    public void setFont(XSSFFont font) {
+        this.cellStyle.setFont(font);
+    }
+
+    @Override
+    public void setColor(short color) {
+        this.font.setColor(color);
+    }
+
+    @Override
+    public short getColor() {
+        return this.font.getColor();
+    }
+
+    @Override
+    public void setStrikeout(boolean strikeout) {
+        this.font.setStrikeout(strikeout);
+    }
+
+    @Override
+    public boolean getStrikeout() {
+        return this.font.getStrikeout();
+    }
+
+    @Override
+    public void setItalic(boolean italic) {
+        this.font.setItalic(italic);
+    }
+
+    @Override
+    public boolean getItalic() {
+        return this.font.getItalic();
+    }
+
+    @Override
+    public void setFontHeightInPoints(short size) {
+        this.font.setFontHeightInPoints(size);
+    }
+
+    @Override
+    public short getFontHeightInPoints() {
+        return this.font.getFontHeightInPoints();
+    }
+
+    @Override
+    public void setFontName(String name) {
+        this.font.setFontName(name);
+    }
+
+    @Override
+    public String getFontName() {
+        return this.font.getFontName();
+    }
+
+    @Override
+    public void setBoldWeight(boolean boldWeight) {
+        if (boldWeight) {
+            this.font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+        } else {
+            this.font.setBoldweight(XSSFFont.BOLDWEIGHT_NORMAL);
+        }
+    }
+
+    @Override
+    public boolean getBoldWeight() {
+        return this.font.getBoldweight() == XSSFFont.BOLDWEIGHT_BOLD;
+    }
+
+    @Override
+    public void setUnderLine(UnderLine underLine) {
+        this.font.setUnderline((byte) underLine.value);
+    }
+
+    @Override
+    public UnderLine getUnderLine() {
+        switch (this.font.getUnderline()) {
+            case 1:
+                return UnderLine.SINGLE;
+            case 2:
+                return UnderLine.DOUBLE;
+            case 3:
+                return UnderLine.SINGLE_ACCOUNTING;
+            case 4:
+                return UnderLine.DOUBLE_ACCOUNTING;
+            case 5:
+                return UnderLine.NONE;
+            default:
+                return null;
+        }
     }
 }

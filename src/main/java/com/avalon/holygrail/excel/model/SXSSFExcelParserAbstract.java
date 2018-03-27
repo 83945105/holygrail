@@ -35,7 +35,7 @@ public abstract class SXSSFExcelParserAbstract extends XSSFExcelParserAbstract {
         SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, startCol, endRow - startRow + 1, endCol - startCol + 1);
 
         excelTitle.copyCellOptionSelective(mergeCell);//设置属性
-        excelTitle.copyCellStyleByName(mergeCell);//设置样式
+        excelTitle.setCellStyleByName(mergeCell);//设置样式
 
         return mergeCell;
     }

@@ -15,7 +15,6 @@ import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
@@ -113,7 +112,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
     public SXSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException {
         SXSSFMergeCell mergeCell = new SXSSFMergeCell(this.rowCursor + startRow + 1, this.colCursor + startCol + 1, endRow - startRow + 1, endCol - startCol + 1);
         excelTitle.copyCellOptionSelective(mergeCell);//设置属性
-        excelTitle.copyCellStyleByName(mergeCell);//设置样式
+        excelTitle.setCellStyleByName(mergeCell);//设置样式
         return mergeCell;
     }
 
@@ -155,16 +154,26 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 if (dataValidation != null) {
                     this.sheet.addValidationData(dataValidation);
                 }
-                XSSFCellStyle cellStyle = (XSSFCellStyle) this.sxssfWorkbook.createCellStyle();
-                SXSSFLoader sxssfLoader = new SXSSFLoader(this.sheet, cell, cellStyle);
+                SXSSFLoader sxssfLoader = new SXSSFLoader(this.sxssfWorkbook, this.sheet, cell);
                 //设置属性
                 mergeCell.copyCellOptionSelective(sxssfLoader);
                 //设置样式
-                mergeCell.copyCellStyleByName(sxssfLoader);
+                sxssfLoader.getCellStyleByName(mergeCell);
+                //设置字体
+                sxssfLoader.getFontByName(mergeCell);
             }
         }
         //添加合并单元格
-        CellRangeAddress cellRangeAddress = new CellRangeAddress(mergeCell.getStartRowNum() - 1, mergeCell.getEndRowNum() - 1, mergeCell.getStartColNum() - 1, mergeCell.getEndColNum() - 1);
+        int firstRow = mergeCell.getStartRowNum() - 1;
+        int lastRow = mergeCell.getEndRowNum() - 1;
+        int firstCol = mergeCell.getStartColNum() - 1;
+        int lastCol = mergeCell.getEndColNum() - 1;
+
+        if(firstRow == lastRow && firstCol == lastCol) {
+            //同一单元格,不用合并
+            return;
+        }
+        CellRangeAddress cellRangeAddress = new CellRangeAddress(firstRow, lastRow, firstCol, lastCol);
         this.sheet.addMergedRegion(cellRangeAddress);
     }
 
@@ -332,7 +341,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                         value = "";
                     }
                 }
-                mergeCell.setValue(value == null ? "": value);
+                mergeCell.setValue(value == null ? "" : value);
                 this.buildCell(mergeCell);
                 break;
             }
