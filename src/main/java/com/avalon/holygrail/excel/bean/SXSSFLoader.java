@@ -43,7 +43,9 @@ public class SXSSFLoader implements CellOption, CellStyle, Font {
         this.sheet = sheet;
         this.cell = cell;
         this.cellStyle = (XSSFCellStyle) this.sxssfWorkbook.createCellStyle();
+        this.setCellStyle(this.cellStyle);
         this.font = (XSSFFont) this.sxssfWorkbook.createFont();
+        this.setFont(this.font);
     }
 
     @Override
@@ -54,7 +56,6 @@ public class SXSSFLoader implements CellOption, CellStyle, Font {
         this.setBorderTop(source.getBorderTop().name());
         this.setBorderRight(source.getBorderRight().name());
         this.setBorderBottom(source.getBorderBottom().name());
-        this.setCellStyle(this.cellStyle);
     }
 
     @Override
@@ -66,7 +67,6 @@ public class SXSSFLoader implements CellOption, CellStyle, Font {
         this.setFontName(source.getFontName());
         this.setBoldWeight(source.getBoldWeight());
         this.setUnderLine(source.getUnderLine());
-        this.setFont(this.font);
     }
 
     @Override
