@@ -9,6 +9,13 @@ import java.util.Map;
  */
 public class StringUtil {
 
+    public static void main(String[] args) {
+        Object str = "";
+
+        System.out.println(str instanceof String);
+        System.out.println(str.toString().length());
+    }
+
     /**
      * 验证对象是否为空
      * null => true
@@ -20,15 +27,30 @@ public class StringUtil {
      * @return 空 => true | 非空 => false
      */
     public static boolean isEmpty(Object tar) {
-        return tar == null
-                || (tar instanceof Collection ? ((Collection) tar).size() == 0
-                : tar instanceof Map ? ((Map) tar).size() == 0
-                : tar.getClass().isArray() ? ((Object[]) tar).length == 0
-                : tar.toString().trim().length() == 0);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(StringUtil.isEmpty(null));
+        if (tar == null) {
+            return true;
+        }
+        if (tar instanceof String) {
+            if (tar.toString().length() == 0) {
+                return true;
+            }
+        }
+        if (tar instanceof Collection) {
+            if (((Collection) tar).size() == 0) {
+                return true;
+            }
+        }
+        if (tar instanceof Map) {
+            if (((Map) tar).size() == 0) {
+                return true;
+            }
+        }
+        if (tar.getClass().isArray()) {
+            if (((Object[]) tar).length == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
