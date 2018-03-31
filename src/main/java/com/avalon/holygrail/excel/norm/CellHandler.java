@@ -239,4 +239,102 @@ public interface CellHandler {
      * 设置四个边框样式,顺序为左上右下
      */
     void setBorder(short[] values);
+
+    /**
+     * 设置字体颜色
+     *
+     * @param color
+     */
+    void setColor(short color);
+
+    /**
+     * 设置字体颜色
+     *
+     * @param fontColor
+     */
+    void setColor(Font.FontColor fontColor);
+
+    /**
+     * 获取字体颜色
+     * @return
+     */
+    short getColor();
+
+    /**
+     * 设置是否有删除线
+     *
+     * @param strikeout
+     */
+    void setStrikeout(boolean strikeout);
+
+    /**
+     * 获取是否有删除线
+     * @return
+     */
+    boolean getStrikeout();
+
+    /**
+     * 设置是否斜体
+     *
+     * @param italic
+     */
+    void setItalic(boolean italic);
+
+    /**
+     * 获取是否斜体
+     * @return
+     */
+    boolean getItalic();
+
+    /**
+     * 设置字体大小
+     *
+     * @param size
+     */
+    void setFontHeightInPoints(short size);
+
+    /**
+     * 获取字体大小
+     * @return
+     */
+    short getFontHeightInPoints();
+
+    /**
+     * 设置字体名称
+     *
+     * @param name
+     */
+    void setFontName(String name);
+
+    /**
+     * 获取字体名称
+     * @return
+     */
+    String getFontName();
+
+    /**
+     * 设置是否粗体
+     *
+     * @param boldWeight
+     */
+    void setBoldWeight(boolean boldWeight);
+
+    /**
+     * 获取是否粗体
+     * @return
+     */
+    boolean getBoldWeight();
+
+    /**
+     * 设置下划线
+     *
+     * @param underLine
+     */
+    void setUnderLine(Font.UnderLine underLine);
+
+    /**
+     * 获取下划线
+     * @return
+     */
+    Font.UnderLine getUnderLine();
 }

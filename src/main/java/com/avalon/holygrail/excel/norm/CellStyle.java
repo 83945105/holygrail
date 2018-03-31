@@ -368,13 +368,27 @@ public interface CellStyle {
      *
      * @param target 目标单元格
      */
-    default void copyCellStyleByName(CellStyle target) {
+    default void setCellStyleByName(CellStyle target) {
         target.setHAlign(getHAlign().name());
         target.setVAlign(getVAlign().name());
         target.setBorderLeft(getBorderLeft().name());
         target.setBorderTop(getBorderTop().name());
         target.setBorderRight(getBorderRight().name());
         target.setBorderBottom(getBorderBottom().name());
+    }
+
+    /**
+     * 拷贝样式
+     *
+     * @param source 数据源
+     */
+    default void getCellStyleByName(CellStyle source) {
+        this.setHAlign(source.getHAlign().name());
+        this.setVAlign(source.getVAlign().name());
+        this.setBorderLeft(source.getBorderLeft().name());
+        this.setBorderTop(source.getBorderTop().name());
+        this.setBorderRight(source.getBorderRight().name());
+        this.setBorderBottom(source.getBorderBottom().name());
     }
 
     /**

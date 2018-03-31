@@ -1,15 +1,12 @@
 package com.avalon.holygrail.excel.model;
 
-import com.avalon.holygrail.excel.norm.CellHandler;
-import com.avalon.holygrail.excel.norm.CellOption;
-import com.avalon.holygrail.excel.norm.CellStyle;
-import com.avalon.holygrail.excel.norm.MergeCell;
+import com.avalon.holygrail.excel.norm.*;
 
 /**
  * 合并单元格属性
  * Created by 白超 on 2018/1/17.
  */
-public abstract class MergeCellAbstract extends ExcelCellAbstract implements MergeCell, CellOption, CellStyle, CellHandler {
+public abstract class MergeCellAbstract extends ExcelCellAbstract implements MergeCell, CellOption, CellStyle, Font, CellHandler {
 
     /**
      * 开始行号

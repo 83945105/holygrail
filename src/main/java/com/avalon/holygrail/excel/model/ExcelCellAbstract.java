@@ -2,12 +2,13 @@ package com.avalon.holygrail.excel.model;
 
 import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.CellStyle;
+import com.avalon.holygrail.excel.norm.Font;
 
 /**
  * Excel Cell属性
  * Created by 白超 on 2018/1/17.
  */
-public abstract class ExcelCellAbstract implements CellOption, CellStyle {
+public abstract class ExcelCellAbstract implements CellOption, CellStyle, Font {
 
     /**
      * 单元格类型
@@ -248,4 +249,117 @@ public abstract class ExcelCellAbstract implements CellOption, CellStyle {
     public void setWriteEmpty(boolean writeEmpty) {
         this.writeEmpty = writeEmpty;
     }
+
+    /*--------------------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * 字体颜色
+     */
+    protected short fontColor = 32767;
+
+    /**
+     * 是否有删除线
+     */
+    protected boolean strikeout;
+
+    /**
+     * 是否斜体
+     */
+    protected boolean italic;
+
+    /**
+     * 字体大小
+     */
+    protected short fontSize = 11;
+
+    /**
+     * 字体名
+     */
+    protected String fontName = "宋体";
+
+    /**
+     * 是否加粗
+     */
+    protected boolean boldWeight;
+
+    /**
+     * 下划线
+     */
+    protected UnderLine underLine = UnderLine.NONE;
+
+    @Override
+    public void setColor(short color) {
+        this.fontColor = color;
+    }
+
+    @Override
+    public void setColor(FontColor fontColor) {
+        this.setColor(fontColor.value);
+    }
+
+    @Override
+    public short getColor() {
+        return this.fontColor;
+    }
+
+    @Override
+    public void setStrikeout(boolean strikeout) {
+        this.strikeout = strikeout;
+    }
+
+    @Override
+    public boolean getStrikeout() {
+        return this.strikeout;
+    }
+
+    @Override
+    public void setItalic(boolean italic) {
+        this.italic = italic;
+    }
+
+    @Override
+    public boolean getItalic() {
+        return this.italic;
+    }
+
+    @Override
+    public void setFontHeightInPoints(short size) {
+        this.fontSize = size;
+    }
+
+    @Override
+    public short getFontHeightInPoints() {
+        return this.fontSize;
+    }
+
+    @Override
+    public void setFontName(String name) {
+        this.fontName = name;
+    }
+
+    @Override
+    public String getFontName() {
+        return this.fontName;
+    }
+
+    @Override
+    public void setBoldWeight(boolean boldWeight) {
+        this.boldWeight = boldWeight;
+    }
+
+    @Override
+    public boolean getBoldWeight() {
+        return this.boldWeight;
+    }
+
+    @Override
+    public void setUnderLine(UnderLine underLine) {
+        this.underLine = underLine;
+    }
+
+    @Override
+    public UnderLine getUnderLine() {
+        return this.underLine;
+    }
+
 }
