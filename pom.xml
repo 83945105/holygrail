@@ -58,9 +58,18 @@
         <com.alibaba.druid.version>1.0.26</com.alibaba.druid.version>
         <shiro.version>1.2.4</shiro.version>
         <commons-io.version>2.6</commons-io.version>
+        <json-lib.version>2.4</json-lib.version>
     </properties>
 
     <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>${json-lib.version}</version>
+            <classifier>jdk15</classifier>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
