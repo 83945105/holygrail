@@ -16,7 +16,7 @@ import java.security.cert.X509Certificate;
  */
 public class HttpUtil {
 
-    enum MethodType {
+    public enum MethodType {
         GET, POST, HEAD, OPTIONS, PUT, DELETE, TRACE
     }
 
