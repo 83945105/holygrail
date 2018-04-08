@@ -120,7 +120,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
      * 获取数据校验对象
      */
     protected DataValidation getDataValidation(SXSSFMergeCell mergeCell) {
-        if (mergeCell.getType() == CellOption.CellType.COMBOBOX) {
+        if (mergeCell.getType() == CellOption.CellType.COMBOBOX && mergeCell.getOptions().length > 0) {
             DataValidationHelper helper = this.sheet.getDataValidationHelper();
             CellRangeAddressList cellRangeAddressList = new CellRangeAddressList(mergeCell.getStartRowNum() - 1, mergeCell.getEndRowNum() - 1, mergeCell.getStartColNum() - 1, mergeCell.getEndColNum() - 1);
             DataValidationConstraint constraint = helper.createExplicitListConstraint(mergeCell.getOptions());
