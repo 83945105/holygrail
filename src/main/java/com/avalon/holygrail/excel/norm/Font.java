@@ -50,29 +50,61 @@ public interface Font {
         FontColor(short value) {
             this.value = value;
         }
+
+        /**
+         * 根据name获取字体颜色
+         */
+        public static FontColor getFontColorByName(String name) {
+            for (FontColor fontColor : FontColor.values()) {
+                if (fontColor.name().equalsIgnoreCase(name)) {
+                    return fontColor;
+                }
+            }
+            throw new RuntimeException("fontColor值不正确:" + name);
+        }
+
+        /**
+         * 根据value获取字体颜色
+         */
+        public static FontColor getFontColorByValue(short value) {
+            for (FontColor fontColor : FontColor.values()) {
+                if (fontColor.value == value) {
+                    return fontColor;
+                }
+            }
+            throw new RuntimeException("fontColor值不正确:" + value);
+        }
     }
 
     /**
      * 设置字体颜色
      *
-     * @param color
-     */
-    void setColor(short color);
-
-    /**
-     * 设置字体颜色
      * @param fontColor
      */
-    default void setColor(FontColor fontColor) {
-        this.setColor(fontColor.value);
+    void setColor(FontColor fontColor);
+
+    /**
+     * 设置字体颜色
+     *
+     * @param fontColorString
+     */
+    default void setColor(String fontColorString) {
+        this.setColor(FontColor.getFontColorByName(fontColorString));
     }
 
     /**
-     * 获取字体颜色
+     * 设置字体颜色
      *
-     * @return
+     * @param fontColorShort
      */
-    short getColor();
+    default void setColor(short fontColorShort) {
+        this.setColor(FontColor.getFontColorByValue(fontColorShort));
+    }
+
+    /**
+     * @return 字体颜色
+     */
+    FontColor getColor();
 
     /**
      * 设置是否有删除线
@@ -86,7 +118,7 @@ public interface Font {
      *
      * @return
      */
-    boolean getStrikeout();
+    boolean isStrikeout();
 
     /**
      * 设置是否斜体
@@ -100,7 +132,7 @@ public interface Font {
      *
      * @return
      */
-    boolean getItalic();
+    boolean isItalic();
 
     /**
      * 设置字体大小
@@ -119,9 +151,9 @@ public interface Font {
     /**
      * 设置字体名称
      *
-     * @param name
+     * @param fontName
      */
-    void setFontName(String name);
+    void setFontName(String fontName);
 
     /**
      * 获取字体名称
@@ -142,7 +174,7 @@ public interface Font {
      *
      * @return
      */
-    boolean getBoldWeight();
+    boolean isBoldWeight();
 
     /**
      * 下划线
@@ -176,17 +208,86 @@ public interface Font {
     UnderLine getUnderLine();
 
     /**
-     * 获取字体属性
-     *
-     * @param source 数据源
+     * 字体的默认实现
      */
-    default void getFontByName(Font source) {
-        this.setColor(source.getColor());
-        this.setStrikeout(source.getStrikeout());
-        this.setItalic(source.getItalic());
-        this.setFontHeightInPoints(source.getFontHeightInPoints());
-        this.setFontName(source.getFontName());
-        this.setBoldWeight(source.getBoldWeight());
-        this.setUnderLine(source.getUnderLine());
+    final class DefaultFont implements Font {
+
+        private Font.FontColor color = Font.FontColor.BLACK;
+        private boolean strikeout;
+        private boolean italic;
+        private short fontHeightInPoints = 11;
+        private String fontName = "宋体";
+        private boolean boldWeight;
+        private Font.UnderLine underLine = Font.UnderLine.NONE;
+
+        @Override
+        public void setColor(FontColor fontColor) {
+            this.color = fontColor;
+        }
+
+        @Override
+        public FontColor getColor() {
+            return this.color;
+        }
+
+        @Override
+        public void setStrikeout(boolean strikeout) {
+            this.strikeout = strikeout;
+        }
+
+        @Override
+        public boolean isStrikeout() {
+            return this.strikeout;
+        }
+
+        @Override
+        public void setItalic(boolean italic) {
+            this.italic = italic;
+        }
+
+        @Override
+        public boolean isItalic() {
+            return this.italic;
+        }
+
+        @Override
+        public void setFontHeightInPoints(short size) {
+            this.fontHeightInPoints = size;
+        }
+
+        @Override
+        public short getFontHeightInPoints() {
+            return this.fontHeightInPoints;
+        }
+
+        @Override
+        public void setFontName(String fontName) {
+            this.fontName = fontName;
+        }
+
+        @Override
+        public String getFontName() {
+            return this.fontName;
+        }
+
+        @Override
+        public void setBoldWeight(boolean boldWeight) {
+            this.boldWeight = boldWeight;
+        }
+
+        @Override
+        public boolean isBoldWeight() {
+            return this.boldWeight;
+        }
+
+        @Override
+        public void setUnderLine(UnderLine underLine) {
+            this.underLine = underLine;
+        }
+
+        @Override
+        public UnderLine getUnderLine() {
+            return this.underLine;
+        }
     }
 }

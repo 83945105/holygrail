@@ -5,6 +5,7 @@ import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.exception.ExportException;
 
 import java.io.*;
+import java.util.function.Consumer;
 
 /**
  * Excel导出工作簿
@@ -14,12 +15,14 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 创建工作表
+     *
      * @return 工作表对象
      */
     SheetExportHandler createSheet() throws ExportException;
 
     /**
      * 创建工作表
+     *
      * @param sheetName 工作表表名
      * @return 工作表对象
      */
@@ -27,6 +30,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 获取工作表
+     *
      * @param index 下标
      * @return 工作表对象
      */
@@ -34,6 +38,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 获取所有表格的数据总数
+     *
      * @return 所有表格已经导入的数据总数
      */
     default int getTotalSheetDataSize() {
@@ -49,6 +54,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
     interface FormatterSheetName {
         /**
          * 格式化Sheet名
+         *
          * @param sheetIndex 当前Sheet在WorkBook中的下标
          * @param index      当前Sheet下标
          * @return 你想要设置的Sheet名称
@@ -61,6 +67,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
         /**
          * 处理Sheet
+         *
          * @param sheet                 待处理的Sheet
          * @param sheetIndex            当前Sheet在WorkBook中的下标
          * @param index                 当前创建的Sheet下标
@@ -75,6 +82,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
         /**
          * 处理Sheet
+         *
          * @param sheet                 待处理的Sheet
          * @param sheetIndex            当前Sheet在WorkBook中的下标
          * @param index                 当前创建的Sheet下标
@@ -87,6 +95,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 批量创建Sheet
+     *
      * @param totalSheet         你要创建的Sheet总数(最大支持100)
      * @param formatterSheetName 格式化Sheet名称,需要返回你要创建的Sheet名称
      * @param handlerSheet       处理Sheet
@@ -105,6 +114,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 批量创建Sheet
+     *
      * @param totalSheet   你要创建的Sheet总数(最大支持100)
      * @param handlerSheet 处理Sheet
      * @return 当前工作簿对象
@@ -116,6 +126,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 批量创建Sheet
+     *
      * @param formatterSheetName 格式化Sheet名称,需要返回你要创建的Sheet名称
      * @param handlerSheet       处理Sheet,需要返回是否继续创建,最多创建100个Sheet
      * @return 当前工作簿对象
@@ -141,6 +152,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 批量创建Sheet
+     *
      * @param handlerSheet 处理Sheet,需要返回是否继续创建,最多创建100个Sheet
      * @return 当前工作簿对象
      */
@@ -150,7 +162,62 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
     }
 
     /**
+     * 获取单元格样式
+     *
+     * @param index 已经创建的样式下标
+     * @return
+     */
+    CellStyle findCellStyle(int index);
+
+    /**
+     * 获取字体
+     *
+     * @param index 已经创建的字体下标
+     * @return
+     */
+    Font findFont(int index);
+
+    /**
+     * 创建单元格样式对象
+     *
+     * @return 单元格样式对象
+     */
+    CellStyle createCellStyle(int index);
+
+    /**
+     * 创建字体对象
+     *
+     * @return 字体对象
+     */
+    Font createFont(int index);
+
+    /**
+     * 创建样式对象
+     *
+     * @param index
+     * @param handler
+     * @return
+     */
+    default ExcelWorkBookExport createCellStyle(int index, Consumer<CellStyle> handler) {
+        handler.accept(this.createCellStyle(index));
+        return this;
+    }
+
+    /**
+     * 创建字体
+     *
+     * @param index
+     * @param handler
+     * @return
+     */
+    default ExcelWorkBookExport createFont(int index, Consumer<Font> handler) {
+        handler.accept(this.createFont(index));
+        return this;
+    }
+
+    /**
      * 导出Excel
+     *
      * @param outFile 目标文件
      * @return 当前对象
      * @throws IOException
@@ -159,16 +226,17 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 导出Excel
+     *
      * @param outPath 导出地址
      * @return 当前对象
      * @throws IOException
      */
     default void export(String outPath) throws IOException {
         File file = new File(outPath);
-        if(!file.getParentFile().exists()) {
+        if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
             file.createNewFile();
-        }else if(!file.exists()) {
+        } else if (!file.exists()) {
             file.createNewFile();
         }
         export(new File(outPath));
@@ -181,6 +249,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
     /**
      * 导出JavaScript模板文件
+     *
      * @param path 路径
      * @throws IOException
      */

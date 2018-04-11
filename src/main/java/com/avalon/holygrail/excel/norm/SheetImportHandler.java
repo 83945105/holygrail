@@ -1,12 +1,15 @@
 package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.exception.ExcelException;
-import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
+import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -108,7 +111,7 @@ public interface SheetImportHandler extends Sheet {
      * @param clazz  数据容器
      * @return 准备导入
      */
-    <T> SheetImportHandler setTitles(ExcelTitleCellAbstract[][] titles, Class<T> clazz) throws ExcelException;
+    <T> SheetImportHandler setTitles(BaseExcelTitleCell[][] titles, Class<T> clazz) throws ExcelException;
 
     /**
      * 设置列对应的数据属性
@@ -170,7 +173,7 @@ public interface SheetImportHandler extends Sheet {
     }
 
     @Override
-    default SheetImportHandler setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException {
+    default SheetImportHandler setTitles(BaseExcelTitleCell[][] titles) throws ExcelException {
         return setTitles(titles, HashMap.class);
     }
 

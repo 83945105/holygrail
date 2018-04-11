@@ -17,11 +17,11 @@ public class SXSSFExcelTitle extends XSSFExcelTitle {
         super(title, field);
     }
 
-    public SXSSFExcelTitle(String title, String field, Integer rowSpan, Integer colSpan) {
-        super(title, field, rowSpan, colSpan);
+    public SXSSFExcelTitle(int startRowNum, int startColNum) {
+        super(startRowNum, startColNum);
     }
 
-    public SXSSFExcelTitle(String title, String field, Integer width, Integer rowSpan, Integer colSpan, String HAlign, String VAlign) {
-        super(title, field, width, rowSpan, colSpan, HAlign, VAlign);
+    public SXSSFExcelTitle(int startRowNum, int startColNum, int rowSpan, int colSpan) {
+        super(startRowNum, startColNum, rowSpan, colSpan);
     }
 }

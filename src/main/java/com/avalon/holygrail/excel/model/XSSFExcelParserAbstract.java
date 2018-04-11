@@ -2,8 +2,8 @@ package com.avalon.holygrail.excel.model;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.avalon.holygrail.excel.bean.XSSFCell;
 import com.avalon.holygrail.excel.bean.XSSFExcelTitle;
-import com.avalon.holygrail.excel.bean.XSSFMergeCell;
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.norm.ExcelParser;
 import com.avalon.holygrail.excel.norm.MergeCell;
@@ -19,6 +19,7 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
 
     /**
      * 解析表头json数据
+     *
      * @param titlesJson 表头json
      * @return 表头信息二维数组
      */
@@ -33,18 +34,9 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
         return rs;
     }
 
-    @Override
-    public XSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException {
-        XSSFMergeCell mergeCell = new XSSFMergeCell(startRow, startCol , endRow - startRow + 1, endCol - startCol + 1);
-
-        excelTitle.copyCellOptionSelective(mergeCell);//设置属性
-        excelTitle.setCellStyleByName(mergeCell);//设置样式
-
-        return mergeCell;
-    }
-
     /**
      * 搜寻与数据直接相关的field名称,按照单元格顺序排列,从第1列开始,如果没有就设置为""
+     *
      * @param mergeCellList 单元格合并信息
      * @return 数据Fields
      */
@@ -57,10 +49,18 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
                 fs.add("");
             }
             for (int i = mergeCell.getStartColNum(); i <= mergeCell.getEndColNum(); i++) {
-                fs.add(((XSSFMergeCell)mergeCell).getField());
+                fs.add(((XSSFCell) mergeCell).getField());
             }
             start = mergeCell.getEndColNum() + 1;
         }
         return fs;
     }
+
+    @Override
+    public BaseExcelTitleCell buildExcelTitleCell(BaseExcelTitleCell excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException {
+        excelTitle.setStartRowNum(startRow);
+        excelTitle.setStartColNum(startCol);
+        return excelTitle;
+    }
+
 }

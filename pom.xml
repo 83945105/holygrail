@@ -5,7 +5,7 @@
 
     <groupId>com.github.83945105</groupId>
     <artifactId>holygrail</artifactId>
-    <version>0.0.5</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
 
     <name>holygrail</name>

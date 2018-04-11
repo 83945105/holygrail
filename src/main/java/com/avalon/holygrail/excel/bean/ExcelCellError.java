@@ -1,6 +1,6 @@
 package com.avalon.holygrail.excel.bean;
 
-import com.avalon.holygrail.excel.norm.CellOption;
+import com.avalon.holygrail.excel.norm.ExcelCellHandler;
 
 /**
  * Excel单元格错误信息
@@ -17,17 +17,14 @@ public class ExcelCellError {
      */
     private int col;
     /**
-     * 表头属性
+     * 单元格
      */
-    private CellOption cellOption;
+    private ExcelCellHandler excelCellHandler;
 
-    public ExcelCellError() {
-    }
-
-    public ExcelCellError(int row, int col, CellOption cellOption) {
+    public ExcelCellError(int row, int col, ExcelCellHandler excelCellHandler) {
         this.row = row;
         this.col = col;
-        this.cellOption = cellOption;
+        this.excelCellHandler = excelCellHandler;
     }
 
     public int getRow() {
@@ -46,11 +43,11 @@ public class ExcelCellError {
         this.col = col;
     }
 
-    public CellOption getCellOption() {
-        return cellOption;
+    public ExcelCellHandler getExcelCellHandler() {
+        return excelCellHandler;
     }
 
-    public void setCellOption(CellOption cellOption) {
-        this.cellOption = cellOption;
+    public void setExcelCellHandler(ExcelCellHandler excelCellHandler) {
+        this.excelCellHandler = excelCellHandler;
     }
 }

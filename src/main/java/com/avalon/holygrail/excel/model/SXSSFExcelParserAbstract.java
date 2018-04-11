@@ -3,8 +3,6 @@ package com.avalon.holygrail.excel.model;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.avalon.holygrail.excel.bean.SXSSFExcelTitle;
-import com.avalon.holygrail.excel.bean.SXSSFMergeCell;
-import com.avalon.holygrail.excel.exception.ExcelException;
 
 import java.util.List;
 
@@ -30,13 +28,4 @@ public abstract class SXSSFExcelParserAbstract extends XSSFExcelParserAbstract {
         return rs;
     }
 
-    @Override
-    public SXSSFMergeCell buildTitleMergeCell(ExcelTitleCellAbstract excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException {
-        SXSSFMergeCell mergeCell = new SXSSFMergeCell(startRow, startCol, endRow - startRow + 1, endCol - startCol + 1);
-
-        excelTitle.copyCellOptionSelective(mergeCell);//设置属性
-        excelTitle.setCellStyleByName(mergeCell);//设置样式
-
-        return mergeCell;
-    }
 }

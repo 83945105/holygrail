@@ -9,7 +9,7 @@ public interface CellStyle {
     /**
      * 水平对齐方式
      */
-    enum H_AlignType {
+    enum HorizontalAlignType {
         /**
          * 常规对齐
          */
@@ -45,15 +45,15 @@ public interface CellStyle {
 
         public short value;
 
-        H_AlignType(short value) {
+        HorizontalAlignType(short value) {
             this.value = value;
         }
 
         /**
          * 根据name获取水平枚举类型
          */
-        public static H_AlignType getHAlignByName(String name) {
-            for (H_AlignType alignType : H_AlignType.values()) {
+        public static HorizontalAlignType getHAlignByName(String name) {
+            for (HorizontalAlignType alignType : HorizontalAlignType.values()) {
                 if (alignType.name().equalsIgnoreCase(name)) {
                     return alignType;
                 }
@@ -64,8 +64,8 @@ public interface CellStyle {
         /**
          * 根据value获取水平枚举类型
          */
-        public static H_AlignType getHAlignByValue(short value) {
-            for (H_AlignType alignType : H_AlignType.values()) {
+        public static HorizontalAlignType getHAlignByValue(short value) {
+            for (HorizontalAlignType alignType : HorizontalAlignType.values()) {
                 if (alignType.value == value) {
                     return alignType;
                 }
@@ -77,7 +77,7 @@ public interface CellStyle {
     /**
      * 垂直对齐方式
      */
-    enum V_AlignType {
+    enum VerticalAlignType {
         /**
          * 靠上
          */
@@ -101,15 +101,15 @@ public interface CellStyle {
 
         public short value;
 
-        V_AlignType(short value) {
+        VerticalAlignType(short value) {
             this.value = value;
         }
 
         /**
          * 根据name获取垂直枚举类型
          */
-        public static V_AlignType getVAlignByName(String name) {
-            for (V_AlignType alignType : V_AlignType.values()) {
+        public static VerticalAlignType getVAlignByName(String name) {
+            for (VerticalAlignType alignType : VerticalAlignType.values()) {
                 if (alignType.name().equalsIgnoreCase(name)) {
                     return alignType;
                 }
@@ -120,8 +120,8 @@ public interface CellStyle {
         /**
          * 根据value获取垂直枚举类型
          */
-        public static V_AlignType getVAlignByValue(short value) {
-            for (V_AlignType alignType : V_AlignType.values()) {
+        public static VerticalAlignType getVAlignByValue(short value) {
+            for (VerticalAlignType alignType : VerticalAlignType.values()) {
                 if (alignType.value == value) {
                     return alignType;
                 }
@@ -133,49 +133,49 @@ public interface CellStyle {
     /**
      * 获取单元格水平对齐方式
      */
-    H_AlignType getHAlign();
+    HorizontalAlignType getHorizontalAlignType();
 
     /**
      * 设置单元格水平对齐方式
      */
-    void setHAlign(String HAlign);
+    void setHorizontalAlignType(HorizontalAlignType hAlignType);
 
     /**
      * 设置单元格水平对齐方式
      */
-    default void setHAlign(H_AlignType hAlignType) {
-        this.setHAlign(hAlignType.name());
+    default void setHorizontalAlignType(String hAlignTypeString) {
+        this.setHorizontalAlignType(HorizontalAlignType.getHAlignByName(hAlignTypeString));
     }
 
     /**
      * 设置单元格水平对齐方式
      */
-    default void setHAlign(short value) {
-        this.setHAlign(H_AlignType.getHAlignByValue(value));
+    default void setHorizontalAlignType(short hAlignTypeShort) {
+        this.setHorizontalAlignType(HorizontalAlignType.getHAlignByValue(hAlignTypeShort));
     }
 
     /**
      * 获取单元格垂直对齐方式
      */
-    V_AlignType getVAlign();
+    VerticalAlignType getVerticalAlignType();
 
     /**
      * 设置单元格垂直对齐方式
      */
-    void setVAlign(String VAlign);
+    void setVerticalAlignType(VerticalAlignType vAlignType);
 
     /**
      * 设置单元格垂直对齐方式
      */
-    default void setVAlign(V_AlignType vAlignType) {
-        this.setVAlign(vAlignType.name());
+    default void setVerticalAlignType(String vAlignTypeString) {
+        this.setVerticalAlignType(VerticalAlignType.getVAlignByName(vAlignTypeString));
     }
 
     /**
      * 设置单元格垂直对齐方式
      */
-    default void setVAlign(short value) {
-        this.setVAlign(V_AlignType.getVAlignByValue(value));
+    default void setVerticalAlignType(short vAlignTypeShort) {
+        this.setVerticalAlignType(VerticalAlignType.getVAlignByValue(vAlignTypeShort));
     }
 
     /**
@@ -231,97 +231,97 @@ public interface CellStyle {
     /**
      * 获取左边框样式
      */
-    BorderStyle getBorderLeft();
+    BorderStyle getBorderLeftStyle();
 
     /**
      * 设置左边框样式
      */
-    void setBorderLeft(String borderLeft);
+    void setBorderLeftStyle(BorderStyle borderLeftStyle);
 
     /**
      * 设置左边框样式
      */
-    default void setBorderLeft(BorderStyle borderStyle) {
-        this.setBorderLeft(borderStyle.name());
+    default void setBorderLeftStyle(String borderLeftStyleString) {
+        this.setBorderLeftStyle(BorderStyle.getBorderStyleByName(borderLeftStyleString));
     }
 
     /**
      * 设置左边框样式
      */
-    default void setBorderLeft(short value) {
-        this.setBorderLeft(BorderStyle.getBorderStyleByValue(value));
+    default void setBorderLeftStyle(short borderLeftStyleShort) {
+        this.setBorderLeftStyle(BorderStyle.getBorderStyleByValue(borderLeftStyleShort));
     }
 
     /**
      * 获取上边框样式
      */
-    BorderStyle getBorderTop();
+    BorderStyle getBorderTopStyle();
 
     /**
      * 设置上边框样式
      */
-    void setBorderTop(String borderTop);
+    void setBorderTopStyle(BorderStyle borderTopStyle);
 
     /**
      * 设置上边框样式
      */
-    default void setBorderTop(BorderStyle borderStyle) {
-        this.setBorderTop(borderStyle.name());
+    default void setBorderTopStyle(String borderTopStyleString) {
+        this.setBorderTopStyle(BorderStyle.getBorderStyleByName(borderTopStyleString));
     }
 
     /**
      * 设置上边框样式
      */
-    default void setBorderTop(short value) {
-        this.setBorderTop(BorderStyle.getBorderStyleByValue(value));
+    default void setBorderTopStyle(short value) {
+        this.setBorderTopStyle(BorderStyle.getBorderStyleByValue(value));
     }
 
     /**
      * 获取右边框样式
      */
-    BorderStyle getBorderRight();
+    BorderStyle getBorderRightStyle();
 
     /**
      * 设置右边框样式
      */
-    void setBorderRight(String borderRight);
+    void setBorderRightStyle(BorderStyle borderRightStyle);
 
     /**
      * 设置右边框样式
      */
-    default void setBorderRight(BorderStyle borderStyle) {
-        this.setBorderRight(borderStyle.name());
+    default void setBorderRightStyle(String borderRightStyleString) {
+        this.setBorderRightStyle(BorderStyle.getBorderStyleByName(borderRightStyleString));
     }
 
     /**
      * 设置右边框样式
      */
-    default void setBorderRight(short value) {
-        this.setBorderRight(BorderStyle.getBorderStyleByValue(value));
+    default void setBorderRightStyle(short borderRightStyleShort) {
+        this.setBorderRightStyle(BorderStyle.getBorderStyleByValue(borderRightStyleShort));
     }
 
     /**
      * 获取下边框样式
      */
-    BorderStyle getBorderBottom();
+    BorderStyle getBorderBottomStyle();
 
     /**
      * 设置下边框样式
      */
-    void setBorderBottom(String borderBottom);
+    void setBorderBottomStyle(BorderStyle borderBottomStyle);
 
     /**
      * 设置下边框样式
      */
-    default void setBorderBottom(BorderStyle borderStyle) {
-        this.setBorderBottom(borderStyle.name());
+    default void setBorderBottomStyle(String borderBottomStyleString) {
+        this.setBorderBottomStyle(BorderStyle.getBorderStyleByName(borderBottomStyleString));
     }
 
     /**
      * 设置下边框样式
      */
-    default void setBorderBottom(short value) {
-        this.setBorderBottom(BorderStyle.getBorderStyleByValue(value));
+    default void setBorderBottomStyle(short borderBottomStyleShort) {
+        this.setBorderBottomStyle(BorderStyle.getBorderStyleByValue(borderBottomStyleShort));
     }
 
     /**
@@ -329,79 +329,145 @@ public interface CellStyle {
      *
      * @return 左边框, 上边框, 右边框, 下边框
      */
-    BorderStyle[] getBorder();
+    BorderStyle[] getBorderStyle();
 
     /**
      * 设置四个边框样式,以","分隔,顺序为左上右下
      */
-    default void setBorder(String border) {
-        String[] borders = border.split(",");
-        this.setBorderLeft(borders[0]);
-        this.setBorderTop(borders[1]);
-        this.setBorderRight(borders[2]);
-        this.setBorderBottom(borders[3]);
+    default void setBorderStyle(String borderStyleStrings) {
+        String[] borders = borderStyleStrings.split(",");
+        this.setBorderLeftStyle(borders[0]);
+        this.setBorderTopStyle(borders[1]);
+        this.setBorderRightStyle(borders[2]);
+        this.setBorderBottomStyle(borders[3]);
     }
 
     /**
      * 设置四个边框样式,顺序为左上右下
      */
-    default void setBorder(BorderStyle[] borderStyles) {
+    default void setBorderStyle(BorderStyle[] borderStyles) {
         StringBuilder sb = new StringBuilder();
         for (BorderStyle borderStyle : borderStyles) {
             sb.append(",").append(borderStyle.name());
         }
-        this.setBorder(sb.substring(1));
+        this.setBorderStyle(sb.substring(1));
     }
 
     /**
      * 设置四个边框样式,顺序为左上右下
      */
-    default void setBorder(short[] values) {
-        this.setBorderLeft(values[0]);
-        this.setBorderTop(values[1]);
-        this.setBorderRight(values[2]);
-        this.setBorderBottom(values[3]);
+    default void setBorderStyle(short[] borderStyleShorts) {
+        this.setBorderLeftStyle(borderStyleShorts[0]);
+        this.setBorderTopStyle(borderStyleShorts[1]);
+        this.setBorderRightStyle(borderStyleShorts[2]);
+        this.setBorderBottomStyle(borderStyleShorts[3]);
     }
 
     /**
-     * 拷贝样式
-     *
-     * @param target 目标单元格
+     * @return 字体
      */
-    default void setCellStyleByName(CellStyle target) {
-        target.setHAlign(getHAlign().name());
-        target.setVAlign(getVAlign().name());
-        target.setBorderLeft(getBorderLeft().name());
-        target.setBorderTop(getBorderTop().name());
-        target.setBorderRight(getBorderRight().name());
-        target.setBorderBottom(getBorderBottom().name());
-    }
+    Font getFont();
 
     /**
-     * 拷贝样式
+     * 设置字体
      *
-     * @param source 数据源
+     * @param font
      */
-    default void getCellStyleByName(CellStyle source) {
-        this.setHAlign(source.getHAlign().name());
-        this.setVAlign(source.getVAlign().name());
-        this.setBorderLeft(source.getBorderLeft().name());
-        this.setBorderTop(source.getBorderTop().name());
-        this.setBorderRight(source.getBorderRight().name());
-        this.setBorderBottom(source.getBorderBottom().name());
-    }
+    void setFont(Font font);
 
     /**
-     * 拷贝样式
-     *
-     * @param target 目标单元格
+     * 默认的单元格样式实现
      */
-    default void copyCellStyleByValue(CellStyle target) {
-        target.setHAlign(getHAlign().value);
-        target.setVAlign(getVAlign().value);
-        target.setBorderLeft(getBorderLeft().value);
-        target.setBorderTop(getBorderTop().value);
-        target.setBorderRight(getBorderRight().value);
-        target.setBorderBottom(getBorderBottom().value);
+    final class DefaultCellStyle implements CellStyle {
+
+        private CellStyle.HorizontalAlignType hAlignType = CellStyle.HorizontalAlignType.CENTER;
+        private CellStyle.VerticalAlignType vAlignType = CellStyle.VerticalAlignType.CENTER;
+        private CellStyle.BorderStyle borderLeftStyle = CellStyle.BorderStyle.NONE;
+        private CellStyle.BorderStyle borderTopStyle = CellStyle.BorderStyle.NONE;
+        private CellStyle.BorderStyle borderRightStyle = CellStyle.BorderStyle.NONE;
+        private CellStyle.BorderStyle borderBottomStyle = CellStyle.BorderStyle.NONE;
+        private Font font = new Font.DefaultFont();
+
+        @Override
+        public HorizontalAlignType getHorizontalAlignType() {
+            return this.hAlignType;
+        }
+
+        @Override
+        public void setHorizontalAlignType(HorizontalAlignType hAlignType) {
+            this.hAlignType = hAlignType;
+        }
+
+        @Override
+        public VerticalAlignType getVerticalAlignType() {
+            return this.vAlignType;
+        }
+
+        @Override
+        public void setVerticalAlignType(VerticalAlignType vAlignType) {
+            this.vAlignType = vAlignType;
+        }
+
+        @Override
+        public BorderStyle getBorderLeftStyle() {
+            return this.borderLeftStyle;
+        }
+
+        @Override
+        public void setBorderLeftStyle(BorderStyle borderLeftStyle) {
+            this.borderLeftStyle = borderLeftStyle;
+        }
+
+        @Override
+        public BorderStyle getBorderTopStyle() {
+            return this.borderTopStyle;
+        }
+
+        @Override
+        public void setBorderTopStyle(BorderStyle borderTopStyle) {
+            this.borderTopStyle = borderTopStyle;
+        }
+
+        @Override
+        public BorderStyle getBorderRightStyle() {
+            return this.borderRightStyle;
+        }
+
+        @Override
+        public void setBorderRightStyle(BorderStyle borderRightStyle) {
+            this.borderRightStyle = borderRightStyle;
+        }
+
+        @Override
+        public BorderStyle getBorderBottomStyle() {
+            return this.borderBottomStyle;
+        }
+
+        @Override
+        public void setBorderBottomStyle(BorderStyle borderBottomStyle) {
+            this.borderBottomStyle = borderBottomStyle;
+        }
+
+        @Override
+        public BorderStyle[] getBorderStyle() {
+            return new BorderStyle[]{
+                    this.borderLeftStyle,
+                    this.borderTopStyle,
+                    this.borderRightStyle,
+                    this.borderBottomStyle
+            };
+        }
+
+        @Override
+        public Font getFont() {
+            return this.font;
+        }
+
+        @Override
+        public void setFont(Font font) {
+            this.font = font;
+        }
+
+
     }
 }

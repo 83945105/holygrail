@@ -1,7 +1,7 @@
 package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.exception.ExcelException;
-import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
+import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,7 +62,7 @@ public interface SheetExportHandler extends Sheet {
      * @param exportTitles 是否导出表头
      * @return 准备导出
      */
-    ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] titles, boolean exportTitles) throws ExcelException;
+    ExcelSheetExport setTitles(BaseExcelTitleCell[][] titles, boolean exportTitles) throws ExcelException;
 
     /**
      * 设置列属性
@@ -135,7 +135,7 @@ public interface SheetExportHandler extends Sheet {
      * @param titles 表头对象
      * @return 准备导出
      */
-    default ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException {
+    default ExcelSheetExport setTitles(BaseExcelTitleCell[][] titles) throws ExcelException {
         return setTitles(titles, true);
     }
 

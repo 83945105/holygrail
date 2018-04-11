@@ -1,12 +1,12 @@
 package com.avalon.holygrail.excel.bean;
 
-import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
+import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
 
 /**
  * XSSFWorkbook表头
  * Created by 白超 on 2018/1/24.
  */
-public class XSSFExcelTitle extends ExcelTitleCellAbstract {
+public class XSSFExcelTitle extends BaseExcelTitleCell {
 
     public XSSFExcelTitle() {
     }
@@ -19,11 +19,11 @@ public class XSSFExcelTitle extends ExcelTitleCellAbstract {
         super(title, field);
     }
 
-    public XSSFExcelTitle(String title, String field, Integer rowSpan, Integer colSpan) {
-        super(title, field, rowSpan, colSpan);
+    public XSSFExcelTitle(int startRowNum, int startColNum) {
+        super(startRowNum, startColNum);
     }
 
-    public XSSFExcelTitle(String title, String field, Integer width, Integer rowSpan, Integer colSpan, String HAlign, String VAlign) {
-        super(title, field, width, rowSpan, colSpan, HAlign, VAlign);
+    public XSSFExcelTitle(int startRowNum, int startColNum, int rowSpan, int colSpan) {
+        super(startRowNum, startColNum, rowSpan, colSpan);
     }
 }

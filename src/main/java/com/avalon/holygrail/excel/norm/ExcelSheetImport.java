@@ -1,7 +1,7 @@
 package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.exception.ExcelException;
-import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
+import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public interface ExcelSheetImport extends SheetImportHandler {
     <T> ExcelSheetImport parseTitlesJson(File file, Class<T> clazz) throws IOException, ExcelException;
 
     @Override
-    <T> ExcelSheetImport setTitles(ExcelTitleCellAbstract[][] titles, Class<T> clazz) throws ExcelException;
+    <T> ExcelSheetImport setTitles(BaseExcelTitleCell[][] titles, Class<T> clazz) throws ExcelException;
 
     @Override
     <T> ExcelSheetImport setColumnFields(List<String> fields, Class<T> clazz) throws ExcelException;

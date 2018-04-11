@@ -2,7 +2,7 @@ package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.bean.SXSSFExcelSheetExport;
 import com.avalon.holygrail.excel.exception.ExcelException;
-import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
+import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public interface ExcelSheetExport extends SheetExportHandler {
     ExcelSheetExport parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelException;
 
     @Override
-    ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] titles, boolean exportTitles) throws ExcelException;
+    ExcelSheetExport setTitles(BaseExcelTitleCell[][] titles, boolean exportTitles) throws ExcelException;
 
     @Override
     ExcelSheetExport setColumnFields(List<String> fields) throws ExcelException;
@@ -63,7 +63,7 @@ public interface ExcelSheetExport extends SheetExportHandler {
     }
 
     @Override
-    default ExcelSheetExport setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException {
+    default ExcelSheetExport setTitles(BaseExcelTitleCell[][] titles) throws ExcelException {
         return setTitles(titles, true);
     }
 

@@ -1,6 +1,6 @@
 package com.avalon.holygrail.excel.exception;
 
-import com.avalon.holygrail.excel.bean.ExcelCellError;
+import com.avalon.holygrail.excel.bean.ExcelTitleCellError;
 
 /**
  * Excel表头异常
@@ -8,61 +8,42 @@ import com.avalon.holygrail.excel.bean.ExcelCellError;
  */
 public class ExcelTitleException extends ExcelException {
 
-    protected ExcelCellError excelCellError;
+    protected ExcelTitleCellError excelTitleCellError;
 
-    public ExcelTitleException() {
+    public ExcelTitleException(ExcelTitleCellError excelTitleCellError) {
+        this.excelTitleCellError = excelTitleCellError;
     }
 
-    public ExcelTitleException(String message) {
+    public ExcelTitleException(String message, ExcelTitleCellError excelTitleCellError) {
         super(message);
+        this.excelTitleCellError = excelTitleCellError;
     }
 
-    public ExcelTitleException(String message, Throwable cause) {
+    public ExcelTitleException(String message, Throwable cause, ExcelTitleCellError excelTitleCellError) {
         super(message, cause);
+        this.excelTitleCellError = excelTitleCellError;
     }
 
-    public ExcelTitleException(Throwable cause) {
+    public ExcelTitleException(Throwable cause, ExcelTitleCellError excelTitleCellError) {
         super(cause);
+        this.excelTitleCellError = excelTitleCellError;
     }
 
-    public ExcelTitleException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public ExcelTitleException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, ExcelTitleCellError excelTitleCellError) {
         super(message, cause, enableSuppression, writableStackTrace);
-    }
-
-    public ExcelTitleException(ExcelCellError excelCellError) {
-        this.excelCellError = excelCellError;
-    }
-
-    public ExcelTitleException(String message, ExcelCellError excelCellError) {
-        super(message);
-        this.excelCellError = excelCellError;
-    }
-
-    public ExcelTitleException(String message, Throwable cause, ExcelCellError excelCellError) {
-        super(message, cause);
-        this.excelCellError = excelCellError;
-    }
-
-    public ExcelTitleException(Throwable cause, ExcelCellError excelCellError) {
-        super(cause);
-        this.excelCellError = excelCellError;
-    }
-
-    public ExcelTitleException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, ExcelCellError excelCellError) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        this.excelCellError = excelCellError;
+        this.excelTitleCellError = excelTitleCellError;
     }
 
     @Override
     public String toString() {
         try {
-            return "row:" + excelCellError.getRow()
-                    + " col:" + excelCellError.getCol()
+            return "row:" + excelTitleCellError.getRow()
+                    + " col:" + excelTitleCellError.getCol()
                     + " 已被占用,title:"
-                    + excelCellError.getCellOption().getValue()
-                    + " rowSpan:" + excelCellError.getCellOption().getRowSpan()
-                    + " colSpan:" + excelCellError.getCellOption().getColSpan();
-        } catch (ExcelException e) {
+                    + excelTitleCellError.getExcelTitleCellHandler().getTitle()
+                    + " rowSpan:" + excelTitleCellError.getExcelTitleCellHandler().getRowSpan()
+                    + " colSpan:" + excelTitleCellError.getExcelTitleCellHandler().getColSpan();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return super.toString();

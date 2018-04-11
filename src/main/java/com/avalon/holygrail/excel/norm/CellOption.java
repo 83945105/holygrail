@@ -53,129 +53,118 @@ public interface CellOption {
     }
 
     /**
-     * 获取类型
+     * @return 单元格类型
      */
-    CellType getType();
+    CellType getCellType();
 
     /**
-     * 设置类型
+     * 设置单元格类型
+     *
+     * @param cellType
      */
-    void setType(String type);
+    void setCellType(CellType cellType);
 
     /**
-     * 设置类型
+     * 设置单元格类型
+     *
+     * @param cellTypeString
      */
-    default void setType(CellType type) {
-        this.setType(type.name());
+    default void setCellType(String cellTypeString) {
+        this.setCellType(CellType.getCellTypeByName(cellTypeString));
     }
 
     /**
-     * 设置类型
+     * 设置单元格类型
+     *
+     * @param cellTypeShort
      */
-    default void setType(short value) {
-        this.setType(CellType.getCellTypeByValue(value));
+    default void setCellType(short cellTypeShort) {
+        this.setCellType(CellType.getCellTypeByValue(cellTypeShort));
     }
 
     /**
-     * 获取下拉框值
+     * @return 下拉框值
      */
-    String[] getOptions();
+    String[] getCellOptions();
 
     /**
      * 设置下拉框值
+     *
+     * @param cellOptions
      */
-    void setOptions(String[] options);
+    void setCellOptions(String[] cellOptions);
 
     /**
-     * 获取值
+     * @return 获取值
+     * @throws ExcelException
      */
     Object getValue() throws ExcelException;
 
     /**
      * 设置值
+     *
+     * @param value
      */
     void setValue(Object value);
 
     /**
-     * 获取字段名称
+     * @return 映射值
      */
     String getField();
 
     /**
-     * 设置字段名称
+     * 设置映射值
+     *
+     * @param field
      */
     void setField(String field);
 
     /**
-     * 获取宽
+     * @return 单元格宽度
      */
-    Integer getWidth();
+    int getWidth();
 
     /**
-     * 设置宽
+     * 设置单元格宽度
+     *
+     * @param width
      */
-    void setWidth(Integer width);
+    void setWidth(int width);
 
     /**
-     * 获取占用多少行
+     * @return 占用多少行
      */
-    Integer getRowSpan();
+    int getRowSpan();
 
     /**
      * 设置占用多少行
+     *
+     * @param rowSpan
      */
-    void setRowSpan(Integer rowSpan);
+    void setRowSpan(int rowSpan);
 
     /**
-     * 获取占用多少列
+     * @return 占用多少列
      */
-    Integer getColSpan();
+    int getColSpan();
 
     /**
      * 设置占用多少列
+     *
+     * @param colSpan
      */
-    void setColSpan(Integer colSpan);
+    void setColSpan(int colSpan);
 
     /**
-     * 获取是否写入空值
+     * @return 是否写入空值
      */
     boolean isWriteEmpty();
 
     /**
      * 设置是否写入空值
+     *
+     * @param writeEmpty
      */
     void setWriteEmpty(boolean writeEmpty);
 
-    /**
-     * 拷贝属性(无视null)
-     *
-     * @param target 目标单元格
-     */
-    default void copyCellOptionSelective(CellOption target) throws ExcelException {
-        CellType type = getType();
-        if (type != null) {
-            target.setType(type);
-        }
-        Object value = getValue();
-        if (value != null) {
-            target.setValue(value);
-        }
-        String field = getField();
-        if (field != null) {
-            target.setField(field);
-        }
-        Integer width = getWidth();
-        if (width != null) {
-            target.setWidth(width);
-        }
-        Integer rowSpan = getRowSpan();
-        if (rowSpan != null) {
-            target.setRowSpan(rowSpan);
-        }
-        Integer colSpan = getColSpan();
-        if (colSpan != null) {
-            target.setColSpan(colSpan);
-        }
-        target.setWriteEmpty(isWriteEmpty());
-    }
 }

@@ -1,7 +1,7 @@
 package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.exception.ExcelException;
-import com.avalon.holygrail.excel.model.ExcelTitleCellAbstract;
+import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
 import com.avalon.holygrail.util.AlgorithmicUtil;
 
 import java.io.File;
@@ -68,7 +68,7 @@ public interface Sheet {
      * @param titles 表头对象
      * @return 准备导出
      */
-    Sheet setTitles(ExcelTitleCellAbstract[][] titles) throws ExcelException;
+    Sheet setTitles(BaseExcelTitleCell[][] titles) throws ExcelException;
 
     /**
      * 设置行号
