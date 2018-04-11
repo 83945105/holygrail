@@ -26,4 +26,8 @@ public class XSSFExcelTitle extends BaseExcelTitleCell {
     public XSSFExcelTitle(int startRowNum, int startColNum, int rowSpan, int colSpan) {
         super(startRowNum, startColNum, rowSpan, colSpan);
     }
+
+    public XSSFExcelTitle(String title, String field, int rowSpan, int colSpan) {
+        super(title, field, rowSpan, colSpan);
+    }
 }

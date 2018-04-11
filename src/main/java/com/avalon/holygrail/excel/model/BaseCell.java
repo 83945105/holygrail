@@ -24,6 +24,12 @@ public abstract class BaseCell implements CellHandler {
         this.colSpan = colSpan;
     }
 
+    public BaseCell(String field, int rowSpan, int colSpan) {
+        this.field = field;
+        this.rowSpan = rowSpan;
+        this.colSpan = colSpan;
+    }
+
     /**
      * 获取开始行号
      */

@@ -41,6 +41,11 @@ public abstract class BaseExcelTitleCell extends BaseCell implements ExcelTitleC
         this.field = field;
     }
 
+    public BaseExcelTitleCell(String title, String field, int rowSpan, int colSpan) {
+        super(field, rowSpan, colSpan);
+        this.title = title;
+    }
+
     public BaseExcelTitleCell(int startRowNum, int startColNum) {
         super(startRowNum, startColNum);
     }

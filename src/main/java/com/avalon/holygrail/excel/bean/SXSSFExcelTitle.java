@@ -24,4 +24,8 @@ public class SXSSFExcelTitle extends XSSFExcelTitle {
     public SXSSFExcelTitle(int startRowNum, int startColNum, int rowSpan, int colSpan) {
         super(startRowNum, startColNum, rowSpan, colSpan);
     }
+
+    public SXSSFExcelTitle(String title, String field, int rowSpan, int colSpan) {
+        super(title, field, rowSpan, colSpan);
+    }
 }
