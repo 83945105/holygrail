@@ -31,6 +31,18 @@ public final class MinValue<T> extends StatisticsBigDecimalFilter<T> {
     }
 
     @Override
+    public void doStatistics(BigDecimal value, int count) throws Exception {
+        BigDecimal hv = this.getValue(this.getName());
+        if (hv == null) {
+            hv = new BigDecimal(Integer.MAX_VALUE);
+        }
+        if (value == null) {
+            value = new BigDecimal(0);
+        }
+        this.doStatistics(hv, value, count);
+    }
+
+    @Override
     public void doStatistics(BigDecimal oldValue, BigDecimal newValue, int count) {
         BigDecimal minValue;
         if (newValue.compareTo(oldValue) == -1) {
