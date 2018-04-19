@@ -9,10 +9,15 @@ public interface MySqlLimit extends Limit {
     /**
      * 获取分页开始号
      */
-    int getLimitStart();
+    Integer getLimitStart();
 
     /**
      * 获取分页结束号
      */
     int getLimitEnd();
+
+    @Override
+    default String getSql() {
+        return "limit " + this.getLimitStart() == null ? "0" : this.getLimitStart() + "," + this.getLimitEnd();
+    }
 }

@@ -114,7 +114,7 @@ public class PageSupport implements MySqlLimit {
 	}
 
 	@Override
-	public int getLimitStart() {
+	public Integer getLimitStart() {
 		return getMySQLStartNo();
 	}
 
