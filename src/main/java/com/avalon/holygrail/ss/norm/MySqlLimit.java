@@ -18,6 +18,6 @@ public interface MySqlLimit extends Limit {
 
     @Override
     default String getSql() {
-        return "limit " + this.getLimitStart() == null ? "0" : this.getLimitStart() + "," + this.getLimitEnd();
+        return "limit " + (this.getLimitStart() == null ? "0" : this.getLimitStart()) + "," + this.getLimitEnd();
     }
 }

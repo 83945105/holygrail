@@ -5,6 +5,8 @@ import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.CellStyle;
 import com.avalon.holygrail.excel.norm.Font;
+import com.avalon.holygrail.ss.bean.PageSupport;
+import com.avalon.holygrail.ss.norm.Limit;
 import com.avalon.holygrail.util.Export;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -24,8 +26,14 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
-        Test.method1();
+        Test.method3();
 
+    }
+
+    public static void method3() throws Exception {
+
+        Limit limit = new PageSupport(100, 1, 10);
+        System.out.println(limit.getSql());
     }
 
     public static void method1() throws Exception {
