@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
  * 全局异常处理
  * Created by 白超 on 2018-1-20.
  */
-@ControllerAdvice
 public class GlobalExceptionHandler {
 
     //404异常
@@ -53,7 +52,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     DataView ExceptionHandler(HttpServletRequest request, Exception ex) throws Exception {
 
-        return DataViewUtil.getMessageViewSuccess("未知错误");
+        return DataViewUtil.getMessageViewError("未知错误");
 
     }
 
