@@ -3,7 +3,6 @@ package com.avalon.holygrail.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 集合工具

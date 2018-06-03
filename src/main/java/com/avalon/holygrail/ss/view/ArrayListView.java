@@ -9,11 +9,6 @@ import java.util.Collection;
  */
 public class ArrayListView<E> extends ArrayList<E> implements DataView {
 
-	/**  
-	 * @Fields serialVersionUID : 序列化标识符
-	 */ 
-	private static final long serialVersionUID = -6311887064693523630L;
-
 	public ArrayListView() {
 		super();
 	}

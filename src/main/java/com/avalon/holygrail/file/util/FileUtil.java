@@ -162,7 +162,7 @@ public class FileUtil {
      * 将base64保存为图片
      *
      * @param base64
-     * @param savePath     文件保存路径(不包含项目路径,不包含文件名和后缀名,尾部不用加/)
+     * @param savePath     文件保存路径(包含项目路径,不包含文件名和后缀名,尾部不用加/)
      * @param saveFileName 保存文件名(不包含后缀名)
      * @param suffix       文件后缀
      */
@@ -178,7 +178,6 @@ public class FileUtil {
                 b[i] += 256;
             }
         }
-        savePath = getRealPath(savePath);
         File file = new File(savePath);
         if (!file.exists()) {
             file.mkdirs();

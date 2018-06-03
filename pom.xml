@@ -5,7 +5,7 @@
 
     <groupId>com.github.83945105</groupId>
     <artifactId>holygrail</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.3</version>
     <packaging>jar</packaging>
 
     <name>holygrail</name>
@@ -55,6 +55,7 @@
         <org.apache.poi.version>3.9</org.apache.poi.version>
         <mysql-connector.version>6.0.6</mysql-connector.version>
         <javax.servlet.version>4.0.0-b01</javax.servlet.version>
+        <jackson.version>2.9.5</jackson.version>
         <com.alibaba.fastjson.version>1.2.7</com.alibaba.fastjson.version>
         <com.alibaba.druid.version>1.0.26</com.alibaba.druid.version>
         <shiro.version>1.2.4</shiro.version>
@@ -106,6 +107,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>${com.alibaba.druid.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
