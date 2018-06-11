@@ -16,8 +16,8 @@ mybatis:
   #mapper-locations: classpath:XX/*.xml
   # 给指定包下的实体类简化名称
   #type-aliases-package:
-  # mybatis-config.xml配置文件的路径
-  #config-location:
+  # mybatis-modules-config.xml配置文件的路径
+  #modules-config-location:
   # 扫描typeHandlers的包
   #type-handlers-package:
   # 检查配置文件是否存在
