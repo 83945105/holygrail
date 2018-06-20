@@ -70,7 +70,6 @@ public class Test {
                 .createSheet()
                 .parseTitlesJson(Test.class.getResourceAsStream("/com/avalon/holygrail/excel/bean/666.js"))
                 .importData(list, (value, record, cellHandler, field, rowCursor, index) -> {
-
                     cellHandler.setCellStyle(cellHandler.findCellStyle(0));
                     cellHandler.getCellStyle().setFont(cellHandler.findFont(0));
 
