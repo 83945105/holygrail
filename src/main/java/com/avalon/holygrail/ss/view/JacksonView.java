@@ -1,5 +1,9 @@
 package com.avalon.holygrail.ss.view;
 
+import com.alibaba.fastjson.JSONObject;
+import com.avalon.holygrail.ss.bean.ResultInfoRealization;
+import com.avalon.holygrail.ss.norm.ResultInfo;
+
 import java.util.Map;
 
 /**
@@ -20,5 +24,12 @@ public class JacksonView extends HashMapView {
 
     public JacksonView(Map m) {
         super(m);
+    }
+
+    @Override
+    public ResultInfo getResultInfo() {
+        JSONObject r = (JSONObject) this.get("resultInfo");
+        ResultInfoRealization resultInfo = JSONObject.parseObject(r.toJSONString(), ResultInfoRealization.class);
+        return super.getResultInfo();
     }
 }

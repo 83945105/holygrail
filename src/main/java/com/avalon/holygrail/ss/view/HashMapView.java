@@ -1,10 +1,14 @@
 package com.avalon.holygrail.ss.view;
 
+import com.avalon.holygrail.ss.norm.ResultInfo;
+import com.avalon.holygrail.ss.util.ResultUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Map视图
+ *
  * @param <K>
  * @param <V>
  */
@@ -25,4 +29,12 @@ public class HashMapView<K, V> extends HashMap<K, V> implements DataView {
         super(m);
     }
 
+    @Override
+    public ResultInfo getResultInfo() {
+        Object resultInfo = this.get("resultInfo");
+        if (resultInfo == null) {
+            return null;
+        }
+        return ResultUtil.createSuccess("HashMapView is success");
+    }
 }

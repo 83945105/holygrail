@@ -1,5 +1,8 @@
 package com.avalon.holygrail.ss.view;
 
+import com.avalon.holygrail.ss.norm.ResultInfo;
+import com.avalon.holygrail.ss.util.ResultUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -21,4 +24,8 @@ public class ArrayListView<E> extends ArrayList<E> implements DataView {
 		super(initialCapacity);
 	}
 
+	@Override
+	public ResultInfo getResultInfo() {
+		return ResultUtil.createSuccess("ArrayListView is success");
+	}
 }

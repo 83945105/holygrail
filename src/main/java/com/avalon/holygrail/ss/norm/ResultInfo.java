@@ -1,9 +1,11 @@
 package com.avalon.holygrail.ss.norm;
 
+import java.io.Serializable;
+
 /**
  * 结果集信息
  */
-public interface ResultInfo {
+public interface ResultInfo extends Serializable {
 
     /**
      * 是否成功

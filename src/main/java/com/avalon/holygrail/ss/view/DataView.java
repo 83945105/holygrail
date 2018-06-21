@@ -1,5 +1,6 @@
 package com.avalon.holygrail.ss.view;
 
+import com.avalon.holygrail.ss.norm.ResultInfo;
 import com.avalon.holygrail.ss.plugins.JacksonDataViewDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -11,5 +12,12 @@ import java.io.Serializable;
  */
 @JsonDeserialize(using = JacksonDataViewDeserializer.class)
 public interface DataView extends Serializable {
+
+    /**
+     * 获取结果集
+     *
+     * @return
+     */
+    ResultInfo getResultInfo();
 
 }

@@ -24,7 +24,10 @@ public class ResultInfoRealization implements ResultInfo {
 
 	/**提示信息明细列表*/
 	private Collection<ResultInfo> details;
-	
+
+	public ResultInfoRealization() {
+	}
+
 	public ResultInfoRealization(ResultCode resultCode, String message) {
 		this.resultCode = resultCode;
 		this.message = message;
@@ -49,7 +52,7 @@ public class ResultInfoRealization implements ResultInfo {
 		this.messageCode = messageCode;
 		this.details = details;
 	}
-	
+
 	public boolean isSuccess() {
 		return this.resultCode.isSuccess();
 	}
