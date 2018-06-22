@@ -15,14 +15,14 @@ import java.io.IOException;
  * 用于Jackson反序列化
  * Created by 白超 on 2018/6/3.
  */
-public class JacksonDataViewDeserializer extends JsonDeserializer<DataView> {
+public class DataViewDeserializer extends JsonDeserializer<DataView> {
 
     @Override
     public DataView deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
 
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
-        JacksonView jacksonView = JSONObject.parseObject(node.toString(), JacksonView.class);
+        JacksonView jacksonView = JSONObject.parseObject(node.asText(), JacksonView.class);
 
         return jacksonView;
     }

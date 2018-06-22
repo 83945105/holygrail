@@ -12,9 +12,9 @@ import java.util.Map;
  */
 public class ModelView extends LimitDataView {
 
-	protected Map<?, ?> records = new HashMap<>();
-	
 	protected Object record;
+
+	protected Map<?, ?> records = new HashMap<>();
 
 	public ModelView(ResultInfo resultInfo) {
 		super(resultInfo);
@@ -24,8 +24,8 @@ public class ModelView extends LimitDataView {
 		super(resultInfo, rows);
 	}
 
-	public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, int totalPage, Collection<?> rows) {
-		super(resultInfo, total, currPage, pageSize, totalPage, rows);
+	public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows) {
+		super(resultInfo, total, currPage, pageSize, rows);
 	}
 
 	public ModelView(ResultInfo resultInfo, Limit limit, Collection<?> rows) {
@@ -42,8 +42,8 @@ public class ModelView extends LimitDataView {
 		this.records = records;
 	}
 
-	public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, int totalPage, Collection<?> rows, Map<?, ?> records) {
-		super(resultInfo, total, currPage, pageSize, totalPage, rows);
+	public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Map<?, ?> records) {
+		super(resultInfo, total, currPage, pageSize, rows);
 		this.records = records;
 	}
 
@@ -62,8 +62,8 @@ public class ModelView extends LimitDataView {
 		this.record = record;
 	}
 
-	public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, int totalPage, Collection<?> rows, Object record) {
-		super(resultInfo, total, currPage, pageSize, totalPage, rows);
+	public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Object record) {
+		super(resultInfo, total, currPage, pageSize, rows);
 		this.record = record;
 	}
 
@@ -84,8 +84,8 @@ public class ModelView extends LimitDataView {
 		this.record = record;
 	}
 
-	public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, int totalPage, Collection<?> rows, Map<?, ?> records, Object record) {
-		super(resultInfo, total, currPage, pageSize, totalPage, rows);
+	public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Map<?, ?> records, Object record) {
+		super(resultInfo, total, currPage, pageSize, rows);
 		this.records = records;
 		this.record = record;
 	}

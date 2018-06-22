@@ -24,6 +24,7 @@ public class ResultUtil {
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
 		return new ResultInfoRealization(ResultCodeEnum.FAIL, messageCode, message);
 	}
+
 	/**
 	 * 创建失败结果集
 	 * @param message 提示信息
@@ -31,6 +32,7 @@ public class ResultUtil {
 	public static ResultInfo createFail(String message) {
 		return new ResultInfoRealization(ResultCodeEnum.FAIL, message);
 	}
+
 	/**
 	 * 创建失败结果集
 	 * @param message 提示信息
@@ -39,6 +41,7 @@ public class ResultUtil {
 	public static ResultInfo createFail(String message, String exceptionMessage) {
 		return new ResultInfoRealization(ResultCodeEnum.FAIL, message, exceptionMessage);
 	}
+
 	/**
 	 * 创建成功结果集
 	 * @param messageCode 提示信息key
@@ -49,6 +52,7 @@ public class ResultUtil {
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
 		return new ResultInfoRealization(ResultCodeEnum.SUCCESS, messageCode, message);
 	}
+
 	/**
 	 * 创建成功结果集
 	 * @param message 提示信息
@@ -56,6 +60,7 @@ public class ResultUtil {
 	public static ResultInfo createSuccess(String message) {
 		return new ResultInfoRealization(ResultCodeEnum.SUCCESS, message);
 	}
+
 	/**
 	 * 创建警告结果集
 	 * @param messageCode 提示信息key
@@ -73,6 +78,7 @@ public class ResultUtil {
 	public static ResultInfo createWarn(String message) {
 		return new ResultInfoRealization(ResultCodeEnum.WARN, message);
 	}
+
 	/**
 	 * 创建信息结果集
 	 * @param messageCode 提示信息key
@@ -83,6 +89,7 @@ public class ResultUtil {
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
 		return new ResultInfoRealization(ResultCodeEnum.INFO, messageCode, message);
 	}
+
 	/**
 	 * 创建信息结果集
 	 * @param message 提示信息
@@ -101,6 +108,7 @@ public class ResultUtil {
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
 		return new ResultInfoRealization(ResultCodeEnum.ERROR, messageCode, message);
 	}
+
 	/**
 	 * 创建错误结果集
 	 * @param message 提示信息
@@ -119,6 +127,7 @@ public class ResultUtil {
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
 		return new ResultInfoRealization(ResultCodeEnum.NEED_LOGIN, messageCode, message);
 	}
+
 	/**
 	 * 创建需要登录结果集
 	 * @param message 提示信息
@@ -137,6 +146,7 @@ public class ResultUtil {
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
 		return new ResultInfoRealization(ResultCodeEnum.NO_AUTHORITY, messageCode, message);
 	}
+
 	/**
 	 * 创建需要权限结果集
 	 * @param message 提示信息
@@ -155,6 +165,7 @@ public class ResultUtil {
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
 		return new ResultInfoRealization(ResultCodeEnum.NOT_FOUND, messageCode, message);
 	}
+
 	/**
 	 * 创建需要权限结果集
 	 * @param message 提示信息
@@ -169,18 +180,21 @@ public class ResultUtil {
 	public static ResultException createResultException(ResultInfo resultInfo) {
 		return new ResultException(resultInfo);
 	}
+
 	/**
 	 * 构建需要登录异常
 	 */
 	public static NeedLoginException createNeedLoginException(ResultInfo resultInfo) {
 		return new NeedLoginException(resultInfo);
 	}
+
 	/**
 	 * 构建没有权限异常
 	 */
 	public static NoAuthorityException createNoAuthorityException(ResultInfo resultInfo) {
 		return new NoAuthorityException(resultInfo);
 	}
+
 	/**
 	 * 构建404异常
 	 */

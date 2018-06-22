@@ -82,8 +82,8 @@ public class DataViewUtil {
         return new DataGridView(ResultUtil.createSuccess("success"), rows, footer);
     }
 
-    public static DataGridView getDataGridViewSuccess(Collection<?> rows, int total, int currPage, int pageSize, int totalPage) {
-        return new DataGridView(ResultUtil.createSuccess("success"), total, currPage, pageSize, totalPage, rows);
+    public static DataGridView getDataGridViewSuccess(Collection<?> rows, int total, int currPage, int pageSize) {
+        return new DataGridView(ResultUtil.createSuccess("success"), total, currPage, pageSize, rows);
     }
 
     public static DataGridView getDataGridViewSuccess(Collection<?> rows, Limit limit) {
@@ -106,15 +106,6 @@ public class DataViewUtil {
         return new DataGridView(ResultUtil.createInfo("info"));
     }
 
-    //--------------------------------构建ArrayListView视图-------------------------------------//
-    public static <E> ArrayListView<E> getArrayListView(Collection<E> list) {
-        return new ArrayListView<>(list);
-    }
-
-    //--------------------------------构建ArrayListView视图-------------------------------------//
-    public static <K, V> HashMapView<K, V> getHashMapView(Map<K, V> map) {
-        return new HashMapView<>(map);
-    }
     //-------------------------------------构建上传结果视图------------------------------------------//
 
     /**
@@ -168,16 +159,16 @@ public class DataViewUtil {
         return new ModelView(ResultUtil.createSuccess(message), rows);
     }
 
-    public static ModelView getModelViewSuccess(Collection<?> rows, int total, int currPage, int pageSize, int totalPage) {
-        return new ModelView(ResultUtil.createSuccess("success"), total, currPage, pageSize, totalPage, rows);
+    public static ModelView getModelViewSuccess(Collection<?> rows, int total, int currPage, int pageSize) {
+        return new ModelView(ResultUtil.createSuccess("success"), total, currPage, pageSize, rows);
     }
 
     public static ModelView getModelViewSuccess(Collection<?> rows, Limit limit) {
         return new ModelView(ResultUtil.createSuccess("success"), limit, rows);
     }
 
-    public static ModelView getModelViewSuccess(Collection<?> rows, String message, int total, int currPage, int pageSize, int totalPage) {
-        return new ModelView(ResultUtil.createSuccess(message), total, currPage, pageSize, totalPage, rows);
+    public static ModelView getModelViewSuccess(Collection<?> rows, String message, int total, int currPage, int pageSize) {
+        return new ModelView(ResultUtil.createSuccess(message), total, currPage, pageSize, rows);
     }
 
     public static ModelView getModelViewSuccess(Map<?, ?> records) {

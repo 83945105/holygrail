@@ -7,21 +7,37 @@ import com.avalon.holygrail.ss.norm.ResultCode;
  */
 public enum ResultCodeEnum implements ResultCode {
 
-    /**失败*/
-    FAIL(ResultCode.FAIL_CODE, "失败","fail"),
-    /**成功*/
+    /**
+     * 失败
+     */
+    FAIL(ResultCode.FAIL_CODE, "失败", "fail"),
+    /**
+     * 成功
+     */
     SUCCESS(ResultCode.SUCCESS_CODE, "成功", "success"),
-    /**警告*/
+    /**
+     * 警告
+     */
     WARN(ResultCode.WARN_CODE, "警告", "warn"),
-    /**信息提示*/
+    /**
+     * 信息提示
+     */
     INFO(ResultCode.INFO_CODE, "信息", "info"),
-    /**错误*/
+    /**
+     * 错误
+     */
     ERROR(ResultCode.ERROR_CODE, "错误", "error"),
-    /**需要登录*/
+    /**
+     * 需要登录
+     */
     NEED_LOGIN(ResultCode.NEED_LOGIN_CODE, "需要登录", "needLogin"),
-    /**无权*/
+    /**
+     * 无权
+     */
     NO_AUTHORITY(ResultCode.NO_AUTHORITY_CODE, "没有权限", "noAuthority"),
-    /**资源不存在*/
+    /**
+     * 资源不存在
+     */
     NOT_FOUND(ResultCode.NOT_FOUND, "资源不存在", "404");
 
     private final int code;
@@ -66,6 +82,5 @@ public enum ResultCodeEnum implements ResultCode {
     public boolean isError() {
         return this == ResultCodeEnum.ERROR;
     }
-
 
 }
