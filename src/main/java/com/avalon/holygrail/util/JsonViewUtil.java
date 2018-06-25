@@ -42,4 +42,27 @@ public class JsonViewUtil {
         throw new JsonViewParseException(resultInfo);
     }
 
+    /**
+     * JsonView 成功
+     *
+     * @param dataView
+     * @param <K>
+     * @param <V>
+     * @throws JsonViewParseException
+     */
+    public static <K, V> JsonView<K, V> success(DataView dataView) throws JsonViewParseException {
+        if (dataView == null) {
+            throw new JsonViewParseException(null);
+        }
+        JsonView jsonView = (JsonView) dataView;
+        ResultInfo resultInfo = jsonView.getResultInfo();
+        if (resultInfo == null) {
+            throw new JsonViewParseException(null);
+        }
+        if (resultInfo.isSuccess()) {
+            return jsonView;
+        }
+        throw new JsonViewParseException(resultInfo);
+    }
+
 }
