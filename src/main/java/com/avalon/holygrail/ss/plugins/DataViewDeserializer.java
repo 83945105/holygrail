@@ -2,7 +2,7 @@ package com.avalon.holygrail.ss.plugins;
 
 import com.alibaba.fastjson.JSONObject;
 import com.avalon.holygrail.ss.view.DataView;
-import com.avalon.holygrail.ss.view.JacksonView;
+import com.avalon.holygrail.ss.view.JsonView;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -22,8 +22,8 @@ public class DataViewDeserializer extends JsonDeserializer<DataView> {
 
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
-        JacksonView jacksonView = JSONObject.parseObject(node.asText(), JacksonView.class);
+        JsonView jsonView = JSONObject.parseObject(node.asText(), JsonView.class);
 
-        return jacksonView;
+        return jsonView;
     }
 }
