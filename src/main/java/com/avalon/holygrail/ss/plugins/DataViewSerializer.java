@@ -13,8 +13,8 @@ import java.io.IOException;
 public class DataViewSerializer extends JsonSerializer<DataView> {
 
     @Override
-    public void serialize(DataView dataView, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString(dataView.toJson());
+    public void serialize(DataView feignView, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        jsonGenerator.writeObject(feignView.getJsonObject());
     }
 
 }
