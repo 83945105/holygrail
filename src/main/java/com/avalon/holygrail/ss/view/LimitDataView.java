@@ -11,6 +11,8 @@ import java.util.Collection;
  */
 public class LimitDataView extends PageView {
 
+    public static final String ROWS_KEY = "rows";
+
     /**
      * 结果集
      */

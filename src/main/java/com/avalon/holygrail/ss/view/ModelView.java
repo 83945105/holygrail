@@ -12,6 +12,9 @@ import java.util.Map;
  */
 public class ModelView extends LimitDataView {
 
+	public static final String RECORD_KEY = "record";
+	public static final String RECORDS_KEY = "records";
+
 	protected Object record;
 
 	protected Map<?, ?> records = new HashMap<>();

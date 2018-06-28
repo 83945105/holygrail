@@ -9,6 +9,8 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
  */
 public class PageView extends MessageView {
 
+    public static final String LIMIT_KEY = "limit";
+
     protected Limit limit;
 
     public PageView(ResultInfo resultInfo) {
