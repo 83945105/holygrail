@@ -9,10 +9,6 @@ public class ValidateResultView extends MessageView {
 
     protected boolean success;
 
-    public ValidateResultView(boolean success) {
-        this.success = success;
-    }
-
     public ValidateResultView(ResultInfo resultInfo, boolean success) {
         super(resultInfo);
         this.success = success;

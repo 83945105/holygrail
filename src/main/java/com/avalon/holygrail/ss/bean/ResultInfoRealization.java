@@ -11,20 +11,23 @@ import java.util.Collection;
 public class ResultInfoRealization implements ResultInfo {
 
 	/**消息提示类型*/
-	private ResultCode resultCode;
+	protected ResultCode resultCode;
 	
 	/**提示代码*/
-	private int messageCode;
+	protected int messageCode;
 	
 	/**提示信息*/
-	private String message;
+	protected String message;
 	
 	/**异常信息*/
-	private String exceptionMessage;
+	protected String exceptionMessage;
 
 	/**提示信息明细列表*/
-	private Collection<ResultInfo> details;
-	
+	protected Collection<ResultInfo> details;
+
+	public ResultInfoRealization() {
+	}
+
 	public ResultInfoRealization(ResultCode resultCode, String message) {
 		this.resultCode = resultCode;
 		this.message = message;
@@ -49,7 +52,7 @@ public class ResultInfoRealization implements ResultInfo {
 		this.messageCode = messageCode;
 		this.details = details;
 	}
-	
+
 	public boolean isSuccess() {
 		return this.resultCode.isSuccess();
 	}
@@ -65,7 +68,15 @@ public class ResultInfoRealization implements ResultInfo {
 	}
 
 	//------------------------------------get set---------------------------------------//
-	
+
+	public ResultCode getResultCode() {
+		return resultCode;
+	}
+
+	public void setResultCode(ResultCode resultCode) {
+		this.resultCode = resultCode;
+	}
+
 	public Collection<ResultInfo> getDetails() {
 		return details;
 	}
@@ -101,5 +112,5 @@ public class ResultInfoRealization implements ResultInfo {
 	public void setExceptionMessage(String exceptionMessage) {
 		this.exceptionMessage = exceptionMessage;
 	}
-	
+
 }
