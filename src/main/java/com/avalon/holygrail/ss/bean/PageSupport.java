@@ -17,10 +17,6 @@ public class PageSupport implements MySqlLimit {
      */
     private int total;
     /**
-     * 总页数
-     */
-    private int totalPageCount = 1;
-    /**
      * 当前页号
      */
     private int currentPage = 1;
@@ -39,20 +35,46 @@ public class PageSupport implements MySqlLimit {
     /**
      * MySQL起始记录号
      */
-    private int mySQLStartNo = -1;
+    private int mySqlStartNo = -1;
 
     public PageSupport() {
     }
 
-    public PageSupport(int currentPageNo, int pageSize) {
-        this.currentPage = currentPageNo > 0 ? currentPageNo : 1;
-        this.pageSize = pageSize > 0 ? pageSize : 1;
+    public PageSupport(int currentPage, int pageSize) {
+        this.setCurrentPage(currentPage);
+        this.setPageSize(pageSize);
     }
 
-    public PageSupport(int total, int currentPageNo, int pageSize) {
-        this.total = total > 0 ? total : 0;
-        this.currentPage = currentPageNo > 0 ? currentPageNo : 1;
-        this.pageSize = pageSize > 0 ? pageSize : 1;
+    public PageSupport(int total, int currentPage, int pageSize) {
+        this.setTotal(total);
+        this.setCurrentPage(currentPage);
+        this.setPageSize(pageSize);
+    }
+
+    @Override
+    public int getTotal() {
+        return this.total;
+    }
+
+    @Override
+    public int getCurrentPage() {
+        return this.currentPage;
+    }
+
+    @Override
+    public int getPageSize() {
+        return this.pageSize;
+    }
+
+    @Override
+    public int getPageCount() {
+        if (this.total % this.pageSize == 0) {
+            return this.total / this.pageSize;
+        } else if (total % pageSize > 0) {
+            return this.total / this.pageSize + 1;
+        } else {
+            return 1;
+        }
     }
 
     /**
@@ -63,29 +85,10 @@ public class PageSupport implements MySqlLimit {
     }
 
     /**
-     * 获取总记录数
-     */
-    public int getTotal() {
-        return total;
-    }
-
-    @Override
-    public int getCurrPageNum() {
-        return getCurrentPage();
-    }
-
-    /**
      * 设置当前页号
      */
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage > 0 ? currentPage : 1;
-    }
-
-    /**
-     * 获取当前页号
-     */
-    public int getCurrentPage() {
-        return currentPage;
     }
 
     /**
@@ -95,77 +98,42 @@ public class PageSupport implements MySqlLimit {
         this.pageSize = pageSize > 0 ? pageSize : 1;
     }
 
-    /**
-     * 获取每页显示条数
-     */
-    public int getPageSize() {
-        return this.pageSize;
-    }
-
-    @Override
-    public int getTotalPage() {
-        return getTotalPageCount();
-    }
-
-    /**
-     * 计算总页数
-     */
-    private void setTotalPageCount() {
-        if (total % pageSize == 0) {
-            this.totalPageCount = total / pageSize;
-        } else if (total % pageSize > 0) {
-            this.totalPageCount = total / pageSize + 1;
-        } else {
-            this.totalPageCount = 0;
-        }
-    }
-
-    /**
-     * 获取总页数
-     */
-    public int getTotalPageCount() {
-        setTotalPageCount();
-        return totalPageCount > 0 ? totalPageCount : 1;
+    public int getOracleStartNo() {
+        return this.oracleStartNo != 0 ? this.oracleStartNo : (this.currentPage - 1) * this.pageSize + 1;
     }
 
     public void setOracleStartNo(int oracleStartNo) {
         this.oracleStartNo = oracleStartNo > 0 ? oracleStartNo : 1;
     }
 
-    public int getOracleStartNo() {
-        return this.oracleStartNo != 0 ? this.oracleStartNo : (this.currentPage - 1) * this.pageSize + 1;
+    public int getOracleEndNo() {
+        return this.oracleEndNo != 0 ? this.oracleEndNo : this.currentPage * this.pageSize;
     }
 
     public void setOracleEndNo(int oracleEndNo) {
         this.oracleEndNo = oracleEndNo > 0 ? oracleEndNo : 1;
     }
 
-    public int getOracleEndNo() {
-        return this.oracleEndNo != 0 ? this.oracleEndNo : this.currentPage * this.pageSize;
+    public int getMySqlStartNo() {
+        return this.mySqlStartNo != -1 ? this.mySqlStartNo : (this.currentPage - 1) * this.pageSize;
+    }
+
+    public void setMySqlStartNo(int mySqlStartNo) {
+        this.mySqlStartNo = mySqlStartNo;
     }
 
     public void setMySQLStartNo(int mySQLStartNo) {
-        this.mySQLStartNo = mySQLStartNo > 0 ? mySQLStartNo : 0;
-    }
-
-    public int getMySQLStartNo() {
-        return this.mySQLStartNo != -1 ? this.mySQLStartNo : (this.currentPage - 1) * this.pageSize;
+        this.mySqlStartNo = mySQLStartNo > 0 ? mySQLStartNo : 0;
     }
 
     @Override
     public Integer getLimitStart() {
-        return getMySQLStartNo();
+        return this.getMySqlStartNo();
     }
 
     @Override
     public int getLimitEnd() {
-        return getPageSize();
+        return this.getPageSize();
     }
 
-    private String sql;
-
-    @Override
-    public String getSql() {
-        return "limit " + (this.getLimitStart() == null ? "0" : this.getLimitStart()) + "," + this.getLimitEnd();
-    }
 }

@@ -16,8 +16,4 @@ public interface MySqlLimit extends Limit {
      */
     int getLimitEnd();
 
-    @Override
-    default String getSql() {
-        return "limit " + (this.getLimitStart() == null ? "0" : this.getLimitStart()) + "," + this.getLimitEnd();
-    }
 }

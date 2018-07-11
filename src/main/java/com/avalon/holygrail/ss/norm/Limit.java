@@ -17,7 +17,7 @@ public interface Limit {
      *
      * @return
      */
-    int getCurrPageNum();
+    int getCurrentPage();
 
     /**
      * 获取每页显示数量
@@ -31,12 +31,6 @@ public interface Limit {
      *
      * @return
      */
-    int getTotalPage();
+    int getPageCount();
 
-    /**
-     * 获取分页语句
-     *
-     * @return
-     */
-    String getSql();
 }

@@ -7,8 +7,8 @@ public class DateUtil {
 
     private final static SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
     private final static SimpleDateFormat sdfDay = new SimpleDateFormat("yyyy-MM-dd");
-    private final static SimpleDateFormat sdfDays = new SimpleDateFormat("yyyyMMdd");
-    private final static SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final static SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
+    private final static SimpleDateFormat YYYY_MM_DD__HH_MM_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     /**
@@ -17,7 +17,16 @@ public class DateUtil {
      * @return
      */
     public static String getTimeString() {
-        return sdfTime.format(new Date());
+        return YYYY_MM_DD__HH_MM_SS.format(new Date());
+    }
+
+    /**
+     * 获取YYYYMMDD 格式
+     *
+     * @return
+     */
+    public static String getTimeStringSimple() {
+        return YYYYMMDD.format(new Date());
     }
 
     /**
