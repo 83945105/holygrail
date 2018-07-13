@@ -32,8 +32,6 @@ public class Test {
 
     public static void method3() throws Exception {
 
-        Limit limit = new PageSupport(100, 1, 10);
-        System.out.println(limit.getSql());
     }
 
     public static void method1() throws Exception {

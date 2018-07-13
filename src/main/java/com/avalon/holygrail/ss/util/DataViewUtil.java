@@ -179,8 +179,12 @@ public class DataViewUtil {
         return new ModelView(ResultUtil.createSuccess("success"), records, limit);
     }
 
-    public static ModelView getModelViewFail(String message) {
-        return new ModelView(ResultUtil.createFail(message));
+    public static ModelView getModelViewFail(String message, Object record) {
+        return new ModelView(ResultUtil.createFail(message), record);
+    }
+
+    public static ModelView getModelViewFail(Object record) {
+        return new ModelView(ResultUtil.createFail("fail"), record);
     }
 
 }
