@@ -5,7 +5,7 @@ import com.avalon.holygrail.ss.exception.NotFoundException;
 import com.avalon.holygrail.ss.exception.NeedLoginException;
 import com.avalon.holygrail.ss.exception.NoAuthorityException;
 import com.avalon.holygrail.ss.exception.ResultException;
-import com.avalon.holygrail.ss.bean.ResultCodeEnum;
+import com.avalon.holygrail.ss.bean.ResultCode;
 import com.avalon.holygrail.ss.bean.ResultInfoRealization;
 import com.avalon.holygrail.ss.norm.ResultInfo;
 
@@ -22,7 +22,7 @@ public class ResultUtil {
 	public static ResultInfo createFail(int messageCode, Object[] params) {
 		String message = params == null ? ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "")
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
-		return new ResultInfoRealization(ResultCodeEnum.FAIL, messageCode, message);
+		return new ResultInfoRealization(ResultCode.FAIL, messageCode, message);
 	}
 
 	/**
@@ -30,7 +30,7 @@ public class ResultUtil {
 	 * @param message 提示信息
 	 */
 	public static ResultInfo createFail(String message) {
-		return new ResultInfoRealization(ResultCodeEnum.FAIL, message);
+		return new ResultInfoRealization(ResultCode.FAIL, message);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class ResultUtil {
 	 * @param exceptionMessage 异常信息
 	 */
 	public static ResultInfo createFail(String message, String exceptionMessage) {
-		return new ResultInfoRealization(ResultCodeEnum.FAIL, message, exceptionMessage);
+		return new ResultInfoRealization(ResultCode.FAIL, message, exceptionMessage);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class ResultUtil {
 	public static ResultInfo createSuccess(int messageCode, Object[] params) {
 		String message = params == null ? ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "")
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
-		return new ResultInfoRealization(ResultCodeEnum.SUCCESS, messageCode, message);
+		return new ResultInfoRealization(ResultCode.SUCCESS, messageCode, message);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class ResultUtil {
 	 * @param message 提示信息
 	 */
 	public static ResultInfo createSuccess(String message) {
-		return new ResultInfoRealization(ResultCodeEnum.SUCCESS, message);
+		return new ResultInfoRealization(ResultCode.SUCCESS, message);
 	}
 
 	/**
@@ -69,14 +69,14 @@ public class ResultUtil {
 	public static ResultInfo createWarn(int messageCode, Object[] params) {
 		String message = params == null ? ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "")
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
-		return new ResultInfoRealization(ResultCodeEnum.WARN, messageCode, message);
+		return new ResultInfoRealization(ResultCode.WARN, messageCode, message);
 	}
 	/**
 	 * 创建警告结果集
 	 * @param message 提示信息
 	 */
 	public static ResultInfo createWarn(String message) {
-		return new ResultInfoRealization(ResultCodeEnum.WARN, message);
+		return new ResultInfoRealization(ResultCode.WARN, message);
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class ResultUtil {
 	public static ResultInfo createInfo(int messageCode, Object[] params) {
 		String message = params == null ? ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "")
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
-		return new ResultInfoRealization(ResultCodeEnum.INFO, messageCode, message);
+		return new ResultInfoRealization(ResultCode.INFO, messageCode, message);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class ResultUtil {
 	 * @param message 提示信息
 	 */
 	public static ResultInfo createInfo(String message) {
-		return new ResultInfoRealization(ResultCodeEnum.INFO, message);
+		return new ResultInfoRealization(ResultCode.INFO, message);
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class ResultUtil {
 	public static ResultInfo createError(int messageCode, Object[] params) {
 		String message = params == null ? ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "")
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
-		return new ResultInfoRealization(ResultCodeEnum.ERROR, messageCode, message);
+		return new ResultInfoRealization(ResultCode.ERROR, messageCode, message);
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class ResultUtil {
 	 * @param message 提示信息
 	 */
 	public static ResultInfo createError(String message) {
-		return new ResultInfoRealization(ResultCodeEnum.ERROR, message);
+		return new ResultInfoRealization(ResultCode.ERROR, message);
 	}
 	
 	/**
@@ -125,7 +125,7 @@ public class ResultUtil {
 	public static ResultInfo createNeedLogin(int messageCode, Object[] params) {
 		String message = params == null ? ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "")
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
-		return new ResultInfoRealization(ResultCodeEnum.NEED_LOGIN, messageCode, message);
+		return new ResultInfoRealization(ResultCode.NEED_LOGIN, messageCode, message);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class ResultUtil {
 	 * @param message 提示信息
 	 */
 	public static ResultInfo createNeedLogin(String message) {
-		return new ResultInfoRealization(ResultCodeEnum.NEED_LOGIN, message);
+		return new ResultInfoRealization(ResultCode.NEED_LOGIN, message);
 	}
 	
 	/**
@@ -144,7 +144,7 @@ public class ResultUtil {
 	public static ResultInfo createNoAuthority(int messageCode, Object[] params) {
 		String message = params == null ? ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "")
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
-		return new ResultInfoRealization(ResultCodeEnum.NO_AUTHORITY, messageCode, message);
+		return new ResultInfoRealization(ResultCode.NO_AUTHORITY, messageCode, message);
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class ResultUtil {
 	 * @param message 提示信息
 	 */
 	public static ResultInfo createNoAuthority(String message) {
-		return new ResultInfoRealization(ResultCodeEnum.NO_AUTHORITY, message);
+		return new ResultInfoRealization(ResultCode.NO_AUTHORITY, message);
 	}
 	
 	/**
@@ -163,7 +163,7 @@ public class ResultUtil {
 	public static ResultInfo createNotFound(int messageCode, Object[] params) {
 		String message = params == null ? ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "")
 				: ResourceUtil.getValue(ResultConf.MESSAGE, messageCode + "", params);
-		return new ResultInfoRealization(ResultCodeEnum.NOT_FOUND, messageCode, message);
+		return new ResultInfoRealization(ResultCode.NOT_FOUND, messageCode, message);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class ResultUtil {
 	 * @param message 提示信息
 	 */
 	public static ResultInfo createNotFound(String message) {
-		return new ResultInfoRealization(ResultCodeEnum.NOT_FOUND, message);
+		return new ResultInfoRealization(ResultCode.NOT_FOUND, message);
 	}
 	
 	/**

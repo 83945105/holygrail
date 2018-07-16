@@ -2,6 +2,7 @@ package com.avalon.holygrail.ss.norm;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.avalon.holygrail.ss.bean.ResultCode;
 
 import java.beans.Transient;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ public interface ResultInfo extends Json, Serializable {
 
     /**
      * 获取结果值
+     *
      * @return
      */
     ResultCode getResultCode();
@@ -71,7 +73,7 @@ public interface ResultInfo extends Json, Serializable {
     @JSONField(serialize = false)
     default JSONObject getJsonObject() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(ResultCode.RESULT_CODE_PARAM, getResultCode().getJsonObject());
+        jsonObject.put("resultCode", getResultCode());
         jsonObject.put("success", isSuccess());
         jsonObject.put("fail", isFail());
         jsonObject.put("error", isError());

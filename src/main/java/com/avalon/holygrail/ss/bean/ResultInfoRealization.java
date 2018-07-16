@@ -1,6 +1,5 @@
 package com.avalon.holygrail.ss.bean;
 
-import com.avalon.holygrail.ss.norm.ResultCode;
 import com.avalon.holygrail.ss.norm.ResultInfo;
 
 import java.util.Collection;
@@ -10,107 +9,120 @@ import java.util.Collection;
  */
 public class ResultInfoRealization implements ResultInfo {
 
-	/**消息提示类型*/
-	protected ResultCode resultCode;
-	
-	/**提示代码*/
-	protected int messageCode;
-	
-	/**提示信息*/
-	protected String message;
-	
-	/**异常信息*/
-	protected String exceptionMessage;
+    /**
+     * 消息提示类型
+     */
+    protected ResultCode resultCode;
 
-	/**提示信息明细列表*/
-	protected Collection<ResultInfo> details;
+    /**
+     * 提示代码
+     */
+    protected int messageCode;
 
-	public ResultInfoRealization() {
-	}
+    /**
+     * 提示信息
+     */
+    protected String message;
 
-	public ResultInfoRealization(ResultCode resultCode, String message) {
-		this.resultCode = resultCode;
-		this.message = message;
-	}
-	public ResultInfoRealization(ResultCode resultCode, String message, String exceptionMessage) {
-		this.resultCode = resultCode;
-		this.message = message;
-		this.exceptionMessage = exceptionMessage;
-	}
-	public ResultInfoRealization(ResultCode resultCode, int messageCode, String message) {
-		this.resultCode = resultCode;
-		this.messageCode = messageCode;
-		this.message = message;
-	}
+    /**
+     * 异常信息
+     */
+    protected String exceptionMessage;
 
-	public ResultInfoRealization(ResultCode resultCode, Collection<ResultInfo> details) {
-		this.resultCode = resultCode;
-		this.details = details;
-	}
-	public ResultInfoRealization(ResultCode resultCode, int messageCode, Collection<ResultInfo> details) {
-		this.resultCode = resultCode;
-		this.messageCode = messageCode;
-		this.details = details;
-	}
+    /**
+     * 提示信息明细列表
+     */
+    protected Collection<ResultInfo> details;
 
-	public boolean isSuccess() {
-		return this.resultCode.isSuccess();
-	}
+    public ResultInfoRealization() {
+    }
 
-	@Override
-	public boolean isFail() {
-		return this.resultCode.isFail();
-	}
+    public ResultInfoRealization(ResultCode resultCode, String message) {
+        this.resultCode = resultCode;
+        this.message = message;
+    }
 
-	@Override
-	public boolean isError() {
-		return this.resultCode.isError();
-	}
+    public ResultInfoRealization(ResultCode resultCode, String message, String exceptionMessage) {
+        this.resultCode = resultCode;
+        this.message = message;
+        this.exceptionMessage = exceptionMessage;
+    }
 
-	//------------------------------------get set---------------------------------------//
+    public ResultInfoRealization(ResultCode resultCode, int messageCode, String message) {
+        this.resultCode = resultCode;
+        this.messageCode = messageCode;
+        this.message = message;
+    }
 
-	public ResultCode getResultCode() {
-		return resultCode;
-	}
+    public ResultInfoRealization(ResultCode resultCode, Collection<ResultInfo> details) {
+        this.resultCode = resultCode;
+        this.details = details;
+    }
 
-	public void setResultCode(ResultCode resultCode) {
-		this.resultCode = resultCode;
-	}
+    public ResultInfoRealization(ResultCode resultCode, int messageCode, Collection<ResultInfo> details) {
+        this.resultCode = resultCode;
+        this.messageCode = messageCode;
+        this.details = details;
+    }
 
-	public Collection<ResultInfo> getDetails() {
-		return details;
-	}
+    public boolean isSuccess() {
+        return this.resultCode == ResultCode.SUCCESS;
+    }
 
-	public void setDetails(Collection<ResultInfo> details) {
-		this.details = details;
-	}
+    @Override
+    public boolean isFail() {
+        return this.resultCode == ResultCode.FAIL;
+    }
 
-	public int getType() {
-		return resultCode.getCode();
-	}
+    @Override
+    public boolean isError() {
+        return this.resultCode == ResultCode.ERROR;
+    }
 
-	public void setType(ResultCode type) {
-		this.resultCode = type;
-	}
+    //------------------------------------get set---------------------------------------//
 
-	public String getMessage() {
-		return message;
-	}
+    public ResultCode getResultCode() {
+        return resultCode;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setResultCode(ResultCode resultCode) {
+        this.resultCode = resultCode;
+    }
 
-	public int getMessageCode() {
-		return messageCode;
-	}
-	
-	public String getExceptionMessage() {
-		return exceptionMessage;
-	}
-	
-	public void setExceptionMessage(String exceptionMessage) {
-		this.exceptionMessage = exceptionMessage;
-	}
+    public Collection<ResultInfo> getDetails() {
+        return details;
+    }
+
+    public void setDetails(Collection<ResultInfo> details) {
+        this.details = details;
+    }
+
+    public int getType() {
+        return resultCode.getCode();
+    }
+
+    public void setType(ResultCode type) {
+        this.resultCode = type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getMessageCode() {
+        return messageCode;
+    }
+
+    public String getExceptionMessage() {
+        return exceptionMessage;
+    }
+
+    public void setExceptionMessage(String exceptionMessage) {
+        this.exceptionMessage = exceptionMessage;
+    }
 
 }
