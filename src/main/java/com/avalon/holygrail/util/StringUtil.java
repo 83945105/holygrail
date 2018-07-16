@@ -9,13 +9,6 @@ import java.util.Map;
  */
 public class StringUtil {
 
-    public static void main(String[] args) {
-        Object str = "";
-
-        System.out.println(str instanceof String);
-        System.out.println(str.toString().length());
-    }
-
     /**
      * 验证对象是否为空
      * null => true
@@ -31,24 +24,16 @@ public class StringUtil {
             return true;
         }
         if (tar instanceof String) {
-            if (tar.toString().length() == 0) {
-                return true;
-            }
+            return tar.toString().length() == 0;
         }
         if (tar instanceof Collection) {
-            if (((Collection) tar).size() == 0) {
-                return true;
-            }
+            return ((Collection) tar).size() == 0;
         }
         if (tar instanceof Map) {
-            if (((Map) tar).size() == 0) {
-                return true;
-            }
+            return ((Map) tar).size() == 0;
         }
         if (tar.getClass().isArray()) {
-            if (((Object[]) tar).length == 0) {
-                return true;
-            }
+            return ((Object[]) tar).length == 0;
         }
         return false;
     }

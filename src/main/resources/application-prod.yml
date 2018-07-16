@@ -1,9 +1,0 @@
-#生产环境配置
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/baseFrame?useUnicode=true&characterEncoding=utf8&autoReconnect=true
-    username: root
-    password: root
-server:
-  port: 8080
-  context-path: /demo01

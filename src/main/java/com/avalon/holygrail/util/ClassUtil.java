@@ -3,6 +3,7 @@ package com.avalon.holygrail.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by 白超 on 2018-1-2.
@@ -11,6 +12,7 @@ public class ClassUtil {
 
     /**
      * 获取所有Field名称
+     *
      * @param clazz
      * @return
      */
@@ -26,6 +28,7 @@ public class ClassUtil {
 
     /**
      * 获取所有Field
+     *
      * @param clazz
      * @return
      */
@@ -41,6 +44,7 @@ public class ClassUtil {
 
     /**
      * 获取所有Method
+     *
      * @param clazz
      * @return
      */
@@ -48,15 +52,14 @@ public class ClassUtil {
         ArrayList<Method> rs = new ArrayList<>();
 
         for (Class<?> cla = clazz; cla != Object.class; cla = cla.getSuperclass()) {
-            for (Method method : cla.getDeclaredMethods()) {
-                rs.add(method);
-            }
+            rs.addAll(Arrays.asList(cla.getDeclaredMethods()));
         }
         return rs;
     }
 
     /**
      * 获取对象指定方法
+     *
      * @param clazz
      * @param methodName
      * @return
@@ -64,7 +67,7 @@ public class ClassUtil {
     public static Method getMethod(Class<?> clazz, String methodName) {
         for (Class<?> cla = clazz; cla != Object.class; cla = cla.getSuperclass()) {
             for (Method method : cla.getDeclaredMethods()) {
-                if(methodName.equals(method.getName())) {
+                if (methodName.equals(method.getName())) {
                     return method;
                 }
             }
@@ -74,12 +77,13 @@ public class ClassUtil {
 
     /**
      * 根据属性名称和java类型，获取对应的getter方法名
+     *
      * @param property 属性名称
      * @param javaType 属性类型
      * @return
      */
     public static String getGetterMethodName(String property, String javaType) {
-        if(property == null || "".equals(property.trim())) {
+        if (property == null || "".equals(property.trim())) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
@@ -99,11 +103,12 @@ public class ClassUtil {
 
     /**
      * 根据属性名称获取对应的setter方法名称
+     *
      * @param property 属性名称
      * @return
      */
     public static String getSetterMethodName(String property) {
-        if(property == null || "".equals(property.trim())) {
+        if (property == null || "".equals(property.trim())) {
             return "";
         }
         StringBuilder sb = new StringBuilder();

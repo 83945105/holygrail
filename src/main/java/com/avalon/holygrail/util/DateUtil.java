@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class DateUtil {
 
-    private final static SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
-    private final static SimpleDateFormat sdfDay = new SimpleDateFormat("yyyy-MM-dd");
+    private final static SimpleDateFormat YYYY = new SimpleDateFormat("yyyy");
+    private final static SimpleDateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
     private final static SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
     private final static SimpleDateFormat YYYY_MM_DD__HH_MM_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

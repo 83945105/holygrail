@@ -1,6 +1,7 @@
 package com.avalon.holygrail.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -121,11 +122,7 @@ public class CollectionUtil {
      * @return
      */
     public static <T> ArrayList<T> newArrayList(T... targets) {
-        ArrayList<T> list = new ArrayList<>();
-        for (T target : targets) {
-            list.add(target);
-        }
-        return list;
+        return new ArrayList<>(Arrays.asList(targets));
     }
 
     /**

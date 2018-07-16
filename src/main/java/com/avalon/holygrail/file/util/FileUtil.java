@@ -67,7 +67,7 @@ public class FileUtil {
         if (matcher.find()) {
             return matcher.group(1);
         }
-        return "";
+        return null;
     }
 
     /**
@@ -109,7 +109,7 @@ public class FileUtil {
         response.setContentType("multipart/form-data");
         response.setHeader("Content-Disposition", "attachment;fileName=" + new String(fileName.getBytes("utf-8"), "ISO-8859-1") + "." + suffix);
         //用于记录以完成的下载的数据量，单位是byte
-        long downloadedLength = 0l;
+        long downloadedLength = 0L;
         OutputStream os = null;
         try {
             //激活下载操作
@@ -168,7 +168,7 @@ public class FileUtil {
      */
     public static void base64ToImage(String base64, String savePath, String saveFileName, String suffix) throws Exception {
         if (StringUtil.isEmpty(base64)) {
-            throw new FileException("图片base64数据为空");
+            throw new FileException("there is no base64 data.");
         }
         base64 = base64.replace("data:image/" + suffix + ";base64,", "");
         BASE64Decoder decoder = new BASE64Decoder();
@@ -182,7 +182,7 @@ public class FileUtil {
         if (!file.exists()) {
             file.mkdirs();
         }
-        String saveFile = new StringBuilder().append(savePath).append(File.separator).append(saveFileName).append(FilenameUtils.EXTENSION_SEPARATOR).append(suffix).toString();
+        String saveFile = savePath + File.separator + saveFileName + FilenameUtils.EXTENSION_SEPARATOR + suffix;
         OutputStream out = null;
         try {
             out = new FileOutputStream(saveFile);
@@ -306,7 +306,7 @@ public class FileUtil {
     public static CopyResult copyFile(String sourceFullPath, String absoluteSavePath, String relativeSavePath, String saveFileName, String suffix) throws Exception {
         File source = new File(sourceFullPath);
         if (!source.exists()) {
-            throw new FileException("源文件丢失,无法复制文件");
+            throw new FileException("the source is not exist, copy fail.");
         }
         CopyResult result = new CopyResult();
         result.setSourcePath(sourceFullPath);
@@ -319,7 +319,7 @@ public class FileUtil {
         if (!dic.exists()) {
             dic.mkdirs();
         } else if (!dic.isDirectory()) {
-            throw new FileException("savePath不是一个文件夹");
+            throw new FileException("savePath is not a folder.");
         }
         File dest = new File(result.getFileSaveFullPath());
         FileChannel inputChannel = null;
@@ -329,7 +329,7 @@ public class FileUtil {
             outputChannel = new FileOutputStream(dest).getChannel();
             outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
         } catch (Exception e) {
-            throw new FileException("文件复制失败", e);
+            throw new FileException("copy fail.", e);
         } finally {
             try {
                 if (inputChannel != null) inputChannel.close();
