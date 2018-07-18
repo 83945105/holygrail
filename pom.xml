@@ -53,6 +53,7 @@
         <com.alibaba.druid.version>1.0.26</com.alibaba.druid.version>
         <commons-io.version>2.6</commons-io.version>
         <json-lib.version>2.4</json-lib.version>
+        <httpclient.version>4.5.2</httpclient.version>
     </properties>
 
     <dependencies>
@@ -128,6 +129,13 @@
             <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+
 
     </dependencies>
 
