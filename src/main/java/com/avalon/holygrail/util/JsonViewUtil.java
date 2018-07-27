@@ -11,9 +11,9 @@ import com.avalon.holygrail.ss.view.JsonView;
 public class JsonViewUtil {
 
     @FunctionalInterface
-    public interface JsonViewParseSuccess<K, V> {
+    public interface JsonViewParseSuccess {
 
-        void accept(JsonView<K, V> jsonView);
+        void accept(JsonView jsonView);
 
     }
 
@@ -22,11 +22,9 @@ public class JsonViewUtil {
      *
      * @param dataView
      * @param success
-     * @param <K>
-     * @param <V>
      * @throws JsonViewParseException
      */
-    public static <K, V> void success(DataView dataView, JsonViewParseSuccess<K, V> success) throws JsonViewParseException {
+    public static void success(DataView dataView, JsonViewParseSuccess success) throws JsonViewParseException {
         if (dataView == null) {
             throw new JsonViewParseException(null);
         }
@@ -46,11 +44,9 @@ public class JsonViewUtil {
      * JsonView 成功
      *
      * @param dataView
-     * @param <K>
-     * @param <V>
      * @throws JsonViewParseException
      */
-    public static <K, V> JsonView<K, V> success(DataView dataView) throws JsonViewParseException {
+    public static JsonView success(DataView dataView) throws JsonViewParseException {
         if (dataView == null) {
             throw new JsonViewParseException(null);
         }

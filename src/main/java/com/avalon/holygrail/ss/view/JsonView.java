@@ -1,5 +1,6 @@
 package com.avalon.holygrail.ss.view;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avalon.holygrail.ss.bean.JsonResultInfo;
@@ -13,7 +14,7 @@ import java.util.Iterator;
 /**
  * Created by 白超 on 2018/6/3.
  */
-public class JsonView<K, V> extends HashMap<K, V> implements DataView {
+public class JsonView extends HashMap<String, JSON> implements DataView {
 
     @Override
     public ResultInfo getResultInfo() {
@@ -22,7 +23,11 @@ public class JsonView<K, V> extends HashMap<K, V> implements DataView {
         return resultInfo;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getRecord(Class<T> clazz) {
+        if (clazz == String.class) {
+            return (T) String.valueOf(this.get(ModelView.RECORD_KEY));
+        }
         JSONObject jsonObject = (JSONObject) this.get(ModelView.RECORD_KEY);
         if (jsonObject == null) {
             return null;
