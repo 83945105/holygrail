@@ -10,6 +10,7 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.function.Function;
 
 /**
  * Created by 白超 on 2018/6/3.
@@ -48,6 +49,19 @@ public class JsonView extends HashMap<String, JSON> implements DataView {
         Iterator iterator = jsonArray.iterator();
         while (iterator.hasNext()) {
             rows.add(JSONObject.parseObject(((JSONObject) iterator.next()).toJSONString(), clazz));
+        }
+        return rows;
+    }
+
+    public <T> ArrayList<T> getRows(Class<T> clazz, Function<T, T> formatter) {
+        ArrayList<T> rows = new ArrayList<>();
+        JSONArray jsonArray = (JSONArray) this.get(LimitDataView.ROWS_KEY);
+        if (jsonArray == null) {
+            return rows;
+        }
+        Iterator iterator = jsonArray.iterator();
+        while (iterator.hasNext()) {
+            rows.add(formatter.apply(JSONObject.parseObject(((JSONObject) iterator.next()).toJSONString(), clazz)));
         }
         return rows;
     }
