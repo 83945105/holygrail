@@ -9,7 +9,6 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.function.Function;
 
 /**
@@ -20,20 +19,15 @@ public class JsonView extends HashMap<String, JSON> implements DataView {
     @Override
     public ResultInfo getResultInfo() {
         JSONObject r = (JSONObject) this.get(MessageView.RESULT_INFO_PARAM);
-        JsonResultInfo resultInfo = JSONObject.parseObject(r.toJSONString(), JsonResultInfo.class);
-        return resultInfo;
+        return JSONObject.parseObject(r.toJSONString(), JsonResultInfo.class);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T getRecord(Class<T> clazz) {
-        if (clazz == String.class) {
-            return (T) String.valueOf(this.get(ModelView.RECORD_KEY));
-        }
-        JSONObject jsonObject = (JSONObject) this.get(ModelView.RECORD_KEY);
-        if (jsonObject == null) {
+        JSON json = this.get(ModelView.RECORD_KEY);
+        if (json == null) {
             return null;
         }
-        return JSONObject.parseObject(jsonObject.toJSONString(), clazz);
+        return JSONObject.toJavaObject(json, clazz);
     }
 
     public JSONObject getRecords() {
@@ -46,9 +40,8 @@ public class JsonView extends HashMap<String, JSON> implements DataView {
         if (jsonArray == null) {
             return rows;
         }
-        Iterator iterator = jsonArray.iterator();
-        while (iterator.hasNext()) {
-            rows.add(JSONObject.parseObject(((JSONObject) iterator.next()).toJSONString(), clazz));
+        for (Object object : jsonArray) {
+            rows.add(JSONObject.toJavaObject((JSON) object, clazz));
         }
         return rows;
     }
@@ -59,9 +52,8 @@ public class JsonView extends HashMap<String, JSON> implements DataView {
         if (jsonArray == null) {
             return rows;
         }
-        Iterator iterator = jsonArray.iterator();
-        while (iterator.hasNext()) {
-            rows.add(formatter.apply(JSONObject.parseObject(((JSONObject) iterator.next()).toJSONString(), clazz)));
+        for (Object object : jsonArray) {
+            rows.add(formatter.apply(JSONObject.toJavaObject((JSON) object, clazz)));
         }
         return rows;
     }

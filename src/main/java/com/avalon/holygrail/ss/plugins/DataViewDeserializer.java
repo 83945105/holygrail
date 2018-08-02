@@ -21,9 +21,7 @@ public class DataViewDeserializer extends JsonDeserializer<DataView> {
 
     @Override
     public DataView deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-
         String text = node.asText();
         if(StringUtil.isEmpty(text)) {
             text = node.textValue();
@@ -34,9 +32,6 @@ public class DataViewDeserializer extends JsonDeserializer<DataView> {
         if(StringUtil.isEmpty(text)) {
             throw new JsonParseException(jsonParser, "DataView convert to JsonView Fail");
         }
-
-        JsonView jsonView = JSONObject.parseObject(text, JsonView.class);
-
-        return jsonView;
+        return JSONObject.parseObject(text, JsonView.class);
     }
 }
