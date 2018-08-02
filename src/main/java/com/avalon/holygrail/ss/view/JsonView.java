@@ -34,6 +34,14 @@ public class JsonView extends HashMap<String, JSON> implements DataView {
         return (JSONObject) this.get(ModelView.RECORDS_KEY);
     }
 
+    public <T> T getRecords(Class<T> clazz) {
+        JSON json = this.get(ModelView.RECORD_KEY);
+        if (json == null) {
+            return null;
+        }
+        return JSONObject.toJavaObject(json, clazz);
+    }
+
     public <T> ArrayList<T> getRows(Class<T> clazz) {
         ArrayList<T> rows = new ArrayList<>();
         JSONArray jsonArray = (JSONArray) this.get(LimitDataView.ROWS_KEY);
