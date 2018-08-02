@@ -1,8 +1,9 @@
 package com.avalon.holygrail.ss.view;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.util.TypeUtils;
 import com.avalon.holygrail.ss.bean.JsonResultInfo;
 import com.avalon.holygrail.ss.norm.Limit;
 import com.avalon.holygrail.ss.norm.ResultInfo;
@@ -14,7 +15,7 @@ import java.util.function.Function;
 /**
  * Created by 白超 on 2018/6/3.
  */
-public class JsonView extends HashMap<String, JSON> implements DataView {
+public class JsonView extends HashMap<String, Object> implements DataView {
 
     @Override
     public ResultInfo getResultInfo() {
@@ -23,11 +24,11 @@ public class JsonView extends HashMap<String, JSON> implements DataView {
     }
 
     public <T> T getRecord(Class<T> clazz) {
-        JSON json = this.get(ModelView.RECORD_KEY);
-        if (json == null) {
+        Object obj = this.get(ModelView.RECORD_KEY);
+        if (obj == null) {
             return null;
         }
-        return JSONObject.toJavaObject(json, clazz);
+        return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
     }
 
     public JSONObject getRecords() {
@@ -35,11 +36,11 @@ public class JsonView extends HashMap<String, JSON> implements DataView {
     }
 
     public <T> T getRecords(Class<T> clazz) {
-        JSON json = this.get(ModelView.RECORD_KEY);
-        if (json == null) {
+        Object obj = this.get(ModelView.RECORD_KEY);
+        if (obj == null) {
             return null;
         }
-        return JSONObject.toJavaObject(json, clazz);
+        return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
     }
 
     public <T> ArrayList<T> getRows(Class<T> clazz) {
@@ -48,8 +49,8 @@ public class JsonView extends HashMap<String, JSON> implements DataView {
         if (jsonArray == null) {
             return rows;
         }
-        for (Object object : jsonArray) {
-            rows.add(JSONObject.toJavaObject((JSON) object, clazz));
+        for (Object obj : jsonArray) {
+            rows.add(TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance()));
         }
         return rows;
     }
@@ -60,17 +61,17 @@ public class JsonView extends HashMap<String, JSON> implements DataView {
         if (jsonArray == null) {
             return rows;
         }
-        for (Object object : jsonArray) {
-            rows.add(formatter.apply(JSONObject.toJavaObject((JSON) object, clazz)));
+        for (Object obj : jsonArray) {
+            rows.add(formatter.apply(TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance())));
         }
         return rows;
     }
 
     public <T extends Limit> T getLimit(Class<T> clazz) {
-        JSONObject jsonObject = (JSONObject) this.get(PageView.LIMIT_KEY);
-        if (jsonObject == null) {
+        Object obj = this.get(PageView.LIMIT_KEY);
+        if (obj == null) {
             return null;
         }
-        return JSONObject.parseObject(jsonObject.toJSONString(), clazz);
+        return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
     }
 }
