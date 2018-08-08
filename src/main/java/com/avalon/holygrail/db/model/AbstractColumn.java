@@ -4,11 +4,15 @@ import com.avalon.holygrail.db.norm.ColumnType;
 import com.avalon.holygrail.db.norm.IndexMethod;
 import com.avalon.holygrail.db.norm.IndexType;
 
+import java.util.Objects;
+
 /**
  * 数据库列
- * Created by 白超 on 2018/2/8.
+ *
+ * @author 白超
+ * @date 2018/2/8
  */
-public abstract class Column {
+public abstract class AbstractColumn {
 
     /**
      * 列名
@@ -38,12 +42,12 @@ public abstract class Column {
     /**
      * 自增长
      */
-    protected boolean auto_increment;
+    protected boolean autoIncrement;
 
     /**
      * 自增长开始值
      */
-    protected int auto_increment_start_value = 0;
+    protected int autoIncrementStartValue = 0;
 
     /**
      * 无符号
@@ -59,7 +63,7 @@ public abstract class Column {
     /**
      * 非空
      */
-    protected boolean not_null;
+    protected boolean notNull;
 
     /**
      * 默认值
@@ -96,16 +100,16 @@ public abstract class Column {
      */
     protected String indexComment;
 
-    public Column() {
+    public AbstractColumn() {
     }
 
-    public Column(String name, ColumnType columnType, int length) {
+    public AbstractColumn(String name, ColumnType columnType, int length) {
         this.name = name;
         this.columnType = columnType;
         this.length = length;
     }
 
-    public Column(String name, ColumnType columnType, int length, String comment) {
+    public AbstractColumn(String name, ColumnType columnType, int length, String comment) {
         this.name = name;
         this.columnType = columnType;
         this.length = length;
@@ -122,15 +126,13 @@ public abstract class Column {
 
     abstract public int getDecimalLength();
 
-    abstract public boolean isAuto_increment();
-
-    abstract public int getAuto_increment_start_value();
+    abstract public int getAutoIncrementStartValue();
 
     abstract public boolean isUnsigned();
 
     abstract public boolean isZerofill();
 
-    abstract public boolean isNot_null();
+    abstract public boolean isNotNull();
 
     abstract public String getDefaultValue();
 
@@ -150,7 +152,7 @@ public abstract class Column {
 
     public void setPrimaryKey(boolean primaryKey) {
         if (primaryKey) {
-            this.setNot_null(true);
+            this.setNotNull(true);
         }
         this.primaryKey = primaryKey;
     }
@@ -171,12 +173,12 @@ public abstract class Column {
         this.decimalLength = decimalLength;
     }
 
-    public void setAuto_increment(boolean auto_increment) {
-        this.auto_increment = auto_increment;
+    public boolean isAutoIncrement() {
+        return autoIncrement;
     }
 
-    public void setAuto_increment_start_value(int auto_increment_start_value) {
-        this.auto_increment_start_value = auto_increment_start_value;
+    public void setAutoIncrement(boolean autoIncrement) {
+        this.autoIncrement = autoIncrement;
     }
 
     public void setUnsigned(boolean unsigned) {
@@ -187,8 +189,8 @@ public abstract class Column {
         this.zerofill = zerofill;
     }
 
-    public void setNot_null(boolean not_null) {
-        this.not_null = not_null;
+    public void setNotNull(boolean notNull) {
+        this.notNull = notNull;
     }
 
     public void setDefaultValue(String defaultValue) {
@@ -217,5 +219,23 @@ public abstract class Column {
 
     public void setIndexComment(String indexComment) {
         this.indexComment = indexComment;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AbstractColumn column = (AbstractColumn) o;
+        return Objects.equals(name, column.name);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name);
     }
 }

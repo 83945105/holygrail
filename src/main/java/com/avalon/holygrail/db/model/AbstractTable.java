@@ -11,9 +11,11 @@ import java.util.Map;
 
 /**
  * 数据库表
- * Created by 白超 on 2018/2/8.
+ *
+ * @author 白超
+ * @date 2018/2/8
  */
-public abstract class Table {
+public abstract class AbstractTable {
 
     /**
      * 表名
@@ -28,7 +30,7 @@ public abstract class Table {
     /**
      * 主键列
      */
-    protected Column primaryKey;
+    protected AbstractColumn primaryKey;
 
     /**
      * 是否构建自增长列
@@ -38,12 +40,12 @@ public abstract class Table {
     /**
      * 自增长列
      */
-    protected Column auto_increment;
+    protected AbstractColumn autoIncrement;
 
     /**
      * 列
      */
-    protected Iterable<Column> columns;
+    protected Iterable<AbstractColumn> columns;
 
     /**
      * 数据库引擎
@@ -63,7 +65,7 @@ public abstract class Table {
         this.name = name;
     }
 
-    public Column getPrimaryKey() {
+    public AbstractColumn getPrimaryKey() {
         return primaryKey;
     }
 
@@ -83,7 +85,7 @@ public abstract class Table {
         this.buildAutoIncrement = buildAutoIncrement;
     }
 
-    public void setPrimaryKey(Column primaryKey) throws DBException {
+    public void setPrimaryKey(AbstractColumn primaryKey) throws DBException {
         if (!primaryKey.isPrimaryKey()) {
             throw new DBException("Column未设置为primaryKey,columnName:" + primaryKey.getName());
         }
@@ -91,23 +93,23 @@ public abstract class Table {
         this.primaryKey = primaryKey;
     }
 
-    public Column getAuto_increment() {
-        return auto_increment;
+    public AbstractColumn getAutoIncrement() {
+        return autoIncrement;
     }
 
-    public void setAuto_increment(Column auto_increment) throws DBException {
-        if (!auto_increment.isAuto_increment()) {
+    public void setAutoIncrement(AbstractColumn autoIncrement) throws DBException {
+        if (!autoIncrement.isAutoIncrement()) {
             throw new DBException("Column未设置为autoIncrement,columnName:" + primaryKey.getName());
         }
         this.buildAutoIncrement = true;
-        this.auto_increment = auto_increment;
+        this.autoIncrement = autoIncrement;
     }
 
-    public Iterable<Column> getColumns() {
+    public Iterable<AbstractColumn> getColumns() {
         return columns;
     }
 
-    public void setColumns(Iterable<Column> columns) {
+    public void setColumns(Iterable<AbstractColumn> columns) {
         this.columns = columns;
     }
 
@@ -150,7 +152,7 @@ public abstract class Table {
      * @return
      * @throws DBException
      */
-    public static String buildBatchInsertPrecompileSql(String tableName, Iterable<Column> columns, int valueLength) throws DBException {
+    public static String buildBatchInsertPrecompileSql(String tableName, Iterable<AbstractColumn> columns, int valueLength) throws DBException {
         if (StringUtil.isEmpty(tableName)) {
             throw new DBException("未指定tableName");
         }
@@ -161,8 +163,8 @@ public abstract class Table {
             throw new DBException("valueLength必须大于0");
         }
         StringBuilder sql = new StringBuilder("INSERT INTO `").append(tableName).append("` (");
-        Iterator<Column> iterator = columns.iterator();
-        Column column;
+        Iterator<AbstractColumn> iterator = columns.iterator();
+        AbstractColumn column;
         int len = 0;
         while (iterator.hasNext()) {
             column = iterator.next();

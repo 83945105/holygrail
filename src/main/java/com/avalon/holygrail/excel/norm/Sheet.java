@@ -93,7 +93,7 @@ public interface Sheet {
     /**
      * 工作表列名
      */
-    String[] SheetColumnNames = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    String[] SHEET_COLUMN_NAMES = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
     /**
      * 获取表格列名
@@ -102,7 +102,7 @@ public interface Sheet {
      * @return 列名
      */
     static String getColumnName(int columnNum) {
-        return AlgorithmicUtil.calculateStrByNumber(columnNum, SheetColumnNames);
+        return AlgorithmicUtil.calculateStrByNumber(columnNum, SHEET_COLUMN_NAMES);
     }
 
     /**
@@ -111,7 +111,7 @@ public interface Sheet {
      * @return 列号
      */
     static Integer getColumnNum(String columnName) {
-        return AlgorithmicUtil.calculateNumByString(columnName, SheetColumnNames).intValue();
+        return AlgorithmicUtil.calculateNumByString(columnName, SHEET_COLUMN_NAMES).intValue();
     }
 
 }

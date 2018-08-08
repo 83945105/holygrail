@@ -5,19 +5,13 @@ import java.util.Date;
 
 public class DateUtil {
 
-    private final static SimpleDateFormat YYYY = new SimpleDateFormat("yyyy");
-    private final static SimpleDateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
-    private final static SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
-    private final static SimpleDateFormat YYYY_MM_DD__HH_MM_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
     /**
      * 获取YYYY-MM-DD HH:mm:ss格式
      *
      * @return
      */
     public static String getTimeString() {
-        return YYYY_MM_DD__HH_MM_SS.format(new Date());
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
 
     /**
@@ -26,7 +20,7 @@ public class DateUtil {
      * @return
      */
     public static String getTimeStringSimple() {
-        return YYYYMMDD.format(new Date());
+        return new SimpleDateFormat("yyyyMMdd").format(new Date());
     }
 
     /**
@@ -35,7 +29,7 @@ public class DateUtil {
      * @return
      */
     public static Long getTimeStamp() {
-        return new Date().getTime();
+        return System.currentTimeMillis();
     }
 
 }

@@ -7,6 +7,9 @@ import com.avalon.holygrail.db.norm.ColumnType;
  * Created by 白超 on 2018/2/8.
  */
 public enum MySqlColumnType implements ColumnType {
+    /**
+     *
+     */
     tinyint("tinyint"),
     smallint("smallint"),
     mediumint("mediumint"),

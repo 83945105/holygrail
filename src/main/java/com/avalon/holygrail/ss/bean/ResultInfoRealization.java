@@ -65,6 +65,7 @@ public class ResultInfoRealization implements ResultInfo {
         this.details = details;
     }
 
+    @Override
     public boolean isSuccess() {
         return this.resultCode == ResultCode.SUCCESS;
     }
@@ -81,6 +82,7 @@ public class ResultInfoRealization implements ResultInfo {
 
     //------------------------------------get set---------------------------------------//
 
+    @Override
     public ResultCode getResultCode() {
         return resultCode;
     }
@@ -97,6 +99,7 @@ public class ResultInfoRealization implements ResultInfo {
         this.details = details;
     }
 
+    @Override
     public int getType() {
         return resultCode.getCode();
     }
@@ -105,6 +108,7 @@ public class ResultInfoRealization implements ResultInfo {
         this.resultCode = type;
     }
 
+    @Override
     public String getMessage() {
         return message;
     }
@@ -117,10 +121,12 @@ public class ResultInfoRealization implements ResultInfo {
         return messageCode;
     }
 
+    @Override
     public String getExceptionMessage() {
         return exceptionMessage;
     }
 
+    @Override
     public void setExceptionMessage(String exceptionMessage) {
         this.exceptionMessage = exceptionMessage;
     }

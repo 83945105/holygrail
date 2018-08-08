@@ -54,6 +54,7 @@ import java.util.Map;
 public class HttpUtil {
 
     private static final Log LOGGER = LogFactory.getLog(HttpUtil.class);
+    private static final String HTTPS_PREFIX = "https://";
 
     /**
      * 判断是否是AJAX请求
@@ -322,9 +323,9 @@ public class HttpUtil {
      */
     private static HttpClient wrapClient(String host, String path) {
         HttpClient httpClient = HttpClientBuilder.create().build();
-        if (host != null && host.startsWith("https://")) {
+        if (host != null && host.startsWith(HTTPS_PREFIX)) {
             return sslClient();
-        } else if (StringUtils.isBlank(host) && path != null && path.startsWith("https://")) {
+        } else if (StringUtils.isBlank(host) && path != null && path.startsWith(HTTPS_PREFIX)) {
             return sslClient();
         }
         return httpClient;

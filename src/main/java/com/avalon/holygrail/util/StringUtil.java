@@ -93,7 +93,7 @@ public class StringUtil {
      * @return 字符串
      */
     public static String hexStringToString(String hexStr) {
-        if (hexStr == null || hexStr.equals("")) {
+        if (hexStr == null || "".equals(hexStr)) {
             return null;
         }
         hexStr = hexStr.replace(" ", "");

@@ -7,6 +7,9 @@ import com.avalon.holygrail.db.norm.CharacterSet;
  * Created by 白超 on 2018/2/8.
  */
 public enum  MySqlCharacterSet implements CharacterSet {
+    /**
+     *
+     */
     armscii8("ARMSCII-8 Armenian"),
     ascii("US ASCII"),
     big5("Big5 Traditional Chinese"),

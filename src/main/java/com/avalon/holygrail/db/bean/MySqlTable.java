@@ -1,8 +1,8 @@
 package com.avalon.holygrail.db.bean;
 
 import com.avalon.holygrail.db.exception.DBException;
-import com.avalon.holygrail.db.model.Column;
-import com.avalon.holygrail.db.model.Table;
+import com.avalon.holygrail.db.model.AbstractColumn;
+import com.avalon.holygrail.db.model.AbstractTable;
 import com.avalon.holygrail.db.norm.CharacterSet;
 import com.avalon.holygrail.db.norm.Engine;
 import com.avalon.holygrail.util.StringUtil;
@@ -13,7 +13,7 @@ import java.util.*;
  * MySql表
  * Created by 白超 on 2018/2/8.
  */
-public class MySqlTable extends Table {
+public class MySqlTable extends AbstractTable {
 
     /**
      * 数据库引擎
@@ -60,17 +60,19 @@ public class MySqlTable extends Table {
             throw new DBException("未设置MySqlTable名称");
         }
 
-        ArrayList<Column> indexList = new ArrayList<>();
+        ArrayList<AbstractColumn> indexList = new ArrayList<>();
 
         StringBuilder rs = new StringBuilder();
         Map<String, Object> columnMap = new HashMap<>();
 
-        boolean appendPrimaryKeySql = false;//是否构建了主键Sql
-        Column primaryKey = null;
-        boolean appendAutoIncrementSql = false;//是否构建了自增长Sql
-        Column autoIncrement = null;
-
-        if (this.isBuildPrimaryKey() && this.getPrimaryKey() != null) {//是否有主键
+        //是否构建了主键Sql
+        boolean appendPrimaryKeySql = false;
+        AbstractColumn primaryKey = null;
+        //是否构建了自增长Sql
+        boolean appendAutoIncrementSql = false;
+        AbstractColumn autoIncrement = null;
+        //是否有主键
+        if (this.isBuildPrimaryKey() && this.getPrimaryKey() != null) {
             this.validateColumn(columnMap, this.getPrimaryKey().getName(), false);
             primaryKey = this.getPrimaryKey();
             rs.append("\n\t").append(primaryKey.buildColumnCreateSql()).append(",");
@@ -78,24 +80,24 @@ public class MySqlTable extends Table {
             if (primaryKey.isUseIndex()) {
                 indexList.add(primaryKey);
             }
-            if (this.getPrimaryKey().isAuto_increment()) {
+            if (this.getPrimaryKey().isAutoIncrement()) {
                 //如果主键同时也是自增长,那就已经设置了自增长Sql
                 autoIncrement = primaryKey;
                 appendAutoIncrementSql = true;
             }
         }
-        if (this.isBuildAutoIncrement() && !appendAutoIncrementSql && this.getAuto_increment() != null) {//是否有自增长
-            this.validateColumn(columnMap, this.getAuto_increment().getName(), false);
-            autoIncrement = this.getAuto_increment();
+        if (this.isBuildAutoIncrement() && !appendAutoIncrementSql && this.getAutoIncrement() != null) {//是否有自增长
+            this.validateColumn(columnMap, this.getAutoIncrement().getName(), false);
+            autoIncrement = this.getAutoIncrement();
             rs.append("\n\t").append(autoIncrement.buildColumnCreateSql()).append(",");
             appendAutoIncrementSql = true;
             if (autoIncrement.isUseIndex()) {
                 indexList.add(autoIncrement);
             }
         }
-        Iterable<Column> columns = this.getColumns();
-        Column column;
-        Iterator<Column> iterator = columns.iterator();
+        Iterable<AbstractColumn> columns = this.getColumns();
+        AbstractColumn column;
+        Iterator<AbstractColumn> iterator = columns.iterator();
         while (iterator.hasNext()) {
             column = iterator.next();
             //校验是否重复
@@ -105,7 +107,7 @@ public class MySqlTable extends Table {
                 continue;
             }
             //如果不需要构建自增或者已经构建过,而当前列为自增
-            if ((!this.isBuildAutoIncrement() || appendAutoIncrementSql) && column.isAuto_increment()) {
+            if ((!this.isBuildAutoIncrement() || appendAutoIncrementSql) && column.isAutoIncrement()) {
                 continue;
             }
             rs.append("\n\t").append(column.buildColumnCreateSql()).append(",");
@@ -113,7 +115,7 @@ public class MySqlTable extends Table {
                 primaryKey = column;
                 appendPrimaryKeySql = true;
             }
-            if (column.isAuto_increment()) {
+            if (column.isAutoIncrement()) {
                 autoIncrement = column;
                 appendAutoIncrementSql = true;
             }
@@ -122,12 +124,13 @@ public class MySqlTable extends Table {
             }
         }
 
-        if (appendPrimaryKeySql) {//如果构建了主键Sql
+        //如果构建了主键Sql
+        if (appendPrimaryKeySql) {
             rs.append("\n\t").append("PRIMARY KEY ").append("(`").append(primaryKey.getName()).append("`)").append(",");
         }
 
         /*索引开始*/
-        for (Column index : indexList) {
+        for (AbstractColumn index : indexList) {
             if (index.getIndexType() == MySqlIndexType.Unique) {
                 rs.append("\n\t").append("UNIQUE KEY `").append(index.getIndexName()).append("` (`").append(index.getName()).append("`) USING ").append(index.getIndexMethod());
                 if (index.getIndexComment() != null) {
@@ -150,8 +153,9 @@ public class MySqlTable extends Table {
         rs.insert(0, "CREATE TABLE `" + this.getName() + "` (");
         rs.replace(0, rs.length(), rs.substring(0, rs.length() - 1));
         rs.append("\n").append(") ENGINE=").append(this.getEngine());
-        if (appendAutoIncrementSql) {//如果构建了自增Sql
-            rs.append(" AUTO_INCREMENT=").append(Math.abs(autoIncrement.getAuto_increment_start_value()));
+        //如果构建了自增Sql
+        if (appendAutoIncrementSql) {
+            rs.append(" AUTO_INCREMENT=").append(Math.abs(autoIncrement.getAutoIncrementStartValue()));
         }
         rs.append(" DEFAULT CHARSET=").append(this.getCharacterSet()).append(";");
         return rs.toString();
@@ -168,20 +172,20 @@ public class MySqlTable extends Table {
 
     @Override
     public String buildBatchInsertSql(Collection<Map<String, Object>> values) throws DBException {
-        LinkedHashSet<Column> columns = new LinkedHashSet<>();
+        LinkedHashSet<AbstractColumn> columns = new LinkedHashSet<>();
         if (this.getPrimaryKey() != null) {
             columns.add(this.getPrimaryKey());
         }
-        if (this.getAuto_increment() != null) {
-            columns.add(this.getAuto_increment());
+        if (this.getAutoIncrement() != null) {
+            columns.add(this.getAutoIncrement());
         }
         this.getColumns().forEach(column -> columns.add(column));
-        String precompileSql = Table.buildBatchInsertPrecompileSql(this.getName(), columns, values.size());
+        String precompileSql = AbstractTable.buildBatchInsertPrecompileSql(this.getName(), columns, values.size());
         //使用正则表达式填充?
         StringBuilder value = new StringBuilder(32);
         for (Map<String, Object> map : values) {
             value.replace(0, value.length(), "(");
-            for (Column column : columns) {
+            for (AbstractColumn column : columns) {
                 if (map.get(column.getName()) == null) {
                     value.append(map.get(column.getName())).append(",");
                 } else {
@@ -196,12 +200,12 @@ public class MySqlTable extends Table {
 
     @Override
     public String buildBatchInsertSql(Collection<Map<String, Object>> values, String... insertColumnNames) throws DBException {
-        LinkedList<Column> columns = new LinkedList<>();
+        LinkedList<AbstractColumn> columns = new LinkedList<>();
         if (this.getPrimaryKey() != null) {
             columns.add(this.getPrimaryKey());
         }
-        if (this.getAuto_increment() != null) {
-            columns.add(this.getAuto_increment());
+        if (this.getAutoIncrement() != null) {
+            columns.add(this.getAutoIncrement());
         }
         this.getColumns().forEach(column -> columns.add(column));
         boolean removed = true;
@@ -219,12 +223,12 @@ public class MySqlTable extends Table {
                 i++;
             }
         }
-        String precompileSql = Table.buildBatchInsertPrecompileSql(this.getName(), columns, values.size());
+        String precompileSql = AbstractTable.buildBatchInsertPrecompileSql(this.getName(), columns, values.size());
         //使用正则表达式填充?
         StringBuilder value = new StringBuilder(32);
         for (Map<String, Object> map : values) {
             value.replace(0, value.length(), "(");
-            for (Column column : columns) {
+            for (AbstractColumn column : columns) {
                 value.append("'").append(map.get(column.getName())).append("'").append(",");
             }
             value.replace(0, value.length(), value.substring(0, value.length() - 1)).append(")");

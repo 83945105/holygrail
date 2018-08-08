@@ -10,13 +10,12 @@ public interface Font {
      * 字体颜色
      */
     enum FontColor {
-
+        /**
+         *
+         */
         BLACK((short) 0x8), BROWN((short) 0x3c), OLIVE_GREEN((short) 0x3b), DARK_GREEN((short) 0x3a),
-
         DARK_TEAL((short) 0x38), DARK_BLUE((short) 0x12), INDIGO((short) 0x3e), GREY_80_PERCENT((short) 0x3f),
-
         DARK_BLUE2((short) 0x20),
-
         ORANGE((short) 0x35), DARK_YELLOW((short) 0x13), GREEN((short) 0x11), TEAL((short) 0x15), BLUE((short) 0xc),
 
         TEAL2((short) 0x26), BLUE2((short) 0x27),
@@ -180,6 +179,9 @@ public interface Font {
      * 下划线
      */
     enum UnderLine {
+        /**
+         *
+         */
         SINGLE(1),
         DOUBLE(2),
         SINGLE_ACCOUNTING(3),

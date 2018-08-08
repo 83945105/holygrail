@@ -25,12 +25,29 @@ public interface ExcelWorkBook {
      * 图片类型
      */
     enum PictureType {
-
+        /**
+         *
+         */
         EMF("emf", 2),
+        /**
+         *
+         */
         WMF("wmf", 3),
+        /**
+         *
+         */
         PICT("pict", 4),
+        /**
+         *
+         */
         JPEG("jpeg", 5),
+        /**
+         *
+         */
         PNG("png", 6),
+        /**
+         *
+         */
         DIB("dib", 7);
 
         public String suffix;

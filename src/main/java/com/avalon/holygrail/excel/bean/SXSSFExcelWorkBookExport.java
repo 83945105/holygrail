@@ -3,7 +3,7 @@ package com.avalon.holygrail.excel.bean;
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.exception.ExportException;
 import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
-import com.avalon.holygrail.excel.model.SXSSFExcelParserAbstract;
+import com.avalon.holygrail.excel.model.AbstractSXSSFExcelParser;
 import com.avalon.holygrail.excel.norm.CellStyle;
 import com.avalon.holygrail.excel.norm.ExcelSheetExport;
 import com.avalon.holygrail.excel.norm.ExcelWorkBookExport;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * SXSSFWorkbook 导出Excel
  * Created by 白超 on 2018/1/17.
  */
-public class SXSSFExcelWorkBookExport extends SXSSFExcelParserAbstract implements ExcelWorkBookExport {
+public class SXSSFExcelWorkBookExport extends AbstractSXSSFExcelParser implements ExcelWorkBookExport {
 
     protected SXSSFWorkbook sxssfWorkbook;
 
@@ -95,12 +95,16 @@ public class SXSSFExcelWorkBookExport extends SXSSFExcelParserAbstract implement
             this.sxssfWorkbook.write(osw);
         } finally {
             try {
-                if (osw != null) osw.close();
+                if (osw != null) {
+                    osw.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if (fos != null) fos.close();
+                if (fos != null) {
+                    fos.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

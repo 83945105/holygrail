@@ -513,12 +513,16 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             throw e;
         } finally {
             try {
-                if (byteArrayOutputStream != null) byteArrayOutputStream.close();
+                if (byteArrayOutputStream != null) {
+                    byteArrayOutputStream.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if (inputStream != null) inputStream.close();
+                if (inputStream != null) {
+                    inputStream.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

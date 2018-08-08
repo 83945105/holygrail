@@ -13,9 +13,11 @@ import java.util.List;
 
 /**
  * XSSFWorkbook
- * Created by 白超 on 2018/1/24.
+ *
+ * @author 白超
+ * @date 2018/1/24
  */
-public abstract class XSSFExcelParserAbstract implements ExcelParser {
+public abstract class AbstractXSSFExcelParser implements ExcelParser {
 
     /**
      * 解析表头json数据

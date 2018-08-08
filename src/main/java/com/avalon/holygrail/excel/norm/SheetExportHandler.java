@@ -24,12 +24,14 @@ public interface SheetExportHandler extends Sheet {
      * 设置行游标
      * @param handler 接收行号,返回你想设置的行号
      */
+    @Override
     SheetExportHandler setRowCursor(Function<Integer, Integer> handler);
 
     /**
      * 设置列游标
      * @param handler 接收列号,返回你想设置的列号
      */
+    @Override
     SheetExportHandler setColCursor(Function<Integer, Integer> handler);
 
     /**
@@ -108,6 +110,7 @@ public interface SheetExportHandler extends Sheet {
      * @param inputStream 表头数据流
      * @return 准备导出
      */
+    @Override
     default ExcelSheetExport parseTitlesJson(InputStream inputStream) throws IOException, ExcelException {
         return parseTitlesJson(inputStream, true);
     }
@@ -117,6 +120,7 @@ public interface SheetExportHandler extends Sheet {
      * @param file 表头数据文件
      * @return 准备导出
      */
+    @Override
     default ExcelSheetExport parseTitlesJson(File file) throws IOException, ExcelException {
         return parseTitlesJson(file, true);
     }
@@ -126,6 +130,7 @@ public interface SheetExportHandler extends Sheet {
      * @param titlesJson 表头数据json
      * @return 准备导出
      */
+    @Override
     default ExcelSheetExport parseTitlesJson(String titlesJson) throws ExcelException {
         return parseTitlesJson(titlesJson, true);
     }
@@ -135,6 +140,7 @@ public interface SheetExportHandler extends Sheet {
      * @param titles 表头对象
      * @return 准备导出
      */
+    @Override
     default ExcelSheetExport setTitles(BaseExcelTitleCell[][] titles) throws ExcelException {
         return setTitles(titles, true);
     }

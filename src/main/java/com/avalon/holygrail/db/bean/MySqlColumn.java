@@ -1,6 +1,6 @@
 package com.avalon.holygrail.db.bean;
 
-import com.avalon.holygrail.db.model.Column;
+import com.avalon.holygrail.db.model.AbstractColumn;
 import com.avalon.holygrail.db.norm.ColumnType;
 import com.avalon.holygrail.db.norm.IndexMethod;
 import com.avalon.holygrail.db.norm.IndexType;
@@ -10,7 +10,7 @@ import com.avalon.holygrail.util.StringUtil;
  * MySql数据库列
  * Created by 白超 on 2018/2/8.
  */
-public class MySqlColumn extends Column {
+public class MySqlColumn extends AbstractColumn {
 
     public MySqlColumn() {
     }
@@ -52,13 +52,8 @@ public class MySqlColumn extends Column {
     }
 
     @Override
-    public boolean isAuto_increment() {
-        return this.auto_increment;
-    }
-
-    @Override
-    public int getAuto_increment_start_value() {
-        return this.auto_increment_start_value;
+    public int getAutoIncrementStartValue() {
+        return this.autoIncrementStartValue;
     }
 
     @Override
@@ -72,8 +67,8 @@ public class MySqlColumn extends Column {
     }
 
     @Override
-    public boolean isNot_null() {
-        return isPrimaryKey() ? true : this.not_null;
+    public boolean isNotNull() {
+        return isPrimaryKey() ? true : this.notNull;
     }
 
     @Override
@@ -132,13 +127,13 @@ public class MySqlColumn extends Column {
         if (this.zerofill) {
             rs.append(" zerofill");
         }
-        if (this.not_null) {
+        if (this.notNull) {
             rs.append(" NOT NULL");
         }
-        if (this.auto_increment) {
+        if (this.autoIncrement) {
             rs.append(" AUTO_INCREMENT");
         }
-        if (!this.not_null && this.getDefaultValue() == null) {
+        if (!this.notNull && this.getDefaultValue() == null) {
             rs.append(" DEFAULT NULL");
         } else if (this.getDefaultValue() != null) {
             rs.append(" DEFAULT ").append("'").append(this.getDefaultValue()).append("'");

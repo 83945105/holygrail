@@ -1,6 +1,6 @@
 package com.avalon.holygrail.excel.bean;
 
-import com.avalon.holygrail.excel.model.XSSFExcelParserAbstract;
+import com.avalon.holygrail.excel.model.AbstractXSSFExcelParser;
 import com.avalon.holygrail.excel.norm.ExcelSheetImport;
 import com.avalon.holygrail.excel.norm.ExcelWorkBookImport;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * XSSFExcelWorkBookImport 导入Excel
  * Created by 白超 on 2018/1/24.
  */
-public class XSSFExcelWorkBookImport extends XSSFExcelParserAbstract implements ExcelWorkBookImport {
+public class XSSFExcelWorkBookImport extends AbstractXSSFExcelParser implements ExcelWorkBookImport {
 
     protected XSSFWorkbook xssfWorkbook;
 

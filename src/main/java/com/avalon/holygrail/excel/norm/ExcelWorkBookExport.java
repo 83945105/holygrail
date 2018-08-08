@@ -9,14 +9,19 @@ import java.util.function.Consumer;
 
 /**
  * Excel导出工作簿
- * Created by 白超 on 2018/1/17.
+ *
+ * @author 白超
+ * @date 2018/1/17
  */
 public interface ExcelWorkBookExport extends ExcelWorkBook {
+
+    int MAX_BATCH_CREATE_SHEETS_NUMBER = 100;
 
     /**
      * 创建工作表
      *
      * @return 工作表对象
+     * @throws ExportException
      */
     SheetExportHandler createSheet() throws ExportException;
 
@@ -25,6 +30,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      *
      * @param sheetName 工作表表名
      * @return 工作表对象
+     * @throws ExportException
      */
     SheetExportHandler createSheet(String sheetName) throws ExportException;
 
@@ -34,6 +40,7 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * @param index 下标
      * @return 工作表对象
      */
+    @Override
     SheetExportHandler getSheet(int index);
 
     /**
@@ -73,6 +80,8 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
          * @param index                 当前创建的Sheet下标
          * @param totalAllSheetDataSize WorkBook中所有Sheet已经导入的数据总数
          * @param totalSheetDataSize    本次创建的若干Sheet已经导入的数据总数
+         * @throws ExcelException
+         * @throws IOException
          */
         void accept(SheetExportHandler sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws ExcelException, IOException;
     }
@@ -89,6 +98,8 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
          * @param totalAllSheetDataSize WorkBook中所有Sheet已经导入的数据总数
          * @param totalSheetDataSize    本次创建的若干Sheet已经导入的数据中暑
          * @return 是否继续创建
+         * @throws IOException
+         * @throws ExcelException
          */
         boolean accept(SheetExportHandler sheet, int sheetIndex, int index, int totalAllSheetDataSize, int totalSheetDataSize) throws IOException, ExcelException;
     }
@@ -100,6 +111,8 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * @param formatterSheetName 格式化Sheet名称,需要返回你要创建的Sheet名称
      * @param handlerSheet       处理Sheet
      * @return 当前工作簿对象
+     * @throws ExcelException
+     * @throws IOException
      */
     default ExcelWorkBookExport createSheets(int totalSheet, SXSSFExcelWorkBookExport.FormatterSheetName formatterSheetName, SXSSFExcelWorkBookExport.HandlerSheetA handlerSheet) throws ExcelException, IOException {
         createSheets(formatterSheetName, (sheet, sheetIndex, index, totalAllSheetDataSize, totalSheetDataSize) -> {
@@ -118,6 +131,8 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * @param totalSheet   你要创建的Sheet总数(最大支持100)
      * @param handlerSheet 处理Sheet
      * @return 当前工作簿对象
+     * @throws ExcelException
+     * @throws IOException
      */
     default ExcelWorkBookExport createSheets(int totalSheet, SXSSFExcelWorkBookExport.HandlerSheetA handlerSheet) throws ExcelException, IOException {
         createSheets(totalSheet, (sheetIndex, index) -> "sheet" + sheetIndex, handlerSheet);
@@ -130,12 +145,14 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
      * @param formatterSheetName 格式化Sheet名称,需要返回你要创建的Sheet名称
      * @param handlerSheet       处理Sheet,需要返回是否继续创建,最多创建100个Sheet
      * @return 当前工作簿对象
+     * @throws IOException
+     * @throws ExcelException
      */
     default ExcelWorkBookExport createSheets(SXSSFExcelWorkBookExport.FormatterSheetName formatterSheetName, SXSSFExcelWorkBookExport.HandlerSheetB handlerSheet) throws IOException, ExcelException {
         int totalAllSheetDataSize = getTotalSheetDataSize();
         int totalSheetDataSize = 0;
         boolean goon;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < MAX_BATCH_CREATE_SHEETS_NUMBER; i++) {
             int sheetIndex = getSheetSize();
             SheetExportHandler s = createSheet(formatterSheetName.apply(sheetIndex, i));
             if (i > 0) {
@@ -284,32 +301,44 @@ public interface ExcelWorkBookExport extends ExcelWorkBook {
 
         } finally {
             try {
-                if (br != null) br.close();
+                if (br != null) {
+                    br.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if (isr != null) isr.close();
+                if (isr != null) {
+                    isr.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if (is != null) is.close();
+                if (is != null) {
+                    is.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if (bw != null) bw.close();
+                if (bw != null) {
+                    bw.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if (osw != null) osw.close();
+                if (osw != null) {
+                    osw.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if (fos != null) fos.close();
+                if (fos != null) {
+                    fos.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

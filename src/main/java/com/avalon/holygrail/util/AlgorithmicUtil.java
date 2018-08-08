@@ -2,10 +2,13 @@ package com.avalon.holygrail.util;
 
 /**
  * 算法工具
- * Created by 白超 on 2018-1-28.
+ *
+ * @author 白超
+ * @date 2018-1-28
  */
 public class AlgorithmicUtil {
 
+    private static final int MIN_CALCULATE_NUMBER = 2;
 
     /**
      * 根据数字计算出字符串
@@ -21,7 +24,7 @@ public class AlgorithmicUtil {
      * @return 字符串
      */
     public static String calculateStrByNumber(int num, Object[] collection) {
-        if (collection.length < 2) {
+        if (collection.length < MIN_CALCULATE_NUMBER) {
             throw new RuntimeException("collection length must great and then 2");
         }
         return AlgorithmicUtil.calculateStrByNumber(num, collection, new StringBuilder()).toString();
@@ -45,7 +48,7 @@ public class AlgorithmicUtil {
      * @return 数字
      */
     public static Long calculateNumByString(String str, Object[] collection) {
-        if (collection.length < 2) {
+        if (collection.length < MIN_CALCULATE_NUMBER) {
             throw new RuntimeException("collection length must great and then 2");
         }
         String[] strs = str.trim().split("");

@@ -8,9 +8,11 @@ import java.util.List;
 
 /**
  * SXSSFWorkbook 解析器
- * Created by 白超 on 2018/1/16.
+ *
+ * @author 白超
+ * @date 2018/1/16
  */
-public abstract class SXSSFExcelParserAbstract extends XSSFExcelParserAbstract {
+public abstract class AbstractSXSSFExcelParser extends AbstractXSSFExcelParser {
 
     /**
      * 解析单元格json数据

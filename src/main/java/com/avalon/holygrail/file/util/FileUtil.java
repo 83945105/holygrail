@@ -35,6 +35,8 @@ public class FileUtil {
      */
     public static final String PROJECT_FOLDER_PATH = getProjectFolderPath();
 
+    private static final Pattern PROJECT_PATH_PATTERN = Pattern.compile("^[/\\\\](.*?)[^/\\\\]+[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+[/\\\\]$");
+
     /**
      * 获取项目路径
      *
@@ -63,7 +65,7 @@ public class FileUtil {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Matcher matcher = Pattern.compile("^[/\\\\](.*?)[^/\\\\]+[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+[/\\\\]$").matcher(projectPath);
+        Matcher matcher = PROJECT_PATH_PATTERN.matcher(projectPath);
         if (matcher.find()) {
             return matcher.group(1);
         }
@@ -127,12 +129,16 @@ public class FileUtil {
             throw new DownLoadException(e, downloadRecord);
         } finally {
             try {
-                if (os != null) os.close();
+                if (os != null) {
+                    os.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if (inputStream != null) inputStream.close();
+                if (inputStream != null) {
+                    inputStream.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -192,7 +198,9 @@ public class FileUtil {
             throw new FileException(e);
         } finally {
             try {
-                if (out != null) out.close();
+                if (out != null) {
+                    out.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -332,12 +340,16 @@ public class FileUtil {
             throw new FileException("copy fail.", e);
         } finally {
             try {
-                if (inputChannel != null) inputChannel.close();
+                if (inputChannel != null) {
+                    inputChannel.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if (outputChannel != null) outputChannel.close();
+                if (outputChannel != null) {
+                    outputChannel.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by 白超 on 2018-1-2.
+ * @author 白超
+ * @date 2018-1-2
  */
 public class ClassUtil {
+
+    private static final String BOOLEAN_TYPE_GETTER_NAME = "boolean";
 
     /**
      * 获取所有Field名称
@@ -93,7 +96,7 @@ public class ClassUtil {
                 sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
             }
         }
-        if ("boolean".equals(javaType)) {
+        if (BOOLEAN_TYPE_GETTER_NAME.equals(javaType)) {
             sb.insert(0, "is");
         } else {
             sb.insert(0, "get");
