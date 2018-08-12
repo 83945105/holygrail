@@ -18,6 +18,8 @@ import static com.avalon.holygrail.ss.view.MessageView.RESULT_INFO_PARAM;
 /**
  * 数据视图
  * 所有SpringMVC的Controller AJAX返回此接口
+ *
+ * @author 白超
  */
 @JsonSerialize(using = DataViewSerializer.class)
 @JsonDeserialize(using = DataViewDeserializer.class)
@@ -30,6 +32,11 @@ public interface DataView extends Json, Serializable {
      */
     ResultInfo getResultInfo();
 
+    /**
+     * 获取JsonObject对象
+     *
+     * @return
+     */
     @Override
     @Transient
     @JSONField(serialize = false)

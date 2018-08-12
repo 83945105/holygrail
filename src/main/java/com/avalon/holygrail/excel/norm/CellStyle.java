@@ -2,7 +2,9 @@ package com.avalon.holygrail.excel.norm;
 
 /**
  * 单元格样式
- * Created by 白超 on 2018/1/17.
+ *
+ * @author 白超
+ * @date 2018/1/17
  */
 public interface CellStyle {
 
@@ -132,16 +134,22 @@ public interface CellStyle {
 
     /**
      * 获取单元格水平对齐方式
+     *
+     * @return
      */
     HorizontalAlignType getHorizontalAlignType();
 
     /**
      * 设置单元格水平对齐方式
+     *
+     * @param hAlignType
      */
     void setHorizontalAlignType(HorizontalAlignType hAlignType);
 
     /**
      * 设置单元格水平对齐方式
+     *
+     * @param hAlignTypeString
      */
     default void setHorizontalAlignType(String hAlignTypeString) {
         this.setHorizontalAlignType(HorizontalAlignType.getHAlignByName(hAlignTypeString));
@@ -149,6 +157,8 @@ public interface CellStyle {
 
     /**
      * 设置单元格水平对齐方式
+     *
+     * @param hAlignTypeShort
      */
     default void setHorizontalAlignType(short hAlignTypeShort) {
         this.setHorizontalAlignType(HorizontalAlignType.getHAlignByValue(hAlignTypeShort));
@@ -156,16 +166,22 @@ public interface CellStyle {
 
     /**
      * 获取单元格垂直对齐方式
+     *
+     * @return
      */
     VerticalAlignType getVerticalAlignType();
 
     /**
      * 设置单元格垂直对齐方式
+     *
+     * @param vAlignType
      */
     void setVerticalAlignType(VerticalAlignType vAlignType);
 
     /**
      * 设置单元格垂直对齐方式
+     *
+     * @param vAlignTypeString
      */
     default void setVerticalAlignType(String vAlignTypeString) {
         this.setVerticalAlignType(VerticalAlignType.getVAlignByName(vAlignTypeString));
@@ -173,6 +189,8 @@ public interface CellStyle {
 
     /**
      * 设置单元格垂直对齐方式
+     *
+     * @param vAlignTypeShort
      */
     default void setVerticalAlignType(short vAlignTypeShort) {
         this.setVerticalAlignType(VerticalAlignType.getVAlignByValue(vAlignTypeShort));
@@ -272,16 +290,22 @@ public interface CellStyle {
 
     /**
      * 获取左边框样式
+     *
+     * @return
      */
     BorderStyle getBorderLeftStyle();
 
     /**
      * 设置左边框样式
+     *
+     * @param borderLeftStyle
      */
     void setBorderLeftStyle(BorderStyle borderLeftStyle);
 
     /**
      * 设置左边框样式
+     *
+     * @param borderLeftStyleString
      */
     default void setBorderLeftStyle(String borderLeftStyleString) {
         this.setBorderLeftStyle(BorderStyle.getBorderStyleByName(borderLeftStyleString));
@@ -289,6 +313,8 @@ public interface CellStyle {
 
     /**
      * 设置左边框样式
+     *
+     * @param borderLeftStyleShort
      */
     default void setBorderLeftStyle(short borderLeftStyleShort) {
         this.setBorderLeftStyle(BorderStyle.getBorderStyleByValue(borderLeftStyleShort));
@@ -296,16 +322,22 @@ public interface CellStyle {
 
     /**
      * 获取上边框样式
+     *
+     * @return
      */
     BorderStyle getBorderTopStyle();
 
     /**
      * 设置上边框样式
+     *
+     * @param borderTopStyle
      */
     void setBorderTopStyle(BorderStyle borderTopStyle);
 
     /**
      * 设置上边框样式
+     *
+     * @param borderTopStyleString
      */
     default void setBorderTopStyle(String borderTopStyleString) {
         this.setBorderTopStyle(BorderStyle.getBorderStyleByName(borderTopStyleString));
@@ -313,6 +345,8 @@ public interface CellStyle {
 
     /**
      * 设置上边框样式
+     *
+     * @param value
      */
     default void setBorderTopStyle(short value) {
         this.setBorderTopStyle(BorderStyle.getBorderStyleByValue(value));
@@ -320,16 +354,22 @@ public interface CellStyle {
 
     /**
      * 获取右边框样式
+     *
+     * @return
      */
     BorderStyle getBorderRightStyle();
 
     /**
      * 设置右边框样式
+     *
+     * @param borderRightStyle
      */
     void setBorderRightStyle(BorderStyle borderRightStyle);
 
     /**
      * 设置右边框样式
+     *
+     * @param borderRightStyleString
      */
     default void setBorderRightStyle(String borderRightStyleString) {
         this.setBorderRightStyle(BorderStyle.getBorderStyleByName(borderRightStyleString));
@@ -337,6 +377,8 @@ public interface CellStyle {
 
     /**
      * 设置右边框样式
+     *
+     * @param borderRightStyleShort
      */
     default void setBorderRightStyle(short borderRightStyleShort) {
         this.setBorderRightStyle(BorderStyle.getBorderStyleByValue(borderRightStyleShort));
@@ -344,16 +386,22 @@ public interface CellStyle {
 
     /**
      * 获取下边框样式
+     *
+     * @return
      */
     BorderStyle getBorderBottomStyle();
 
     /**
      * 设置下边框样式
+     *
+     * @param borderBottomStyle
      */
     void setBorderBottomStyle(BorderStyle borderBottomStyle);
 
     /**
      * 设置下边框样式
+     *
+     * @param borderBottomStyleString
      */
     default void setBorderBottomStyle(String borderBottomStyleString) {
         this.setBorderBottomStyle(BorderStyle.getBorderStyleByName(borderBottomStyleString));
@@ -361,6 +409,8 @@ public interface CellStyle {
 
     /**
      * 设置下边框样式
+     *
+     * @param borderBottomStyleShort
      */
     default void setBorderBottomStyle(short borderBottomStyleShort) {
         this.setBorderBottomStyle(BorderStyle.getBorderStyleByValue(borderBottomStyleShort));
@@ -375,6 +425,8 @@ public interface CellStyle {
 
     /**
      * 设置四个边框样式,以","分隔,顺序为左上右下
+     *
+     * @param borderStyleStrings
      */
     default void setBorderStyle(String borderStyleStrings) {
         String[] borders = borderStyleStrings.split(",");
@@ -386,6 +438,8 @@ public interface CellStyle {
 
     /**
      * 设置四个边框样式,顺序为左上右下
+     *
+     * @param borderStyles
      */
     default void setBorderStyle(BorderStyle[] borderStyles) {
         StringBuilder sb = new StringBuilder();
@@ -397,6 +451,8 @@ public interface CellStyle {
 
     /**
      * 设置四个边框样式,顺序为左上右下
+     *
+     * @param borderStyleShorts
      */
     default void setBorderStyle(short[] borderStyleShorts) {
         this.setBorderLeftStyle(borderStyleShorts[0]);
@@ -406,6 +462,8 @@ public interface CellStyle {
     }
 
     /**
+     * 获取字体
+     *
      * @return 字体
      */
     Font getFont();

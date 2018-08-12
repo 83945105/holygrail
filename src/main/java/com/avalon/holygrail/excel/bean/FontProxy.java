@@ -3,7 +3,8 @@ package com.avalon.holygrail.excel.bean;
 import org.apache.poi.ss.usermodel.Font;
 
 /**
- * Created by 白超 on 2018/4/9.
+ * @author 白超
+ * @date 2018/4/9
  */
 public class FontProxy implements com.avalon.holygrail.excel.norm.Font {
 

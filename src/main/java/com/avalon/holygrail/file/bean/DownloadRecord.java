@@ -6,7 +6,9 @@ import java.util.UUID;
 
 /**
  * 下载记录
- * Created by 白超 on 2017/10/27.
+ *
+ * @author 白超
+ * @date 2017/10/27
  */
 public class DownloadRecord {
 

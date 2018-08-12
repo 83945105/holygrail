@@ -6,6 +6,8 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
 
 /**
  * 分页视图
+ *
+ * @author 白超
  */
 public class PageView extends MessageView {
 

@@ -2,71 +2,81 @@ package com.avalon.holygrail.excel.norm;
 
 /**
  * 单元格操作
- * Created by 白超 on 2018-1-28.
+ *
+ * @author 白超
+ * @date 2018-1-28
  */
 public interface CellHandler {
 
-    /********************************GET********************************/
-
-    /*-----------------------------OPTIONS-----------------------------*/
-
     /**
-     * @return 开始行号
+     * 开始行号
+     *
+     * @return
      */
     int getStartRowNum();
 
     /**
-     * @return 结束行号
+     * 结束行号
+     *
+     * @return
      */
     int getEndRowNum();
 
     /**
-     * @return 开始列号
+     * 开始列号
+     *
+     * @return
      */
     int getStartColNum();
 
     /**
-     * @return 结束列号
+     * 结束列号
+     *
+     * @return
      */
     int getEndColNum();
 
     /**
-     * @return 映射值
+     * 映射值
+     *
+     * @return
      */
     String getField();
 
     /**
-     * @return 单元格类型
+     * 单元格类型
+     *
+     * @return
      */
     CellOption.CellType getCellType();
 
     /**
-     * @return 单元格下拉框值
+     * 单元格下拉框值
+     *
+     * @return
      */
     String[] getCellOptions();
 
     /**
-     * @return 占用多少行
+     * 占用多少行
+     *
+     * @return
      */
     int getRowSpan();
 
     /**
-     * @return 占用多少列
+     * 占用多少列
+     *
+     * @return
      */
     int getColSpan();
 
     /**
-     * @return 是否写入空值
+     * 是否写入空值
+     *
+     * @return
      */
     boolean isWriteEmpty();
-
-    /*-----------------------------OPTIONS-----------------------------*/
-
-    /********************************GET********************************/
-
-    /********************************SET********************************/
-
-    /*-----------------------------OPTIONS-----------------------------*/
 
     /**
      * 设置开始行
@@ -137,11 +147,6 @@ public interface CellHandler {
      * @param writeEmpty
      */
     void setWriteEmpty(boolean writeEmpty);
-
-    /*-----------------------------OPTIONS-----------------------------*/
-
-
-    /********************************SET********************************/
 
     /**
      * 获取单元格样式

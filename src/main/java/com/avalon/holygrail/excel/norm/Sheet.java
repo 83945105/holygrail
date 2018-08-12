@@ -11,7 +11,9 @@ import java.util.function.Function;
 
 /**
  * 工作表
- * Created by 白超 on 2018/1/24.
+ *
+ * @author 白超
+ * @date 2018/1/24
  */
 public interface Sheet {
 
@@ -107,6 +109,7 @@ public interface Sheet {
 
     /**
      * 获取表格列号
+     *
      * @param columnName 列名
      * @return 列号
      */

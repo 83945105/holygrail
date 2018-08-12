@@ -5,7 +5,9 @@ import com.avalon.holygrail.excel.norm.ExcelTitleCellHandler;
 
 /**
  * Excel表头单元格属性
- * Created by 白超 on 2018/1/16.
+ *
+ * @author 白超
+ * @date 2018/1/16
  */
 public abstract class BaseExcelTitleCell extends BaseCell implements ExcelTitleCellHandler {
 

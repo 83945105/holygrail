@@ -3,7 +3,13 @@ package com.avalon.holygrail.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author 白超
+ */
 public class DateUtil {
+
+    private DateUtil() {
+    }
 
     /**
      * 获取YYYY-MM-DD HH:mm:ss格式

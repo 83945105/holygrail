@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 /**
- * Created by 白超 on 2018/6/3.
+ * @author 白超
+ * @date 2018/6/3
  */
 public class JsonView extends HashMap<String, Object> implements DataView {
 

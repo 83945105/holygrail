@@ -5,7 +5,8 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 
 /**
- * Created by 白超 on 2018-4-4.
+ * @author 白超
+ * @date 2018-4-4
  */
 public class FileResult {
 

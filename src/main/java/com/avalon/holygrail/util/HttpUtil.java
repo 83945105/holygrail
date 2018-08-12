@@ -49,9 +49,14 @@ import java.util.Map;
 
 /**
  * Http工具
- * Created by 白超 on 2018/1/29.
+ *
+ * @author 白超
+ * @date 2018/1/29
  */
 public class HttpUtil {
+
+    private HttpUtil() {
+    }
 
     private static final Log LOGGER = LogFactory.getLog(HttpUtil.class);
     private static final String HTTPS_PREFIX = "https://";
@@ -85,7 +90,7 @@ public class HttpUtil {
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http get uri:" + request.getURI());
         }
         return httpClient.execute(request);
@@ -122,7 +127,7 @@ public class HttpUtil {
             formEntity.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
             request.setEntity(formEntity);
         }
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http post uri:" + request.getURI());
         }
         return httpClient.execute(request);
@@ -152,7 +157,7 @@ public class HttpUtil {
         if (StringUtils.isNotBlank(body)) {
             request.setEntity(new StringEntity(body, "utf-8"));
         }
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http post uri:" + request.getURI());
         }
         return httpClient.execute(request);
@@ -182,7 +187,7 @@ public class HttpUtil {
         if (body != null) {
             request.setEntity(new ByteArrayEntity(body));
         }
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http post uri:" + request.getURI());
         }
         return httpClient.execute(request);
@@ -212,7 +217,7 @@ public class HttpUtil {
         if (StringUtils.isNotBlank(body)) {
             request.setEntity(new StringEntity(body, "utf-8"));
         }
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http put uri:" + request.getURI());
         }
         return httpClient.execute(request);
@@ -242,7 +247,7 @@ public class HttpUtil {
         if (body != null) {
             request.setEntity(new ByteArrayEntity(body));
         }
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http put uri:" + request.getURI());
         }
         return httpClient.execute(request);
@@ -267,7 +272,7 @@ public class HttpUtil {
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http delete uri:" + request.getURI());
         }
         return httpClient.execute(request);

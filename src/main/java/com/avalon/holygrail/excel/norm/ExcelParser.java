@@ -13,7 +13,9 @@ import java.util.function.Consumer;
 
 /**
  * Excel解析器
- * Created by 白超 on 2018/1/17.
+ *
+ * @author 白超
+ * @date 2018/1/17
  */
 public interface ExcelParser {
 
@@ -34,6 +36,7 @@ public interface ExcelParser {
      * @param startCol   占用开始列
      * @param endCol     占用结束列
      * @return 单元格合并对象
+     * @throws ExcelException
      */
     BaseExcelTitleCell buildExcelTitleCell(BaseExcelTitleCell excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException;
 
@@ -57,7 +60,8 @@ public interface ExcelParser {
                 target = targetMergeCell.get(j);
                 //比对位置
                 //如果当前源在目标下面,且二者列有交集,则当前目标不符合条件,要删除
-                if (source.getStartRowNum() > target.getEndRowNum() && !(source.getStartColNum() > target.getEndColNum() || source.getEndColNum() < target.getStartColNum())) {
+                boolean doRemove = source.getStartRowNum() > target.getEndRowNum() && !(source.getStartColNum() > target.getEndColNum() || source.getEndColNum() < target.getStartColNum());
+                if (doRemove) {
                     //执行删除,删除后后一个元素前移,不用增加j
                     targetMergeCell.remove(j);
                 } else {
@@ -79,14 +83,17 @@ public interface ExcelParser {
      * @param defaultSeatRow 记录位置信息初始化默认行数
      * @param defaultSeatCol 记录位置信息初始化默认列数
      * @param handler        处理单元格合并对象回调函数
-     * @throws ExcelTitleException
+     * @throws ExcelException
      */
     default void handlerExcelTitles(BaseExcelTitleCell[][] titles, int defaultSeatRow, int defaultSeatCol, Consumer<BaseExcelTitleCell> handler) throws ExcelException {
         BaseExcelTitleCell[] excelTitles;
         BaseExcelTitleCell excelTitle;
-        int endRow;//结束行
-        int endCol;//结束列
-        int[][] seat = new int[defaultSeatRow][defaultSeatCol];//位置
+        //结束行
+        int endRow;
+        //结束列
+        int endCol;
+        //位置
+        int[][] seat = new int[defaultSeatRow][defaultSeatCol];
         int[] cursor;//游标
         for (int i = 0; i < titles.length; i++) {
             excelTitles = titles[i];
@@ -168,7 +175,7 @@ public interface ExcelParser {
      *
      * @param titles 表头对象二维数组
      * @return 单元格合并集合
-     * @throws ExcelTitleException
+     * @throws ExcelException
      */
     default ArrayList<BaseExcelTitleCell> handlerExcelTitles(BaseExcelTitleCell[][] titles) throws ExcelException {
         return handlerExcelTitles(titles, titles.length * 2, 10);
@@ -181,7 +188,7 @@ public interface ExcelParser {
      * @param defaultSeatRow 记录位置信息初始化默认行数
      * @param defaultSeatCol 记录位置信息初始化默认列数
      * @return 单元格合并集合
-     * @throws ExcelTitleException
+     * @throws ExcelException
      */
     default ArrayList<BaseExcelTitleCell> handlerExcelTitles(BaseExcelTitleCell[][] titles, int defaultSeatRow, int defaultSeatCol) throws ExcelException {
         ArrayList<BaseExcelTitleCell> rs = new ArrayList<>();
@@ -200,7 +207,8 @@ public interface ExcelParser {
         int len = seat[rowNum] == null ? 0 : seat[rowNum].length;
         int i = 0;
         for (; i < len; i++) {
-            if (seat[rowNum][i] != SeatStatus.YES.value) {//没有占用
+            //没有占用
+            if (seat[rowNum][i] != SeatStatus.YES.value) {
                 return new int[]{rowNum, i};
             }
         }
@@ -214,33 +222,42 @@ public interface ExcelParser {
      * @param startCursor 起点游标
      * @param excelTitle  表头
      * @return 校验/扩充后的位置
+     * @throws ExcelTitleException
      */
     default int[][] validateExpandSeat(int[][] seat, int[] startCursor, BaseExcelTitleCell excelTitle) throws ExcelTitleException {
-
         int startRow = startCursor[0];
         int endRow = startRow + excelTitle.getRowSpan() - 1;
         int startCol = startCursor[1];
         int endCol = startCol + excelTitle.getColSpan() - 1;
-
-        for (int i = startRow; i <= endRow; i++) {//循环所占行
+        //循环所占行
+        for (int i = startRow; i <= endRow; i++) {
             if (seat.length <= i) {
-                int[][] copy = seat;//备份
-                seat = new int[endRow + 1][];//初始化seat,长度变为结束行号+1
+                //备份
+                int[][] copy = seat;
+                //初始化seat,长度变为结束行号+1
+                seat = new int[endRow + 1][];
                 int j = 0;
                 for (; j < copy.length; j++) {
-                    seat[j] = copy[j];//复制原始数据
+                    //复制原始数据
+                    seat[j] = copy[j];
                 }
                 for (; j <= endRow; j++) {
-                    seat[j] = new int[endCol + 1];//扩充行,初始化列数据
+                    //扩充行,初始化列数据
+                    seat[j] = new int[endCol + 1];
                 }
-                return seat;//扩充了行,不需要继续校验扩充的内容,肯定可用
+                //扩充了行,不需要继续校验扩充的内容,肯定可用
+                return seat;
             }
-            for (int j = startCol; j <= endCol; j++) {//循环所占列
+            //循环所占列
+            for (int j = startCol; j <= endCol; j++) {
                 if (seat[i] == null || seat[i].length <= j) {
-                    seat[i] = seat[i] == null ? new int[endCol + 1] : Arrays.copyOf(seat[i], endCol + 1);//扩充列
-                    break;//扩充了列,不用继续校验当前行的列
+                    //扩充列
+                    seat[i] = seat[i] == null ? new int[endCol + 1] : Arrays.copyOf(seat[i], endCol + 1);
+                    //扩充了列,不用继续校验当前行的列
+                    break;
                 }
-                if (seat[i][j] == SeatStatus.YES.value) {//当前单元格存在数据
+                //当前单元格存在数据
+                if (seat[i][j] == SeatStatus.YES.value) {
                     throw new ExcelTitleException(new ExcelTitleCellError(i, j, excelTitle));
                 }
             }
@@ -279,7 +296,7 @@ public interface ExcelParser {
          */
         NO(0);
 
-        public int value;
+        public final int value;
 
         SeatStatus(int value) {
             this.value = value;

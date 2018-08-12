@@ -6,7 +6,9 @@ import java.util.function.Function;
 
 /**
  * 增删改查管理
- * Created by 白超 on 2018/6/13.
+ *
+ * @author 白超
+ * @date 2018/6/13
  */
 public interface CrudManager<T> {
 

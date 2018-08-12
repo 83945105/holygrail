@@ -8,6 +8,9 @@ package com.avalon.holygrail.util;
  */
 public class AlgorithmicUtil {
 
+    private AlgorithmicUtil() {
+    }
+
     private static final int MIN_CALCULATE_NUMBER = 2;
 
     /**

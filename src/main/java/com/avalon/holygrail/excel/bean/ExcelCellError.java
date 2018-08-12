@@ -4,7 +4,9 @@ import com.avalon.holygrail.excel.norm.ExcelCellHandler;
 
 /**
  * Excel单元格错误信息
- * Created by 白超 on 2018/1/16.
+ *
+ * @author 白超
+ * @date 2018/1/16
  */
 public class ExcelCellError {
 

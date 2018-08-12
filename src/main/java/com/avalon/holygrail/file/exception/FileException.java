@@ -2,7 +2,9 @@ package com.avalon.holygrail.file.exception;
 
 /**
  * 文件异常
- * Created by 白超 on 2018/3/19.
+ *
+ * @author 白超
+ * @date 2018/3/19
  */
 public class FileException extends Exception {
 

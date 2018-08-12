@@ -5,7 +5,9 @@ import com.avalon.holygrail.excel.norm.CellOption;
 
 /**
  * Cell基础类
- * Created by 白超 on 2018/1/17.
+ *
+ * @author 白超
+ * @date 2018/1/17
  */
 public abstract class BaseCell implements CellHandler {
 

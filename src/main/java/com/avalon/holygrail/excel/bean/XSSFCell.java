@@ -6,7 +6,9 @@ import com.avalon.holygrail.excel.norm.ExcelWorkBookExport;
 
 /**
  * XSSFWorkbook 单元格
- * Created by 白超 on 2018/1/24.
+ *
+ * @author 白超
+ * @date 2018/1/24
  */
 public class XSSFCell extends BaseExcelCell {
 

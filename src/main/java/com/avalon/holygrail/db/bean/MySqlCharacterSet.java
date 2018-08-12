@@ -4,9 +4,11 @@ import com.avalon.holygrail.db.norm.CharacterSet;
 
 /**
  * MySql数据库字符集
- * Created by 白超 on 2018/2/8.
+ *
+ * @author 白超
+ * @date 2018/2/8
  */
-public enum  MySqlCharacterSet implements CharacterSet {
+public enum MySqlCharacterSet implements CharacterSet {
     /**
      *
      */

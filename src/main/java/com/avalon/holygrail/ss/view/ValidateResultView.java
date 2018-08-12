@@ -4,6 +4,8 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
 
 /**
  * 验证结果视图
+ *
+ * @author 白超
  */
 public class ValidateResultView extends MessageView {
 

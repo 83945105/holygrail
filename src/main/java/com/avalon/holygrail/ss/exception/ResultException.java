@@ -4,6 +4,8 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
 
 /**
  * 自定义结果异常
+ *
+ * @author 白超
  */
 public class ResultException extends Exception {
 

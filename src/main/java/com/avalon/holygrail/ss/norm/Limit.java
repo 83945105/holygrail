@@ -2,6 +2,8 @@ package com.avalon.holygrail.ss.norm;
 
 /**
  * 分页接口
+ *
+ * @author 白超
  */
 public interface Limit {
 

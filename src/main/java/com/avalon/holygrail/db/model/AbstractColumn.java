@@ -116,38 +116,123 @@ public abstract class AbstractColumn {
         this.comment = comment;
     }
 
+    /**
+     * 是否是主键
+     *
+     * @return
+     */
     abstract public boolean isPrimaryKey();
 
+    /**
+     * 获取列名
+     *
+     * @return
+     */
     abstract public String getName();
 
+    /**
+     * 获取列类型
+     *
+     * @return
+     */
     abstract public ColumnType getColumnType();
 
+    /**
+     * 获取长度
+     *
+     * @return
+     */
     abstract public int getLength();
 
+    /**
+     * 获取Decimal格式长度
+     *
+     * @return
+     */
     abstract public int getDecimalLength();
 
+    /**
+     * 获取自增长开始值
+     *
+     * @return
+     */
     abstract public int getAutoIncrementStartValue();
 
+    /**
+     * 是否唯一
+     *
+     * @return
+     */
     abstract public boolean isUnsigned();
 
+    /**
+     * 是否填充零
+     *
+     * @return
+     */
     abstract public boolean isZerofill();
 
+    /**
+     * 是否不为空
+     *
+     * @return
+     */
     abstract public boolean isNotNull();
 
+    /**
+     * 获取默认值
+     *
+     * @return
+     */
     abstract public String getDefaultValue();
 
+    /**
+     * 获取注释
+     *
+     * @return
+     */
     abstract public String getComment();
 
+    /**
+     * 是否使用索引
+     *
+     * @return
+     */
     abstract public boolean isUseIndex();
 
+    /**
+     * 索引名
+     *
+     * @return
+     */
     abstract public String getIndexName();
 
+    /**
+     * 索引类型
+     *
+     * @return
+     */
     abstract public IndexType getIndexType();
 
+    /**
+     * 索引方法
+     *
+     * @return
+     */
     abstract public IndexMethod getIndexMethod();
 
+    /**
+     * 索引注释
+     *
+     * @return
+     */
     abstract public String getIndexComment();
 
+    /**
+     * 构建Sql
+     *
+     * @return
+     */
     abstract public String buildColumnCreateSql();
 
     public void setPrimaryKey(boolean primaryKey) {

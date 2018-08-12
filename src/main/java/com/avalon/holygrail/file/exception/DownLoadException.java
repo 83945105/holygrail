@@ -4,7 +4,9 @@ import com.avalon.holygrail.file.bean.DownloadRecord;
 
 /**
  * 下载异常
- * Created by 白超 on 2018/1/22.
+ *
+ * @author 白超
+ * @date 2018/1/22
  */
 public class DownLoadException extends Exception {
 

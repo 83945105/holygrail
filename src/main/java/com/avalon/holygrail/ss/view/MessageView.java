@@ -4,6 +4,8 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
 
 /**
  * 信息视图
+ *
+ * @author 白超
  */
 public class MessageView implements DataView {
 

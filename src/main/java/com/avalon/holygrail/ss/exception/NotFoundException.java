@@ -4,6 +4,8 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
 
 /**
  * 404异常
+ *
+ * @author 白超
  */
 public class NotFoundException extends ResultException {
 

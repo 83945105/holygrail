@@ -8,6 +8,8 @@ import java.util.Collection;
 
 /**
  * 分页数据视图
+ *
+ * @author 白超
  */
 public class LimitDataView extends PageView {
 

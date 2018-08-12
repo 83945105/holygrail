@@ -4,7 +4,9 @@ import com.avalon.holygrail.db.norm.Engine;
 
 /**
  * MySql数据库引擎
- * Created by 白超 on 2018/2/8.
+ *
+ * @author 白超
+ * @date 2018/2/8
  */
 public enum MySqlEngine implements Engine {
     /**

@@ -6,6 +6,8 @@ import java.util.Collection;
 
 /**
  * 系统提示结果集
+ *
+ * @author 白超
  */
 public class ResultInfoRealization implements ResultInfo {
 

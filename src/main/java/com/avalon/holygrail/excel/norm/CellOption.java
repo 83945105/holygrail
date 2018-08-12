@@ -4,7 +4,9 @@ import com.avalon.holygrail.excel.exception.ExcelException;
 
 /**
  * 单元格属性
- * Created by 白超 on 2018/1/16.
+ *
+ * @author 白超
+ * @date 2018/1/16
  */
 public interface CellOption {
 
@@ -53,6 +55,8 @@ public interface CellOption {
     }
 
     /**
+     * 获取单元格类型
+     *
      * @return 单元格类型
      */
     CellType getCellType();
@@ -83,6 +87,8 @@ public interface CellOption {
     }
 
     /**
+     * 获取单元格下拉框值
+     *
      * @return 下拉框值
      */
     String[] getCellOptions();
@@ -95,7 +101,9 @@ public interface CellOption {
     void setCellOptions(String[] cellOptions);
 
     /**
-     * @return 获取值
+     * 获取值
+     *
+     * @return
      * @throws ExcelException
      */
     Object getValue() throws ExcelException;
@@ -108,7 +116,9 @@ public interface CellOption {
     void setValue(Object value);
 
     /**
-     * @return 映射值
+     * 获取映射值(属性)
+     *
+     * @return
      */
     String getField();
 
@@ -120,7 +130,9 @@ public interface CellOption {
     void setField(String field);
 
     /**
-     * @return 单元格宽度
+     * 获取单元格宽度
+     *
+     * @return
      */
     int getWidth();
 
@@ -132,7 +144,9 @@ public interface CellOption {
     void setWidth(int width);
 
     /**
-     * @return 占用多少行
+     * 获取占用多少行
+     *
+     * @return
      */
     int getRowSpan();
 
@@ -144,7 +158,9 @@ public interface CellOption {
     void setRowSpan(int rowSpan);
 
     /**
-     * @return 占用多少列
+     * 获取占用多少列
+     *
+     * @return
      */
     int getColSpan();
 
@@ -156,7 +172,9 @@ public interface CellOption {
     void setColSpan(int colSpan);
 
     /**
-     * @return 是否写入空值
+     * 是否写入空值
+     *
+     * @return
      */
     boolean isWriteEmpty();
 

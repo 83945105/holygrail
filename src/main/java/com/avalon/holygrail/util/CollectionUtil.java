@@ -7,17 +7,35 @@ import java.util.List;
 
 /**
  * 集合工具
- * Created by 白超 on 2018/2/27.
+ *
+ * @author 白超
+ * @date 2018/2/27
  */
 public class CollectionUtil {
 
+    private CollectionUtil() {
+    }
+
     public interface ListHandlerA<T> {
 
+        /**
+         * 接收数据
+         *
+         * @param records
+         * @throws Exception
+         */
         void accept(List<T> records) throws Exception;
     }
 
     public interface ListHandlerB<T> {
 
+        /**
+         * 接收数据
+         *
+         * @param records
+         * @return
+         * @throws Exception
+         */
         boolean apply(List<T> records) throws Exception;
     }
 
@@ -135,7 +153,21 @@ public class CollectionUtil {
      * @return
      */
     public static <K, V> HashMap<K, V> newHashMap(K key, V value) {
-        HashMap<K, V> map = new HashMap<>();
+        return newHashMap(16, key, value);
+    }
+
+    /**
+     * 新建HashMap集合
+     *
+     * @param initialCapacity 初始大小
+     * @param key
+     * @param value
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K, V> HashMap<K, V> newHashMap(int initialCapacity, K key, V value) {
+        HashMap<K, V> map = new HashMap<>(initialCapacity);
         map.put(key, value);
         return map;
     }

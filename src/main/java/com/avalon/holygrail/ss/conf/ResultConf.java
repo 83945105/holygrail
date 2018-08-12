@@ -2,6 +2,8 @@ package com.avalon.holygrail.ss.conf;
 
 /**
  * 结果集配置
+ *
+ * @author 白超
  */
 public interface ResultConf {
 

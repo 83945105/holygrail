@@ -1,7 +1,8 @@
 package com.avalon.holygrail.db.exception;
 
 /**
- * Created by 白超 on 2018/2/26.
+ * @author 白超
+ * @date 2018/2/26
  */
 public class DBException extends Exception {
 

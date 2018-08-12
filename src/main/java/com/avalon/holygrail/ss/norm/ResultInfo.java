@@ -9,6 +9,8 @@ import java.io.Serializable;
 
 /**
  * 结果集信息
+ *
+ * @author 白超
  */
 public interface ResultInfo extends Json, Serializable {
 

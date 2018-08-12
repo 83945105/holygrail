@@ -3,7 +3,8 @@ package com.avalon.holygrail.ss.exception;
 import com.avalon.holygrail.ss.norm.ResultInfo;
 
 /**
- * Created by 白超 on 2018/6/25.
+ * @author 白超
+ * @date 2018/6/25
  */
 public class JsonViewParseException extends ResultException {
 

@@ -1,7 +1,8 @@
 package com.avalon.holygrail.excel.norm;
 
 /**
- * Created by 白超 on 2018/4/10.
+ * @author 白超
+ * @date 2018/4/10
  */
 public interface ExcelTitleCellHandler extends CellHandler {
 

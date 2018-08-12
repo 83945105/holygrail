@@ -4,10 +4,17 @@ import java.util.function.Function;
 
 /**
  * 枚举方法
- * Created by 白超 on 2018/6/13.
+ *
+ * @author 白超
+ * @date 2018/6/13
  */
 public interface EnumMethods {
 
+    /**
+     * 获取值
+     *
+     * @return
+     */
     Object getValue();
 
     /**

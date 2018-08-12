@@ -11,7 +11,9 @@ import java.util.*;
 
 /**
  * MySql表
- * Created by 白超 on 2018/2/8.
+ *
+ * @author 白超
+ * @date 2018/2/8
  */
 public class MySqlTable extends AbstractTable {
 
@@ -59,12 +61,9 @@ public class MySqlTable extends AbstractTable {
         if (StringUtil.isEmpty(this.getName())) {
             throw new DBException("未设置MySqlTable名称");
         }
-
         ArrayList<AbstractColumn> indexList = new ArrayList<>();
-
         StringBuilder rs = new StringBuilder();
-        Map<String, Object> columnMap = new HashMap<>();
-
+        Map<String, Object> columnMap = new HashMap<>(16);
         //是否构建了主键Sql
         boolean appendPrimaryKeySql = false;
         AbstractColumn primaryKey = null;
@@ -86,7 +85,8 @@ public class MySqlTable extends AbstractTable {
                 appendAutoIncrementSql = true;
             }
         }
-        if (this.isBuildAutoIncrement() && !appendAutoIncrementSql && this.getAutoIncrement() != null) {//是否有自增长
+        //是否有自增长
+        if (this.isBuildAutoIncrement() && !appendAutoIncrementSql && this.getAutoIncrement() != null) {
             this.validateColumn(columnMap, this.getAutoIncrement().getName(), false);
             autoIncrement = this.getAutoIncrement();
             rs.append("\n\t").append(autoIncrement.buildColumnCreateSql()).append(",");
@@ -103,11 +103,13 @@ public class MySqlTable extends AbstractTable {
             //校验是否重复
             this.validateColumn(columnMap, column.getName(), true);
             //如果不需要构建主键或者已经构建过,而当前列为主键
-            if ((!this.isBuildPrimaryKey() || appendPrimaryKeySql) && column.isPrimaryKey()) {
+            boolean ctn = (!this.isBuildPrimaryKey() || appendPrimaryKeySql) && column.isPrimaryKey();
+            if (ctn) {
                 continue;
             }
             //如果不需要构建自增或者已经构建过,而当前列为自增
-            if ((!this.isBuildAutoIncrement() || appendAutoIncrementSql) && column.isAutoIncrement()) {
+            ctn = (!this.isBuildAutoIncrement() || appendAutoIncrementSql) && column.isAutoIncrement();
+            if (ctn) {
                 continue;
             }
             rs.append("\n\t").append(column.buildColumnCreateSql()).append(",");
@@ -123,12 +125,10 @@ public class MySqlTable extends AbstractTable {
                 indexList.add(column);
             }
         }
-
         //如果构建了主键Sql
         if (appendPrimaryKeySql) {
             rs.append("\n\t").append("PRIMARY KEY ").append("(`").append(primaryKey.getName()).append("`)").append(",");
         }
-
         /*索引开始*/
         for (AbstractColumn index : indexList) {
             if (index.getIndexType() == MySqlIndexType.Unique) {
@@ -149,7 +149,6 @@ public class MySqlTable extends AbstractTable {
             }
         }
         /*索引结束*/
-
         rs.insert(0, "CREATE TABLE `" + this.getName() + "` (");
         rs.replace(0, rs.length(), rs.substring(0, rs.length() - 1));
         rs.append("\n").append(") ENGINE=").append(this.getEngine());
@@ -207,7 +206,7 @@ public class MySqlTable extends AbstractTable {
         if (this.getAutoIncrement() != null) {
             columns.add(this.getAutoIncrement());
         }
-        this.getColumns().forEach(column -> columns.add(column));
+        this.getColumns().forEach(columns::add);
         boolean removed = true;
         for (int i = 0; i < columns.size(); ) {
             for (String insertColumnName : insertColumnNames) {

@@ -2,6 +2,8 @@ package com.avalon.holygrail.ss.bean;
 
 /**
  * 结果码枚举
+ *
+ * @author 白超
  */
 public enum ResultCode {
 

@@ -4,9 +4,14 @@ import java.util.List;
 
 /**
  * 排序
- * Created by 白超 on 2018-1-22.
+ *
+ * @author 白超
+ * @date 2018-1-22
  */
 public class SortUtil {
+
+    private SortUtil() {
+    }
 
     public interface CompareA<T> {
         /**
@@ -30,11 +35,13 @@ public class SortUtil {
      * @return
      */
     public static <T> T[] bubbleSort(T[] targets, CompareA<T> compare) {
-        int next = targets.length - 1;//循环排序次数
+        //循环排序次数
+        int next = targets.length - 1;
         T left;
         T right;
         for (int i = 0; i < next; i++) {
-            int maxIndex = next - i;//当前循环排序最大下标
+            //当前循环排序最大下标
+            int maxIndex = next - i;
             for (int j = 0; j < maxIndex; j++) {
                 left = targets[j];
                 right = targets[j + 1];
@@ -58,11 +65,13 @@ public class SortUtil {
      * @return
      */
     public static <T> List<T> bubbleSort(List<T> targets, CompareA<T> compare) {
-        int next = targets.size() - 1;//循环排序次数
+        //循环排序次数
+        int next = targets.size() - 1;
         T left;
         T right;
         for (int i = 0; i < next; i++) {
-            int maxIndex = next - i;//当前循环排序最大下标
+            //当前循环排序最大下标
+            int maxIndex = next - i;
             for (int j = 0; j < maxIndex; j++) {
                 left = targets.get(j);
                 right = targets.get(j + 1);
@@ -101,7 +110,8 @@ public class SortUtil {
         T current;
         int j;
         for (int i = 1; i < len; i++) {
-            current = targets[i];//当前元素,从第二个元素开始
+            //当前元素,从第二个元素开始
+            current = targets[i];
             for (j = i; j > 0 && compare.apply(current, targets[j - 1]); j--) {
                 targets[j] = targets[j - 1];
             }
@@ -125,7 +135,8 @@ public class SortUtil {
         T current;
         int j;
         for (int i = 1; i < len; i++) {
-            current = targets.get(i);//当前元素,从第二个元素开始
+            //当前元素,从第二个元素开始
+            current = targets.get(i);
             for (j = i; j > 0 && compare.apply(current, targets.get(j - 1)); j--) {
                 targets.set(j, targets.get(j - 1));
             }

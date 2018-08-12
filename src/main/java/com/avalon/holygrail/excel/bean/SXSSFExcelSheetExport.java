@@ -36,27 +36,56 @@ import java.util.function.Function;
 
 /**
  * SXSSFWorkbook SheetExportHandler
- * Created by 白超 on 2018/1/17.
+ *
+ * @author 白超
+ * @date 2018/1/17
  */
 public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements ExcelSheetExport {
 
-    protected SXSSFSheet sheet;//当前数据表对象
+    /**
+     * 当前数据表对象
+     */
+    protected SXSSFSheet sheet;
 
-    protected SXSSFExcelWorkBookExport ownerWorkBook;//所属工作簿对象
+    /**
+     * 所属工作簿对象
+     */
+    protected SXSSFExcelWorkBookExport ownerWorkBook;
 
-    protected List<BaseExcelTitleCell> titleCells;//表头单元格信息
+    /**
+     * 表头单元格信息
+     */
+    protected List<BaseExcelTitleCell> titleCells;
 
-    protected LinkedList<BaseExcelTitleCell> dataTitleCells;//与数据相关的表头信息
+    /**
+     * 与数据相关的表头信息
+     */
+    protected LinkedList<BaseExcelTitleCell> dataTitleCells;
 
-    protected int rowCursor = -1;//行游标,记录每次插入数据时的总起始行号
+    /**
+     * 行游标,记录每次插入数据时的总起始行号
+     */
+    protected int rowCursor = -1;
 
-    protected int colCursor = -1;//列游标,记录每次插入数据时的总起始列号
+    /**
+     * 列游标,记录每次插入数据时的总起始列号
+     */
+    protected int colCursor = -1;
 
-    protected int totalDataSize;//数据记录总数
+    /**
+     * 数据记录总数
+     */
+    protected int totalDataSize;
 
-    protected CellStyleProxy defaultCellStyle;//默认的单元格样式
+    /**
+     * 默认的单元格样式
+     */
+    protected CellStyleProxy defaultCellStyle;
 
-    protected SXSSFLoader sxssfLoader;//装载器
+    /**
+     * 装载器
+     */
+    protected SXSSFLoader sxssfLoader;
 
     public SXSSFExcelSheetExport(String sheetName, SXSSFExcelWorkBookExport ownerWorkBook) throws ExportException {
         super(ownerWorkBook.sxssfWorkbook);
@@ -106,7 +135,17 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
         return cell;
     }
 
-    //重写表头构建方法,主要关联了行游标和列游标
+    /**
+     * 重写表头构建方法,主要关联了行游标和列游标
+     *
+     * @param excelTitle
+     * @param startRow
+     * @param endRow
+     * @param startCol
+     * @param endCol
+     * @return
+     * @throws ExcelException
+     */
     @Override
     public BaseExcelTitleCell buildExcelTitleCell(BaseExcelTitleCell excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException {
         excelTitle.setStartRowNum(this.rowCursor + startRow + 1);
@@ -219,6 +258,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
          * @param rowCursor   当前行游标
          * @param index       当前数据在数据集合中的下标
          * @return 你要设置的单元格值
+         * @throws ExportException
          */
         Object apply(Object value, T record, ExcelCellHandler cellHandler, String field, int rowCursor, int index) throws ExportException;
     }
@@ -265,11 +305,13 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
             for (Map.Entry<String, Object> entry : record.entrySet()) {
                 boolean last = i++ == record.size() - 1;
                 boolean equal = entry.getKey().equals(cell.getField());
-                if (!equal && !last) {//不等于且不是最后一条,继续
+                //不等于且不是最后一条,继续
+                if (!equal && !last) {
                     continue;
                 }
                 Object value;
-                if (equal) {//等于
+                //等于
+                if (equal) {
                     try {
                         value = entry.getValue();
                     } catch (Exception e) {
@@ -353,7 +395,8 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                     continue;
                 }
                 Object value;
-                if (equal) {//等于
+                //等于
+                if (equal) {
                     try {
                         value = new PropertyDescriptor(f.getName(), record.getClass()).getReadMethod().invoke(record);
                         //value = this.access.invoke(record, ClassUtil.getGetterMethodName(f.getName(), null));

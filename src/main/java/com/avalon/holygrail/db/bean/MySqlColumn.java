@@ -8,7 +8,9 @@ import com.avalon.holygrail.util.StringUtil;
 
 /**
  * MySql数据库列
- * Created by 白超 on 2018/2/8.
+ *
+ * @author 白超
+ * @date 2018/2/8
  */
 public class MySqlColumn extends AbstractColumn {
 

@@ -7,7 +7,9 @@ import com.avalon.holygrail.excel.norm.Font;
 
 /**
  * Excel cell 基础类
- * Created by 白超 on 2018/4/10.
+ *
+ * @author 白超
+ * @date 2018/4/10
  */
 public abstract class BaseExcelCell extends BaseCell implements ExcelCellHandler {
 

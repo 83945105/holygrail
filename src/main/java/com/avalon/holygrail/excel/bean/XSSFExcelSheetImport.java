@@ -21,31 +21,66 @@ import java.util.function.Function;
 
 /**
  * XSSFWorkBook
- * Created by 白超 on 2018/1/24.
+ *
+ * @author 白超
+ * @date 2018/1/24
  */
 public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements ExcelSheetImport {
 
-    protected XSSFSheet sheet;//当前数据表对象
+    /**
+     * 当前数据表对象
+     */
+    protected XSSFSheet sheet;
 
-    protected XSSFExcelWorkBookImport ownerWorkBook;//所属工作簿对象
+    /**
+     * 所属工作簿对象
+     */
+    protected XSSFExcelWorkBookImport ownerWorkBook;
 
-    protected List<BaseExcelTitleCell> excelTitleCells;//表头单元格
+    /**
+     * 表头单元格
+     */
+    protected List<BaseExcelTitleCell> excelTitleCells;
 
-    protected LinkedList<BaseExcelTitleCell> dataTitleCells = new LinkedList<>();//与数据相关的表头信息
+    /**
+     * 与数据相关的表头信息
+     */
+    protected LinkedList<BaseExcelTitleCell> dataTitleCells = new LinkedList<>();
 
-    protected int rowCursor = -1;//行游标,记录读取起始行号
+    /**
+     * 行游标,记录读取起始行号
+     */
+    protected int rowCursor = -1;
 
-    protected int colCursor = -1;//列游标,记录读取起始列号
+    /**
+     * 列游标,记录读取起始列号
+     */
+    protected int colCursor = -1;
 
-    protected int physicalNumberOfRows;//物理行数
+    /**
+     * 物理行数
+     */
+    protected int physicalNumberOfRows;
 
-    protected Class<?> defaultClass = ArrayList.class;//默认数据容器
+    /**
+     * 默认数据容器
+     */
+    protected Class<?> defaultClass = ArrayList.class;
 
-    protected XSSFLoader xssfLoader;//装载器
+    /**
+     * 装载器
+     */
+    protected XSSFLoader xssfLoader;
 
-    private MethodAccess access = null;//对象的ASM,用于高效调用反射
+    /**
+     * 对象的ASM,用于高效调用反射
+     */
+    private MethodAccess access = null;
 
-    protected ArrayList<ArrayList<?>> loadDatasList = new ArrayList<>();//每次读取的数据集合,按照读取次数顺序放入
+    /**
+     * 每次读取的数据集合,按照读取次数顺序放入
+     */
+    protected ArrayList<ArrayList<?>> loadDatasList = new ArrayList<>();
 
     public XSSFExcelSheetImport(XSSFSheet sheet, XSSFExcelWorkBookImport ownerWorkBook) {
         super(ownerWorkBook.xssfWorkbook);
@@ -72,7 +107,8 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
         int j = 0;
         org.apache.poi.xssf.usermodel.XSSFCell cell;
         while (cells.hasNext()) {
-            if (j < this.colCursor) {//小于列游标不读
+            //小于列游标不读
+            if (j < this.colCursor) {
                 continue;
             }
             cell = (org.apache.poi.xssf.usermodel.XSSFCell) cells.next();
@@ -147,11 +183,13 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
         try {
             this.access.invoke(target, methodName, value);
         } catch (ClassCastException e) {
-            if (value instanceof Double) {//Double => Integer
+            //Double => Integer
+            if (value instanceof Double) {
                 this.typeLoader(target, methodName, Integer.valueOf(NumberFormat.getInstance().format(Math.rint((Double) value))));
                 return;
             }
-            if (value instanceof Integer) {//Integer => String
+            //Integer => String
+            if (value instanceof Integer) {
                 this.typeLoader(target, methodName, value.toString());
                 return;
             }
@@ -179,18 +217,21 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
         //设置行游标
         this.setRowCursor(idx -> row.getRowNum());
         T rs = clazz.newInstance();
-        if (Map.class.isAssignableFrom(clazz)) {//Map集合
+        //Map集合
+        if (Map.class.isAssignableFrom(clazz)) {
             this.loadMap(row, (Map<String, Object>) rs);
             return rs;
         }
-        if (Collection.class.isAssignableFrom(clazz)) {//表示使用集合去装载数据,此时不记录field
+        //表示使用集合去装载数据,此时不记录field
+        if (Collection.class.isAssignableFrom(clazz)) {
             this.loadCollection(row, (Collection<Object>) rs);
             return rs;
         }
         if (this.access == null) {
             this.access = MethodAccess.get(clazz);
         }
-        this.loadObject(row, rs);//对象
+        //对象
+        this.loadObject(row, rs);
         return rs;
     }
 
@@ -207,10 +248,12 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     protected <T> void loadRows(Class<T> clazz, HandlerRowA<T> handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
         Iterator<Row> rows = this.sheet.iterator();
         int i = 0;
-        int start = this.rowCursor;//开始读取的行号
+        //开始读取的行号
+        int start = this.rowCursor;
         ArrayList<T> records = new ArrayList<>();
         while (rows.hasNext()) {
-            if (i++ <= start) {//小于等于行游标的不读
+            //小于等于行游标的不读
+            if (i++ <= start) {
                 rows.next();
                 continue;
             }
@@ -234,10 +277,12 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     protected <T> void loadRows(Class<T> clazz, HandlerRowB<T> handlerRow) throws ExcelException, IllegalAccessException, InstantiationException {
         Iterator<Row> rows = this.sheet.iterator();
         int i = 0;
-        int start = this.rowCursor;//开始读取的行号
+        //开始读取的行号
+        int start = this.rowCursor;
         ArrayList<T> records = new ArrayList<>();
         while (rows.hasNext()) {
-            if (i++ <= start) {//小于等于行游标的不读
+            //小于等于行游标的不读
+            if (i++ <= start) {
                 rows.next();
                 continue;
             }
@@ -263,10 +308,12 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     protected <T> void loadRows(Class<T> clazz) throws ExcelException, IllegalAccessException, InstantiationException {
         Iterator<Row> rows = this.sheet.iterator();
         int i = 0;
-        int start = this.rowCursor;//开始读取的行号
+        //开始读取的行号
+        int start = this.rowCursor;
         ArrayList<T> records = new ArrayList<>();
         while (rows.hasNext()) {
-            if (i++ <= start) {//小于等于行游标的不读
+            //小于等于行游标的不读
+            if (i++ <= start) {
                 rows.next();
                 continue;
             }
@@ -301,8 +348,10 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
      * @param rowSpan 占用行数
      */
     protected void parseExportTitles(Collection<BaseExcelTitleCell> titles, int rowSpan) throws ExcelException {
-        Double maxRowNum = Double.NEGATIVE_INFINITY;//无穷小
-        Double minRowNum = Double.POSITIVE_INFINITY;//无穷大
+        //无穷小
+        Double maxRowNum = Double.NEGATIVE_INFINITY;
+        //无穷大
+        Double minRowNum = Double.POSITIVE_INFINITY;
         for (BaseExcelTitleCell title : titles) {
             XSSFTitleCell titleCell = (XSSFTitleCell) title;
             if (titleCell.getEndRowNum() > maxRowNum) {

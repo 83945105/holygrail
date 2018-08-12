@@ -4,7 +4,8 @@ import com.avalon.holygrail.excel.norm.Font;
 import org.apache.poi.ss.usermodel.CellStyle;
 
 /**
- * Created by 白超 on 2018/4/9.
+ * @author 白超
+ * @date 2018/4/9
  */
 public class CellStyleProxy implements com.avalon.holygrail.excel.norm.CellStyle {
 

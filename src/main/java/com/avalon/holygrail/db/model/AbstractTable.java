@@ -133,6 +133,7 @@ public abstract class AbstractTable {
      * 构建创建语句
      *
      * @return
+     * @throws DBException
      */
     abstract public String buildCreateSql() throws DBException;
 
@@ -193,6 +194,7 @@ public abstract class AbstractTable {
      *
      * @param values 数据
      * @return
+     * @throws DBException
      */
     abstract public String buildBatchInsertSql(Collection<Map<String, Object>> values) throws DBException;
 
@@ -202,6 +204,7 @@ public abstract class AbstractTable {
      * @param values            数据
      * @param insertColumnNames 指定插入列
      * @return
+     * @throws DBException
      */
     abstract public String buildBatchInsertSql(Collection<Map<String, Object>> values, String... insertColumnNames) throws DBException;
 

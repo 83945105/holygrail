@@ -6,9 +6,14 @@ import com.avalon.holygrail.ss.view.*;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * @author 白超
+ */
 public class DataViewUtil {
 
-    //-------------------------------------构建消息提示视图------------------------------------------//
+    private DataViewUtil() {
+    }
+
     public static MessageView getMessageViewSuccess() {
         return new MessageView(ResultUtil.createSuccess("success"));
     }
@@ -69,7 +74,6 @@ public class DataViewUtil {
         return new MessageView(ResultUtil.createInfo(messageCode, params));
     }
 
-    //-------------------------------------构建DataGrid视图------------------------------------------//
     public static DataGridView getDataGridViewSuccess() {
         return new DataGridView(ResultUtil.createSuccess("success"));
     }
@@ -106,8 +110,6 @@ public class DataViewUtil {
         return new DataGridView(ResultUtil.createInfo("info"));
     }
 
-    //-------------------------------------构建上传结果视图------------------------------------------//
-
     /**
      * @param filePath 文件路径
      * @param result   参数顺序: 文件真实名称、文件后缀、文件保存名、文件保存全名、文件完成保存路径(不包含项目路径)
@@ -124,21 +126,22 @@ public class DataViewUtil {
         return new UploadResultView(ResultUtil.createSuccess("success"), result[0], result[1], result[2], result[3], result[4], filePath);
     }
 
-    //--------------------------------构建ValidateView视图-------------------------------------//
     public static ValidateResultView getValidateViewSuccess(boolean success) {
         return new ValidateResultView(ResultUtil.createSuccess("success"), success);
     }
 
-    //-------------------------------------构建模型视图------------------------------------------//
     public static ModelView getModelViewSuccess(String message, Object record) {
         return new ModelView(ResultUtil.createSuccess(message), record);
     }
+
     public static ModelView getModelViewSuccess(String message, Map<?, ?> records) {
         return new ModelView(ResultUtil.createSuccess(message), records);
     }
+
     public static ModelView getModelViewSuccess(Object record) {
         return new ModelView(ResultUtil.createSuccess("success"), record);
     }
+
     public static ModelView getModelViewSuccess(Collection<?> rows) {
         return new ModelView(ResultUtil.createSuccess("success"), rows);
     }

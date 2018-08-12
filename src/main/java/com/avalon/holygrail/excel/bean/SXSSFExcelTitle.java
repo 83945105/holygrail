@@ -2,7 +2,9 @@ package com.avalon.holygrail.excel.bean;
 
 /**
  * SXSSFWorkbook 表头
- * Created by 白超 on 2018/1/16.
+ *
+ * @author 白超
+ * @date 2018/1/16
  */
 public class SXSSFExcelTitle extends XSSFExcelTitle {
 

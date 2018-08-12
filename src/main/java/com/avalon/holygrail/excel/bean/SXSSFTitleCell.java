@@ -1,7 +1,9 @@
 package com.avalon.holygrail.excel.bean;
 
 /**
- * Created by 白超 on 2018/4/10.
+ *
+ * @author 白超
+ * @date 2018/4/10
  */
 public class SXSSFTitleCell extends XSSFTitleCell {
 

@@ -21,9 +21,14 @@ import java.util.regex.Pattern;
 
 /**
  * 文件工具类
- * Created by 白超 on 2018/1/22.
+ *
+ * @author 白超
+ * @date 2018/1/22
  */
 public class FileUtil {
+
+    private FileUtil() {
+    }
 
     /**
      * 项目路径
@@ -157,7 +162,10 @@ public class FileUtil {
      * @param filePath 文件路径
      * @param request  请求
      * @param response 响应
-     * @throws Exception
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws DownLoadException
+     * @throws FileNotFoundException
      */
     public static DownloadRecord download(String fileName, String suffix, String filePath,
                                           HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, DownLoadException, FileNotFoundException {
@@ -167,10 +175,11 @@ public class FileUtil {
     /**
      * 将base64保存为图片
      *
-     * @param base64
+     * @param base64       图片base64数据
      * @param savePath     文件保存路径(包含项目路径,不包含文件名和后缀名,尾部不用加/)
      * @param saveFileName 保存文件名(不包含后缀名)
      * @param suffix       文件后缀
+     * @throws Exception
      */
     public static void base64ToImage(String base64, String savePath, String saveFileName, String suffix) throws Exception {
         if (StringUtil.isEmpty(base64)) {
@@ -227,6 +236,12 @@ public class FileUtil {
     @FunctionalInterface
     public interface UploadBefore {
 
+        /**
+         * 接收上传结果
+         *
+         * @param uploadResult 上传结果
+         * @throws Exception
+         */
         void accept(UploadResult uploadResult) throws Exception;
     }
 

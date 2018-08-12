@@ -13,93 +13,121 @@ import java.util.function.Function;
 
 /**
  * Sheet导出操作
- * Created by 白超 on 2018/1/19.
+ *
+ * @author 白超
+ * @date 2018/1/19
  */
 public interface SheetExportHandler extends Sheet {
 
+    /**
+     * 获取所属的工作簿
+     *
+     * @return
+     */
     @Override
     ExcelWorkBookExport getOwnerWorkBook();
 
     /**
      * 设置行游标
+     *
      * @param handler 接收行号,返回你想设置的行号
+     * @return
      */
     @Override
     SheetExportHandler setRowCursor(Function<Integer, Integer> handler);
 
     /**
      * 设置列游标
+     *
      * @param handler 接收列号,返回你想设置的列号
+     * @return
      */
     @Override
     SheetExportHandler setColCursor(Function<Integer, Integer> handler);
 
     /**
      * 解析表头json数据
-     * @param titlesJson 表头数据json
+     *
+     * @param titlesJson   表头数据json
      * @param exportTitles 是否导出表头
      * @return 准备导出
+     * @throws ExcelException
      */
     ExcelSheetExport parseTitlesJson(String titlesJson, boolean exportTitles) throws ExcelException;
 
     /**
      * 解析表头json文件
-     * @param inputStream 表头数据流
+     *
+     * @param inputStream  表头数据流
      * @param exportTitles 是否导出表头
      * @return 准备导出
+     * @throws IOException
+     * @throws ExcelException
      */
     ExcelSheetExport parseTitlesJson(InputStream inputStream, boolean exportTitles) throws IOException, ExcelException;
 
     /**
      * 解析表头json文件
-     * @param file 表头数据文件
+     *
+     * @param file         表头数据文件
      * @param exportTitles 是否导出表头
      * @return 准备导出
+     * @throws IOException
+     * @throws ExcelException
      */
     ExcelSheetExport parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelException;
 
     /**
      * 设置表头
-     * @param titles 表头对象
+     *
+     * @param titles       表头对象
      * @param exportTitles 是否导出表头
      * @return 准备导出
+     * @throws ExcelException
      */
     ExcelSheetExport setTitles(BaseExcelTitleCell[][] titles, boolean exportTitles) throws ExcelException;
 
     /**
      * 设置列属性
+     *
      * @param fields 属性
      * @return 准备导出
+     * @throws ExcelException
      */
     ExcelSheetExport setColumnFields(List<String> fields) throws ExcelException;
 
     /**
      * 设置列宽
+     *
      * @param columnIndex 列号
-     * @param width 列宽
+     * @param width       列宽
      */
     void setColumnWidth(int columnIndex, int width);
 
     /**
      * 插入图片
+     *
      * @param inputStream 图片流
      * @param pictureType 图片类型
-     * @param dx1 起始单元格的x偏移量
-     * @param dy1 起始单元格的y偏移量
-     * @param dx2 终止单元格的x偏移量
-     * @param dy2 终止单元格的y偏移量
-     * @param col1 起始单元格列序号,从0开始计算
-     * @param row1 起始单元格行序号,从0开始计算
-     * @param col2 终止单元格列序号,从0开始计算
-     * @param row2 终止单元格行序号,从0开始计算
+     * @param dx1         起始单元格的x偏移量
+     * @param dy1         起始单元格的y偏移量
+     * @param dx2         终止单元格的x偏移量
+     * @param dy2         终止单元格的y偏移量
+     * @param col1        起始单元格列序号,从0开始计算
+     * @param row1        起始单元格行序号,从0开始计算
+     * @param col2        终止单元格列序号,从0开始计算
+     * @param row2        终止单元格行序号,从0开始计算
+     * @return
      * @throws IOException
      */
     ExcelSheetExport insertPicture(InputStream inputStream, ExcelWorkBook.PictureType pictureType, int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2) throws IOException;
 
     /**
      * 设置列对应的数据属性
+     *
      * @param fields 属性
      * @return 准备导出
+     * @throws ExcelException
      */
     default ExcelSheetExport setColumnFields(String... fields) throws ExcelException {
         return setColumnFields(Arrays.asList(fields));
@@ -107,8 +135,11 @@ public interface SheetExportHandler extends Sheet {
 
     /**
      * 解析表头json文件
+     *
      * @param inputStream 表头数据流
      * @return 准备导出
+     * @throws IOException
+     * @throws ExcelException
      */
     @Override
     default ExcelSheetExport parseTitlesJson(InputStream inputStream) throws IOException, ExcelException {
@@ -117,8 +148,11 @@ public interface SheetExportHandler extends Sheet {
 
     /**
      * 解析表头json文件
+     *
      * @param file 表头数据文件
      * @return 准备导出
+     * @throws IOException
+     * @throws ExcelException
      */
     @Override
     default ExcelSheetExport parseTitlesJson(File file) throws IOException, ExcelException {
@@ -127,8 +161,10 @@ public interface SheetExportHandler extends Sheet {
 
     /**
      * 解析表头json数据
+     *
      * @param titlesJson 表头数据json
      * @return 准备导出
+     * @throws ExcelException
      */
     @Override
     default ExcelSheetExport parseTitlesJson(String titlesJson) throws ExcelException {
@@ -137,8 +173,10 @@ public interface SheetExportHandler extends Sheet {
 
     /**
      * 设置表头
+     *
      * @param titles 表头对象
      * @return 准备导出
+     * @throws ExcelException
      */
     @Override
     default ExcelSheetExport setTitles(BaseExcelTitleCell[][] titles) throws ExcelException {
@@ -147,16 +185,18 @@ public interface SheetExportHandler extends Sheet {
 
     /**
      * 插入图片
-     * @param file 图片文件
+     *
+     * @param file        图片文件
      * @param pictureType 图片类型
-     * @param dx1 起始单元格的x偏移量
-     * @param dy1 起始单元格的y偏移量
-     * @param dx2 终止单元格的x偏移量
-     * @param dy2 终止单元格的y偏移量
-     * @param col1 起始单元格列序号,从0开始计算
-     * @param row1 起始单元格行序号,从0开始计算
-     * @param col2 终止单元格列序号,从0开始计算
-     * @param row2 终止单元格行序号,从0开始计算
+     * @param dx1         起始单元格的x偏移量
+     * @param dy1         起始单元格的y偏移量
+     * @param dx2         终止单元格的x偏移量
+     * @param dy2         终止单元格的y偏移量
+     * @param col1        起始单元格列序号,从0开始计算
+     * @param row1        起始单元格行序号,从0开始计算
+     * @param col2        终止单元格列序号,从0开始计算
+     * @param row2        终止单元格行序号,从0开始计算
+     * @return
      * @throws IOException
      */
     default ExcelSheetExport insertPicture(File file, ExcelWorkBook.PictureType pictureType, int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2) throws IOException {
@@ -165,16 +205,18 @@ public interface SheetExportHandler extends Sheet {
 
     /**
      * 插入图片
-     * @param filePath 图片路径
+     *
+     * @param filePath    图片路径
      * @param pictureType 图片类型
-     * @param dx1 起始单元格的x偏移量
-     * @param dy1 起始单元格的y偏移量
-     * @param dx2 终止单元格的x偏移量
-     * @param dy2 终止单元格的y偏移量
-     * @param col1 起始单元格列序号,从0开始计算
-     * @param row1 起始单元格行序号,从0开始计算
-     * @param col2 终止单元格列序号,从0开始计算
-     * @param row2 终止单元格行序号,从0开始计算
+     * @param dx1         起始单元格的x偏移量
+     * @param dy1         起始单元格的y偏移量
+     * @param dx2         终止单元格的x偏移量
+     * @param dy2         终止单元格的y偏移量
+     * @param col1        起始单元格列序号,从0开始计算
+     * @param row1        起始单元格行序号,从0开始计算
+     * @param col2        终止单元格列序号,从0开始计算
+     * @param row2        终止单元格行序号,从0开始计算
+     * @return
      * @throws IOException
      */
     default ExcelSheetExport insertPicture(String filePath, ExcelWorkBook.PictureType pictureType, int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2) throws IOException {
@@ -184,6 +226,7 @@ public interface SheetExportHandler extends Sheet {
 
     /**
      * 获取表格导入的数据总数
+     *
      * @return 数据总数
      */
     int getTotalDataSize();

@@ -14,7 +14,9 @@ import java.util.function.Function;
 
 /**
  * Excel Sheet导出
- * Created by 白超 on 2018/1/17.
+ *
+ * @author 白超
+ * @date 2018/1/17
  */
 public interface ExcelSheetExport extends SheetExportHandler {
 
@@ -69,16 +71,18 @@ public interface ExcelSheetExport extends SheetExportHandler {
 
     /**
      * 导入数据
+     *
      * @param records 数据集合
-     * @param <T> 数据类型
+     * @param <T>     数据类型
      * @return 当前对象
      */
     <T> ExcelSheetExport importData(Collection<T> records) throws ExcelException;
 
     /**
      * 导入数据
-     * @param records 数据集合
-     * @param <T> 数据类型
+     *
+     * @param records   数据集合
+     * @param <T>       数据类型
      * @param formatter 格式化函数,接收5个参数,分别为 当前当前数据对象record、单元格信息、当前列值、游标、当前记录下标,需要返回要设置的单元格值
      * @return 当前对象
      */
@@ -86,6 +90,7 @@ public interface ExcelSheetExport extends SheetExportHandler {
 
     /**
      * 导出Excel
+     *
      * @param outFile 目标文件
      * @return 当前对象
      * @throws IOException
@@ -94,6 +99,7 @@ public interface ExcelSheetExport extends SheetExportHandler {
 
     /**
      * 导出Excel
+     *
      * @param outPath 导出地址
      * @return 当前对象
      * @throws IOException

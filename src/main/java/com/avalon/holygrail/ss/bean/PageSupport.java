@@ -3,12 +3,9 @@ package com.avalon.holygrail.ss.bean;
 import com.avalon.holygrail.ss.norm.MySqlLimit;
 
 /**
- * <p>Title: 分页工具类</p>
- * <p>Description: </p>
+ * 分页工具类
  *
  * @author 白超
- * @date 2016年10月7日 下午10:34:59
- * @版本 V 1.0
  */
 public class PageSupport implements MySqlLimit {
 

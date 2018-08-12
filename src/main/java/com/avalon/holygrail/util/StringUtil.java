@@ -5,9 +5,14 @@ import java.util.Map;
 
 /**
  * 字符串工具
- * Created by 白超 on 2018/1/22.
+ *
+ * @author 白超
+ * @date 2018/1/22
  */
 public class StringUtil {
+
+    private StringUtil() {
+    }
 
     /**
      * 验证对象是否为空

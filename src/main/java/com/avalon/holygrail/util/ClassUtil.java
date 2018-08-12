@@ -11,6 +11,9 @@ import java.util.Arrays;
  */
 public class ClassUtil {
 
+    private ClassUtil() {
+    }
+
     private static final String BOOLEAN_TYPE_GETTER_NAME = "boolean";
 
     /**

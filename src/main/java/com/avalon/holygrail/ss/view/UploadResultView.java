@@ -4,6 +4,8 @@ import com.avalon.holygrail.ss.norm.ResultInfo;
 
 /**
  * 上传结果视图
+ *
+ * @author 白超
  */
 public class UploadResultView extends MessageView {
 

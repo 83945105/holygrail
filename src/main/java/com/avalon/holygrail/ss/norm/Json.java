@@ -7,10 +7,16 @@ import java.beans.Transient;
 import java.io.Serializable;
 
 /**
- * Created by 白超 on 2018/6/22.
+ * @author 白超
+ * @date 2018/6/22
  */
 public interface Json extends Serializable {
 
+    /**
+     * 获取JsonObject
+     *
+     * @return
+     */
     @Transient
     @JSONField(serialize = false)
     JSONObject getJsonObject();

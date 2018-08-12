@@ -2,7 +2,9 @@ package com.avalon.holygrail.ss.norm;
 
 /**
  * MySql分页
- * Created by 白超 on 2018/2/2.
+ *
+ * @author 白超
+ * @date 2018/2/2
  */
 public interface MySqlLimit extends Limit {
 

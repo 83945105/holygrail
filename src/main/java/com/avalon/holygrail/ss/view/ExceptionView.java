@@ -8,6 +8,8 @@ import java.util.Map;
 
 /**
  * 异常视图
+ *
+ * @author 白超
  */
 public class ExceptionView extends ModelView {
 
