@@ -54,9 +54,17 @@
         <commons-io.version>2.6</commons-io.version>
         <json-lib.version>2.4</json-lib.version>
         <httpclient.version>4.5.2</httpclient.version>
+        <ehcache.version>3.5.2</ehcache.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.2.0</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>net.sf.json-lib</groupId>
@@ -136,6 +144,11 @@
             <version>${httpclient.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
+        </dependency>
 
     </dependencies>
 

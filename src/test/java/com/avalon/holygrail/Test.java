@@ -1,5 +1,7 @@
 package com.avalon.holygrail;
 
+import com.alibaba.fastjson.util.TypeUtils;
+import com.avalon.holygrail.bean.User;
 import com.avalon.holygrail.excel.bean.SXSSFExcelTitle;
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.norm.CellOption;
@@ -8,11 +10,15 @@ import com.avalon.holygrail.excel.norm.Font;
 import com.avalon.holygrail.ss.bean.PageSupport;
 import com.avalon.holygrail.ss.norm.Limit;
 import com.avalon.holygrail.util.Export;
+import com.esotericsoftware.reflectasm.FieldAccess;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.ehcache.CacheManager;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +37,11 @@ public class Test {
     }
 
     public static void method3() throws Exception {
-
+        Field[] fields = User.class.getDeclaredFields();
+        for (Field field : fields) {
+            System.out.println(field.getName());
+            System.out.println(field.getType());
+        }
     }
 
     public static void method1() throws Exception {
@@ -117,7 +127,7 @@ public class Test {
                 .importData(rows, (value, record, cellHandler, field, rowCursor, index) -> {
 
                     cellHandler.setCellType(CellOption.CellType.COMBOBOX);
-                    cellHandler.setCellOptions(new String[]{"1","2"});
+                    cellHandler.setCellOptions(new String[]{"1", "2"});
 
 
                     return value;

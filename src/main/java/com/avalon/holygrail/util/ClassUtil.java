@@ -14,8 +14,6 @@ public class ClassUtil {
     private ClassUtil() {
     }
 
-    private static final String BOOLEAN_TYPE_GETTER_NAME = "boolean";
-
     /**
      * 获取所有Field名称
      *
@@ -84,13 +82,13 @@ public class ClassUtil {
     /**
      * 根据属性名称和java类型，获取对应的getter方法名
      *
-     * @param property 属性名称
-     * @param javaType 属性类型
+     * @param property  属性名称
+     * @param isBoolean 是否是布尔类型
      * @return
      */
-    public static String getGetterMethodName(String property, String javaType) {
+    public static String getGetterMethodName(String property, boolean isBoolean) {
         if (property == null || "".equals(property.trim())) {
-            return "";
+            return null;
         }
         StringBuilder sb = new StringBuilder();
         sb.append(property);
@@ -99,7 +97,7 @@ public class ClassUtil {
                 sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
             }
         }
-        if (BOOLEAN_TYPE_GETTER_NAME.equals(javaType)) {
+        if (isBoolean) {
             sb.insert(0, "is");
         } else {
             sb.insert(0, "get");
@@ -115,7 +113,7 @@ public class ClassUtil {
      */
     public static String getSetterMethodName(String property) {
         if (property == null || "".equals(property.trim())) {
-            return "";
+            return null;
         }
         StringBuilder sb = new StringBuilder();
         sb.append(property);

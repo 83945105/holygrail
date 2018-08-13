@@ -355,9 +355,9 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                     }
                 } else {
                     //能进入这里,说明已经是最后一个属性了,但是还是没找到orz...尝试获取属性对应get方法
-                    Method getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(cell.getField(), ""));
+                    Method getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(cell.getField(), false));
                     if (getMethod == null) {
-                        getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(cell.getField(), "boolean"));
+                        getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(cell.getField(), true));
                     }
                     if (getMethod != null) {
                         try {
@@ -405,9 +405,9 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                     }
                 } else {//最后一条依然不等于,给个默认值""
                     //能进入这里,说明已经是最后一个属性了,但是还是没找到orz...尝试获取属性对应get方法
-                    Method getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(cell.getField(), ""));
+                    Method getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(cell.getField(), false));
                     if (getMethod == null) {
-                        getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(cell.getField(), "boolean"));
+                        getMethod = ClassUtil.getMethod(record.getClass(), ClassUtil.getGetterMethodName(cell.getField(), true));
                     }
                     if (getMethod != null) {
                         try {
