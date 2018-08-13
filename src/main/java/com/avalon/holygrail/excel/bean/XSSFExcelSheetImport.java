@@ -6,7 +6,7 @@ import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
 import com.avalon.holygrail.excel.norm.ExcelSheetImport;
 import com.avalon.holygrail.excel.norm.ExcelWorkBookImport;
 import com.avalon.holygrail.excel.norm.Sheet;
-import com.avalon.holygrail.util.ClassUtil;
+import com.avalon.holygrail.utils.ClassUtil;
 import com.esotericsoftware.reflectasm.MethodAccess;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

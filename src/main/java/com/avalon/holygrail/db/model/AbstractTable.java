@@ -3,7 +3,7 @@ package com.avalon.holygrail.db.model;
 import com.avalon.holygrail.db.exception.DBException;
 import com.avalon.holygrail.db.norm.CharacterSet;
 import com.avalon.holygrail.db.norm.Engine;
-import com.avalon.holygrail.util.StringUtil;
+import com.avalon.holygrail.utils.StringUtil;
 
 import java.util.Collection;
 import java.util.Iterator;

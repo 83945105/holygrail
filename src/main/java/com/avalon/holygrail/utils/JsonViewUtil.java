@@ -1,4 +1,4 @@
-package com.avalon.holygrail.util;
+package com.avalon.holygrail.utils;
 
 import com.avalon.holygrail.ss.exception.JsonViewParseException;
 import com.avalon.holygrail.ss.norm.ResultInfo;

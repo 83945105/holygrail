@@ -3,7 +3,7 @@ package com.avalon.holygrail.ss.plugins;
 import com.alibaba.fastjson.JSONObject;
 import com.avalon.holygrail.ss.view.DataView;
 import com.avalon.holygrail.ss.view.JsonView;
-import com.avalon.holygrail.util.StringUtil;
+import com.avalon.holygrail.utils.StringUtil;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

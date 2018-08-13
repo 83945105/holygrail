@@ -1,4 +1,4 @@
-package com.avalon.holygrail.file.bean;
+package com.avalon.holygrail.resource.bean;
 
 /**
  * 复制结果

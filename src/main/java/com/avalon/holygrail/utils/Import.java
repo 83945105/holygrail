@@ -1,4 +1,4 @@
-package com.avalon.holygrail.util;
+package com.avalon.holygrail.utils;
 
 import com.avalon.holygrail.excel.bean.XSSFExcelWorkBookImport;
 import com.avalon.holygrail.excel.norm.ExcelWorkBookImport;

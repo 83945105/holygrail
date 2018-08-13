@@ -4,7 +4,7 @@ import com.avalon.holygrail.db.model.AbstractColumn;
 import com.avalon.holygrail.db.norm.ColumnType;
 import com.avalon.holygrail.db.norm.IndexMethod;
 import com.avalon.holygrail.db.norm.IndexType;
-import com.avalon.holygrail.util.StringUtil;
+import com.avalon.holygrail.utils.StringUtil;
 
 /**
  * MySql数据库列

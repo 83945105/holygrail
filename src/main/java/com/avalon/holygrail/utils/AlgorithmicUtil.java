@@ -1,4 +1,4 @@
-package com.avalon.holygrail.util;
+package com.avalon.holygrail.utils;
 
 /**
  * 算法工具

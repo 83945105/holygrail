@@ -2,7 +2,7 @@ package com.avalon.holygrail.excel.norm;
 
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
-import com.avalon.holygrail.util.AlgorithmicUtil;
+import com.avalon.holygrail.utils.AlgorithmicUtil;
 
 import java.io.File;
 import java.io.IOException;

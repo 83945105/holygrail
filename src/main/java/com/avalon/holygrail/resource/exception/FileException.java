@@ -1,4 +1,4 @@
-package com.avalon.holygrail.file.exception;
+package com.avalon.holygrail.resource.exception;
 
 /**
  * 文件异常

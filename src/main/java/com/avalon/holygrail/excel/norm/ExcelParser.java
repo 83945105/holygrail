@@ -5,7 +5,7 @@ import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.exception.ExcelTitleException;
 import com.avalon.holygrail.excel.model.BaseCell;
 import com.avalon.holygrail.excel.model.BaseExcelTitleCell;
-import com.avalon.holygrail.util.SortUtil;
+import com.avalon.holygrail.utils.SortUtil;
 
 import java.io.*;
 import java.util.*;

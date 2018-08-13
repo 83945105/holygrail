@@ -1,6 +1,6 @@
-package com.avalon.holygrail.file.exception;
+package com.avalon.holygrail.resource.exception;
 
-import com.avalon.holygrail.file.bean.DownloadRecord;
+import com.avalon.holygrail.resource.bean.DownloadRecord;
 
 /**
  * 下载异常

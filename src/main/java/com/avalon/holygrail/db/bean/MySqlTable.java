@@ -5,7 +5,7 @@ import com.avalon.holygrail.db.model.AbstractColumn;
 import com.avalon.holygrail.db.model.AbstractTable;
 import com.avalon.holygrail.db.norm.CharacterSet;
 import com.avalon.holygrail.db.norm.Engine;
-import com.avalon.holygrail.util.StringUtil;
+import com.avalon.holygrail.utils.StringUtil;
 
 import java.util.*;
 

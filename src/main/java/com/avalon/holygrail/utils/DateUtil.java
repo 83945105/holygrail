@@ -1,4 +1,4 @@
-package com.avalon.holygrail.util;
+package com.avalon.holygrail.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

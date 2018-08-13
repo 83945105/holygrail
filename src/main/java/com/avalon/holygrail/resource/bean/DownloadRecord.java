@@ -1,4 +1,4 @@
-package com.avalon.holygrail.file.bean;
+package com.avalon.holygrail.resource.bean;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;

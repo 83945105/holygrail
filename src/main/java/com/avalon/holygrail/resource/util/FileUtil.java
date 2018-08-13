@@ -1,11 +1,11 @@
-package com.avalon.holygrail.file.util;
+package com.avalon.holygrail.resource.util;
 
-import com.avalon.holygrail.file.bean.CopyResult;
-import com.avalon.holygrail.file.bean.DownloadRecord;
-import com.avalon.holygrail.file.bean.UploadResult;
-import com.avalon.holygrail.file.exception.DownLoadException;
-import com.avalon.holygrail.file.exception.FileException;
-import com.avalon.holygrail.util.StringUtil;
+import com.avalon.holygrail.resource.bean.CopyResult;
+import com.avalon.holygrail.resource.bean.DownloadRecord;
+import com.avalon.holygrail.resource.bean.UploadResult;
+import com.avalon.holygrail.resource.exception.DownLoadException;
+import com.avalon.holygrail.resource.exception.FileException;
+import com.avalon.holygrail.utils.StringUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
