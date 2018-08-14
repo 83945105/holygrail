@@ -70,6 +70,11 @@ public interface ResultInfo extends Json, Serializable {
      */
     void setExceptionMessage(String exceptionMessage);
 
+    /**
+     * 获取 JSONObject对象
+     *
+     * @return JSONObject
+     */
     @Override
     @Transient
     @JSONField(serialize = false)

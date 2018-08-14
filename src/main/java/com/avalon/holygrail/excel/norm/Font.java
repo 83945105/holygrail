@@ -103,6 +103,8 @@ public interface Font {
     }
 
     /**
+     * 获取字体颜色
+     *
      * @return 字体颜色
      */
     FontColor getColor();

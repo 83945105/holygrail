@@ -1,7 +1,7 @@
 package com.avalon.holygrail;
 
 import com.avalon.holygrail.bean.EUser;
-import com.avalon.holygrail.excel.bean.SXSSFExcelTitle;
+import com.avalon.holygrail.excel.bean.SXSSFTitleCell;
 import com.avalon.holygrail.excel.norm.CellOption;
 import com.avalon.holygrail.excel.norm.CellStyle;
 import com.avalon.holygrail.excel.norm.Font;
@@ -111,11 +111,11 @@ public class Test {
         row.put("name", "ABC");
         rows.add(row);
 
-        SXSSFExcelTitle[][] titles = new SXSSFExcelTitle[2][];
+        SXSSFTitleCell[][] titles = new SXSSFTitleCell[2][];
 
-        SXSSFExcelTitle[] t1 = new SXSSFExcelTitle[2];
+        SXSSFTitleCell[] t1 = new SXSSFTitleCell[2];
 
-        t1[0] = new SXSSFExcelTitle();
+        t1[0] = new SXSSFTitleCell();
         t1[0].setRowSpan(2);
         t1[0].setWidth(200);
 

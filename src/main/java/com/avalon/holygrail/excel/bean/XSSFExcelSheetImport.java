@@ -93,7 +93,13 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     @FunctionalInterface
     private interface ParseCell {
 
-        void handlerCell(org.apache.poi.xssf.usermodel.XSSFCell cell) throws ExcelException;
+        /**
+         * 处理单元格
+         *
+         * @param cell
+         * @throws ExcelException
+         */
+        void handleCell(org.apache.poi.xssf.usermodel.XSSFCell cell) throws ExcelException;
     }
 
     /**
@@ -112,7 +118,7 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
                 continue;
             }
             cell = (org.apache.poi.xssf.usermodel.XSSFCell) cells.next();
-            parseCell.handlerCell(cell);
+            parseCell.handleCell(cell);
         }
     }
 
@@ -145,8 +151,6 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
         this.parseRow(row, cell -> container.add(xssfLoader.getValue(cell)));
     }
 
-    private Map<String, String> setMethodNames = new HashMap<>();
-
     /**
      * 装载对象
      *
@@ -159,47 +163,9 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
         this.parseRow(row, cell -> {
             BaseExcelTitleCell titleCell = this.searchTitleCell(this.dataTitleCells, cell.getColumnIndex());
             if (titleCell != null) {
-                String field = titleCell.getField();
-                String methodName = this.setMethodNames.get(field);
-                if (methodName == null) {
-                    methodName = ClassUtil.getSetterMethodName(field);
-                    this.setMethodNames.put(field, methodName);
-                }
-                this.typeLoader(target, methodName, xssfLoader.getValue(cell));
+                ClassUtil.setProperty(target, titleCell.getField(), xssfLoader.getValue(cell));
             }
         });
-    }
-
-    /**
-     * 类型装载器
-     *
-     * @param target
-     * @param methodName
-     * @param value
-     * @param <T>
-     * @throws ExcelException
-     */
-    protected <T> void typeLoader(T target, String methodName, Object value) throws ExcelException {
-        try {
-            this.access.invoke(target, methodName, value);
-        } catch (ClassCastException e) {
-            //Double => Integer
-            if (value instanceof Double) {
-                this.typeLoader(target, methodName, Integer.valueOf(NumberFormat.getInstance().format(Math.rint((Double) value))));
-                return;
-            }
-            //Integer => String
-            if (value instanceof Integer) {
-                this.typeLoader(target, methodName, value.toString());
-                return;
-            }
-            if (value instanceof Boolean) {
-                this.typeLoader(target, methodName, value.toString());
-                return;
-            }
-            throw new ExcelException("无法将单元格类型值注入对象,类型不匹配", e);
-        } catch (IllegalArgumentException e) {
-        }
     }
 
     /**
@@ -383,26 +349,26 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
 
     @Override
     public <T> ExcelSheetImport parseTitlesJson(String titlesJson, Class<T> clazz) throws ExcelException {
-        XSSFExcelTitle[][] excelTitles = this.parseCellsJson(titlesJson);
+        XSSFTitleCell[][] excelTitles = this.parseCellsJson(titlesJson);
         return setTitles(excelTitles, clazz);
     }
 
     @Override
     public <T> ExcelSheetImport parseTitlesJson(InputStream inputStream, Class<T> clazz) throws IOException, ExcelException {
-        XSSFExcelTitle[][] excelTitles = (XSSFExcelTitle[][]) this.parseCellsJson(inputStream);
+        XSSFTitleCell[][] excelTitles = (XSSFTitleCell[][]) this.parseCellsJson(inputStream);
         return setTitles(excelTitles, clazz);
     }
 
     @Override
     public <T> ExcelSheetImport parseTitlesJson(File file, Class<T> clazz) throws IOException, ExcelException {
-        XSSFExcelTitle[][] excelTitles = (XSSFExcelTitle[][]) this.parseCellsJson(file);
+        XSSFTitleCell[][] excelTitles = (XSSFTitleCell[][]) this.parseCellsJson(file);
         return setTitles(excelTitles, clazz);
     }
 
     @Override
     public <T> ExcelSheetImport setTitles(BaseExcelTitleCell[][] excelTitles, Class<T> clazz) throws ExcelException {
-        if (!(excelTitles instanceof XSSFExcelTitle[][])) {
-            throw new ExportException("SXSSFExcelSheetExport setTitles excelTitles类型应该为XSSFExcelTitle[][]");
+        if (!(excelTitles instanceof XSSFTitleCell[][])) {
+            throw new ExportException("SXSSFExcelSheetExport setTitles excelTitles类型应该为XSSFTitleCell[][]");
         }
         this.excelTitleCells = handlerExcelTitles(excelTitles);
         this.dataTitleCells = this.searchDataTitleCells(this.excelTitleCells);
@@ -412,8 +378,8 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
     }
 
     public <T> ExcelSheetImport setTitles(int rowSpan, BaseExcelTitleCell[][] excelTitles, Class<T> clazz) throws ExcelException {
-        if (!(excelTitles instanceof XSSFExcelTitle[][])) {
-            throw new ExportException("SXSSFExcelSheetExport setTitles excelTitles类型应该为XSSFExcelTitle[][]");
+        if (!(excelTitles instanceof XSSFTitleCell[][])) {
+            throw new ExportException("SXSSFExcelSheetExport setTitles excelTitles类型应该为XSSFTitleCell[][]");
         }
         this.excelTitleCells = handlerExcelTitles(excelTitles);
         this.dataTitleCells = this.searchDataTitleCells(this.excelTitleCells);
@@ -424,18 +390,18 @@ public class XSSFExcelSheetImport extends XSSFExcelWorkBookImport implements Exc
 
     @Override
     public <T> ExcelSheetImport setColumnFields(List<String> fields, Class<T> clazz) throws ExcelException {
-        XSSFExcelTitle[][] excelTitles = new XSSFExcelTitle[1][fields.size()];
+        XSSFTitleCell[][] excelTitles = new XSSFTitleCell[1][fields.size()];
         for (int i = 0; i < fields.size(); i++) {
-            excelTitles[0][i] = new XSSFExcelTitle(fields.get(i));
+            excelTitles[0][i] = new XSSFTitleCell(fields.get(i));
         }
         return setTitles(excelTitles, clazz);
     }
 
     @Override
     public <T> ExcelSheetImport setColumnFields(int rowSpan, List<String> fields, Class<T> clazz) throws ExcelException {
-        XSSFExcelTitle[][] excelTitles = new XSSFExcelTitle[1][fields.size()];
+        XSSFTitleCell[][] excelTitles = new XSSFTitleCell[1][fields.size()];
         for (int i = 0; i < fields.size(); i++) {
-            excelTitles[0][i] = new XSSFExcelTitle(fields.get(i));
+            excelTitles[0][i] = new XSSFTitleCell(fields.get(i));
         }
         return setTitles(rowSpan, excelTitles, clazz);
     }

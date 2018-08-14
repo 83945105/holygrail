@@ -1,7 +1,6 @@
 package com.avalon.holygrail.excel.bean;
 
 /**
- *
  * @author 白超
  * @date 2018/4/10
  */

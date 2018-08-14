@@ -144,10 +144,9 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
      * @param startCol
      * @param endCol
      * @return
-     * @throws ExcelException
      */
     @Override
-    public BaseExcelTitleCell buildExcelTitleCell(BaseExcelTitleCell excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException {
+    public BaseExcelTitleCell buildExcelTitleCell(BaseExcelTitleCell excelTitle, int startRow, int endRow, int startCol, int endCol) {
         excelTitle.setStartRowNum(this.rowCursor + startRow + 1);
         excelTitle.setStartColNum(this.colCursor + startCol + 1);
         return excelTitle;
@@ -263,6 +262,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
         Object apply(Object value, T record, ExcelCellHandler cellHandler, String field, int rowCursor, int index) throws ExportException;
     }
 
+    @SuppressWarnings("unchecked")
     protected <T> void parseRecord(T record, int index, FormatterCell<T> formatter) throws ExcelException {
         if (record instanceof Map) {
             this.parseMap((Map<String, Object>) record, index, (FormatterCell<Map<String, Object>>) formatter);
@@ -349,7 +349,6 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 if (equal) {
                     try {
                         value = new PropertyDescriptor(f.getName(), record.getClass()).getReadMethod().invoke(record);
-                        //Object value = this.access.invoke(record, ClassUtil.getGetterMethodName(f.getName(), null));
                     } catch (Exception e) {
                         value = "";
                     }
@@ -362,9 +361,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                     if (getMethod != null) {
                         try {
                             value = getMethod.invoke(record);
-                        } catch (IllegalAccessException e) {
-                            value = "";
-                        } catch (InvocationTargetException e) {
+                        } catch (IllegalAccessException | InvocationTargetException e) {
                             value = "";
                         }
                     } else {
@@ -399,7 +396,6 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                 if (equal) {
                     try {
                         value = new PropertyDescriptor(f.getName(), record.getClass()).getReadMethod().invoke(record);
-                        //value = this.access.invoke(record, ClassUtil.getGetterMethodName(f.getName(), null));
                     } catch (Exception e) {
                         value = "";
                     }
@@ -412,9 +408,7 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
                     if (getMethod != null) {
                         try {
                             value = getMethod.invoke(record);
-                        } catch (IllegalAccessException e) {
-                            value = "";
-                        } catch (InvocationTargetException e) {
+                        } catch (IllegalAccessException | InvocationTargetException e) {
                             value = "";
                         }
                     } else {
@@ -430,9 +424,6 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
         }
     }
 
-//    private Class cls = Object.class;
-//    private MethodAccess access = null;
-
     /**
      * 解析数据
      *
@@ -443,10 +434,6 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
         this.totalDataSize += records.size();
         //找到了表头对应的数据
         for (T record : records) {
-/*            if(record.getClass() != this.cls || this.access == null) {
-                this.cls = record.getClass();
-                this.access = MethodAccess.get(this.cls);
-            }*/
             this.parseRecord(record);
         }
     }
@@ -467,10 +454,6 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
         this.totalDataSize += records.size();
         int index = 0;
         for (T record : records) {
-/*            if(record.getClass() != this.cls || this.access == null) {
-                this.cls = record.getClass();
-                this.access = MethodAccess.get(this.cls);
-            }*/
             this.parseRecord(record, index, formatter);
             index++;
         }
@@ -495,26 +478,26 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
 
     @Override
     public ExcelSheetExport parseTitlesJson(String titlesJson, boolean exportTitles) throws ExcelException {
-        SXSSFExcelTitle[][] excelTitles = this.parseCellsJson(titlesJson);
+        SXSSFTitleCell[][] excelTitles = this.parseCellsJson(titlesJson);
         return setTitles(excelTitles, exportTitles);
     }
 
     @Override
     public ExcelSheetExport parseTitlesJson(InputStream inputStream, boolean exportTitles) throws IOException, ExcelException {
-        SXSSFExcelTitle[][] excelTitles = (SXSSFExcelTitle[][]) this.parseCellsJson(inputStream);
+        SXSSFTitleCell[][] excelTitles = (SXSSFTitleCell[][]) this.parseCellsJson(inputStream);
         return setTitles(excelTitles, exportTitles);
     }
 
     @Override
     public ExcelSheetExport parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelException {
-        SXSSFExcelTitle[][] excelTitles = (SXSSFExcelTitle[][]) this.parseCellsJson(file);
+        SXSSFTitleCell[][] excelTitles = (SXSSFTitleCell[][]) this.parseCellsJson(file);
         return setTitles(excelTitles, exportTitles);
     }
 
     @Override
     public ExcelSheetExport setTitles(BaseExcelTitleCell[][] excelTitles, boolean exportTitles) throws ExcelException {
-        if (!(excelTitles instanceof SXSSFExcelTitle[][])) {
-            throw new ExportException("SXSSFExcelSheetExport setTitles excelTitles类型应该为SXSSFExcelTitle[][]");
+        if (!(excelTitles instanceof SXSSFTitleCell[][])) {
+            throw new ExportException("SXSSFExcelSheetExport setTitles excelTitles类型应该为SXSSFTitleCell[][]");
         }
         this.titleCells = handlerExcelTitles(excelTitles);
         this.dataTitleCells = this.searchDataTitleCells(this.titleCells);
@@ -530,9 +513,9 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
 
     @Override
     public ExcelSheetExport setColumnFields(List<String> fields) throws ExcelException {
-        SXSSFExcelTitle[][] excelTitles = new SXSSFExcelTitle[1][fields.size()];
+        SXSSFTitleCell[][] excelTitles = new SXSSFTitleCell[1][fields.size()];
         for (int i = 0; i < fields.size(); i++) {
-            excelTitles[0][i] = new SXSSFExcelTitle(fields.get(i));
+            excelTitles[0][i] = new SXSSFTitleCell(fields.get(i));
         }
         return setTitles(excelTitles, false);
     }

@@ -28,7 +28,7 @@ public interface Sheet {
      * 设置行游标
      *
      * @param handler 接收行号,返回你想设置的行号
-     * @return
+     * @return 工作表
      */
     Sheet setRowCursor(Function<Integer, Integer> handler);
 
@@ -36,7 +36,7 @@ public interface Sheet {
      * 设置列游标
      *
      * @param handler 接收列号,返回你想设置的列号
-     * @return
+     * @return 工作表
      */
     Sheet setColCursor(Function<Integer, Integer> handler);
 
@@ -45,6 +45,8 @@ public interface Sheet {
      *
      * @param inputStream 表头数据流
      * @return 准备导出
+     * @throws IOException
+     * @throws ExcelException
      */
     Sheet parseTitlesJson(InputStream inputStream) throws IOException, ExcelException;
 
@@ -53,6 +55,8 @@ public interface Sheet {
      *
      * @param file 表头数据文件
      * @return 准备导出
+     * @throws IOException
+     * @throws ExcelException
      */
     Sheet parseTitlesJson(File file) throws IOException, ExcelException;
 
@@ -61,6 +65,7 @@ public interface Sheet {
      *
      * @param titlesJson 表头数据json
      * @return 准备导出
+     * @throws ExcelException
      */
     Sheet parseTitlesJson(String titlesJson) throws ExcelException;
 
@@ -69,6 +74,7 @@ public interface Sheet {
      *
      * @param titles 表头对象
      * @return 准备导出
+     * @throws ExcelException
      */
     Sheet setTitles(BaseExcelTitleCell[][] titles) throws ExcelException;
 

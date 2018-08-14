@@ -30,10 +30,10 @@ public class GetterSetterNameCacheManager {
                 .newCacheManagerBuilder()
                 .withCache(GETTER_METHOD_NAME_CACHE_ALIAS,
                         CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class,
-                                ResourcePoolsBuilder.heap(1)).build())
+                                ResourcePoolsBuilder.heap(100)).build())
                 .withCache(SETTER_METHOD_NAME_CACHE_ALIAS,
                         CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class,
-                                ResourcePoolsBuilder.heap(1).build()))
+                                ResourcePoolsBuilder.heap(100).build()))
                 .build(true);
         GETTER_METHOD_NAME_ACCESS_CACHE = cacheManager.getCache(GETTER_METHOD_NAME_CACHE_ALIAS, String.class, String.class);
         SETTER_METHOD_NAME_ACCESS_CACHE = cacheManager.getCache(SETTER_METHOD_NAME_CACHE_ALIAS, String.class, String.class);

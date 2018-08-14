@@ -210,6 +210,7 @@ public interface ExceptionUtil {
      * 抛出ResultException异常
      *
      * @param resultInfo 结果集
+     * @throws ResultException
      */
     static void throwResultException(ResultInfo resultInfo) throws ResultException {
         throw ResultUtil.createResultException(resultInfo);

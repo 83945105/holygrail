@@ -36,9 +36,8 @@ public interface ExcelParser {
      * @param startCol   占用开始列
      * @param endCol     占用结束列
      * @return 单元格合并对象
-     * @throws ExcelException
      */
-    BaseExcelTitleCell buildExcelTitleCell(BaseExcelTitleCell excelTitle, int startRow, int endRow, int startCol, int endCol) throws ExcelException;
+    BaseExcelTitleCell buildExcelTitleCell(BaseExcelTitleCell excelTitle, int startRow, int endRow, int startCol, int endCol);
 
     /**
      * 搜寻影响数据的表头合并单元格数据
@@ -48,19 +47,17 @@ public interface ExcelParser {
      * @return 数据表头
      */
     default LinkedList<BaseExcelTitleCell> searchDataTitleCells(List<BaseExcelTitleCell> titles) {
-        BaseExcelTitleCell source;
         BaseExcelTitleCell target;
         LinkedList<BaseExcelTitleCell> targetMergeCell = new LinkedList<>();
         //先把所有源放入目标
         targetMergeCell.addAll(titles);
         //遍历源,用源的每一个元素去和目标进行比对位置
-        for (int i = 0; i < titles.size(); i++) {
-            source = titles.get(i);
+        for (BaseExcelTitleCell title : titles) {
             for (int j = 0; j < targetMergeCell.size(); ) {
                 target = targetMergeCell.get(j);
                 //比对位置
                 //如果当前源在目标下面,且二者列有交集,则当前目标不符合条件,要删除
-                boolean doRemove = source.getStartRowNum() > target.getEndRowNum() && !(source.getStartColNum() > target.getEndColNum() || source.getEndColNum() < target.getStartColNum());
+                boolean doRemove = title.getStartRowNum() > target.getEndRowNum() && !(title.getStartColNum() > target.getEndColNum() || title.getEndColNum() < target.getStartColNum());
                 if (doRemove) {
                     //执行删除,删除后后一个元素前移,不用增加j
                     targetMergeCell.remove(j);
@@ -83,11 +80,10 @@ public interface ExcelParser {
      * @param defaultSeatRow 记录位置信息初始化默认行数
      * @param defaultSeatCol 记录位置信息初始化默认列数
      * @param handler        处理单元格合并对象回调函数
-     * @throws ExcelException
+     * @throws ExcelException 参考{@link #validateExpandSeat(int[][], int[], BaseExcelTitleCell)}
      */
     default void handlerExcelTitles(BaseExcelTitleCell[][] titles, int defaultSeatRow, int defaultSeatCol, Consumer<BaseExcelTitleCell> handler) throws ExcelException {
         BaseExcelTitleCell[] excelTitles;
-        BaseExcelTitleCell excelTitle;
         //结束行
         int endRow;
         //结束列
@@ -97,19 +93,18 @@ public interface ExcelParser {
         int[] cursor;//游标
         for (int i = 0; i < titles.length; i++) {
             excelTitles = titles[i];
-            for (int j = 0; j < excelTitles.length; j++) {
+            for (BaseExcelTitleCell baseExcelTitleCell : excelTitles) {
                 cursor = searchStartCursor(seat, i);
-                excelTitle = excelTitles[j];
-                seat = validateExpandSeat(seat, cursor, excelTitle);
+                seat = validateExpandSeat(seat, cursor, baseExcelTitleCell);
                 //将占用的位置设置为已占用
-                endRow = cursor[0] + excelTitle.getRowSpan() - 1;
-                endCol = cursor[1] + excelTitle.getColSpan() - 1;
+                endRow = cursor[0] + baseExcelTitleCell.getRowSpan() - 1;
+                endCol = cursor[1] + baseExcelTitleCell.getColSpan() - 1;
                 for (int k = cursor[0]; k <= endRow; k++) {
                     for (int l = cursor[1]; l <= endCol; l++) {
                         seat[k][l] = SeatStatus.YES.value;
                     }
                 }
-                handler.accept(this.buildExcelTitleCell(excelTitle, cursor[0] + 1, endRow, cursor[1] + 1, endCol));
+                handler.accept(this.buildExcelTitleCell(baseExcelTitleCell, cursor[0] + 1, endRow, cursor[1] + 1, endCol));
             }
         }
     }
@@ -119,7 +114,7 @@ public interface ExcelParser {
      *
      * @param inputStream json数据输入流
      * @return 表头信息二维数组
-     * @throws IOException
+     * @throws IOException 参考{@code br.readLine()}
      */
     default BaseCell[][] parseCellsJson(InputStream inputStream) throws IOException {
         InputStreamReader reader = null;
@@ -163,7 +158,7 @@ public interface ExcelParser {
      *
      * @param file json数据文件
      * @return 表头信息二维数组
-     * @throws IOException
+     * @throws IOException 参考{@link #parseCellsJson(InputStream)}
      */
     default BaseCell[][] parseCellsJson(File file) throws IOException {
         return this.parseCellsJson(new FileInputStream(file));
@@ -175,7 +170,7 @@ public interface ExcelParser {
      *
      * @param titles 表头对象二维数组
      * @return 单元格合并集合
-     * @throws ExcelException
+     * @throws ExcelException 参考{@link #handlerExcelTitles(BaseExcelTitleCell[][], int, int)}
      */
     default ArrayList<BaseExcelTitleCell> handlerExcelTitles(BaseExcelTitleCell[][] titles) throws ExcelException {
         return handlerExcelTitles(titles, titles.length * 2, 10);
@@ -188,11 +183,11 @@ public interface ExcelParser {
      * @param defaultSeatRow 记录位置信息初始化默认行数
      * @param defaultSeatCol 记录位置信息初始化默认列数
      * @return 单元格合并集合
-     * @throws ExcelException
+     * @throws ExcelException 参考{@link #handlerExcelTitles(BaseExcelTitleCell[][], int, int, Consumer)}
      */
     default ArrayList<BaseExcelTitleCell> handlerExcelTitles(BaseExcelTitleCell[][] titles, int defaultSeatRow, int defaultSeatCol) throws ExcelException {
         ArrayList<BaseExcelTitleCell> rs = new ArrayList<>();
-        handlerExcelTitles(titles, defaultSeatRow, defaultSeatCol, mergeCell -> rs.add(mergeCell));
+        handlerExcelTitles(titles, defaultSeatRow, defaultSeatCol, rs::add);
         return rs;
     }
 
@@ -222,7 +217,7 @@ public interface ExcelParser {
      * @param startCursor 起点游标
      * @param excelTitle  表头
      * @return 校验/扩充后的位置
-     * @throws ExcelTitleException
+     * @throws ExcelTitleException 当单元格存在数据时
      */
     default int[][] validateExpandSeat(int[][] seat, int[] startCursor, BaseExcelTitleCell excelTitle) throws ExcelTitleException {
         int startRow = startCursor[0];
@@ -285,6 +280,7 @@ public interface ExcelParser {
     /**
      * 位置状态
      */
+    @SuppressWarnings("unused")
     enum SeatStatus {
 
         /**

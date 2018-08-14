@@ -24,6 +24,12 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
      */
     ExcelWorkBookImport parseFile(InputStream inputStream) throws IOException;
 
+    /**
+     * 获取工作表
+     *
+     * @param index 下标
+     * @return ExcelSheetImport
+     */
     @Override
     ExcelSheetImport getSheet(int index);
 
@@ -31,7 +37,7 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
      * 解析文件
      *
      * @param file 文件
-     * @return
+     * @return ExcelSheetImport
      * @throws IOException
      */
     default ExcelWorkBookImport parseFile(File file) throws IOException {
@@ -42,7 +48,7 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
      * 解析文件
      *
      * @param path 文件路径
-     * @return
+     * @return ExcelSheetImport
      * @throws IOException
      */
     default ExcelWorkBookImport parseFile(String path) throws IOException {
@@ -56,6 +62,10 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
          *
          * @param sheet 读取的Sheet
          * @param index 当前Sheet下标
+         * @throws IOException
+         * @throws ExcelException
+         * @throws InstantiationException
+         * @throws IllegalAccessException
          */
         void accept(ExcelSheetImport sheet, int index) throws IOException, ExcelException, InstantiationException, IllegalAccessException;
     }
@@ -69,6 +79,10 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
          * @param sheet 读取的Sheet
          * @param index 当前Sheet下标
          * @return
+         * @throws ExcelException
+         * @throws IllegalAccessException
+         * @throws InstantiationException
+         * @throws IOException
          */
         boolean apply(ExcelSheetImport sheet, int index) throws ExcelException, IllegalAccessException, InstantiationException, IOException;
     }
@@ -97,6 +111,10 @@ public interface ExcelWorkBookImport extends ExcelWorkBook {
      *
      * @param handlerSheet 操作读取的Sheet,返回false不继续读取
      * @return
+     * @throws IOException
+     * @throws ExcelException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
     default ExcelWorkBookImport readSheets(HandlerSheetB handlerSheet) throws IOException, ExcelException, IllegalAccessException, InstantiationException {
         int totalSheetSize = this.getSheetSize();
