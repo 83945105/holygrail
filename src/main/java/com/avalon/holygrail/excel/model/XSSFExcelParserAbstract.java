@@ -3,7 +3,7 @@ package com.avalon.holygrail.excel.model;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.avalon.holygrail.excel.bean.XSSFCell;
-import com.avalon.holygrail.excel.bean.XSSFExcelTitle;
+import com.avalon.holygrail.excel.bean.XSSFTitleCell;
 import com.avalon.holygrail.excel.exception.ExcelException;
 import com.avalon.holygrail.excel.norm.ExcelParser;
 import com.avalon.holygrail.excel.norm.MergeCell;
@@ -24,12 +24,12 @@ public abstract class XSSFExcelParserAbstract implements ExcelParser {
      * @return 表头信息二维数组
      */
     @Override
-    public XSSFExcelTitle[][] parseCellsJson(String titlesJson) {
+    public XSSFTitleCell[][] parseCellsJson(String titlesJson) {
         JSONArray jsonArray = JSON.parseArray(titlesJson);
-        XSSFExcelTitle[][] rs = new XSSFExcelTitle[jsonArray.size()][];
+        XSSFTitleCell[][] rs = new XSSFTitleCell[jsonArray.size()][];
         for (int i = 0; i < jsonArray.size(); i++) {
-            List<XSSFExcelTitle> list = JSON.parseArray(jsonArray.get(i).toString(), XSSFExcelTitle.class);
-            rs[i] = list.toArray(new XSSFExcelTitle[list.size()]);
+            List<XSSFTitleCell> list = JSON.parseArray(jsonArray.get(i).toString(), XSSFTitleCell.class);
+            rs[i] = list.toArray(new XSSFTitleCell[list.size()]);
         }
         return rs;
     }

@@ -452,26 +452,26 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
 
     @Override
     public ExcelSheetExport parseTitlesJson(String titlesJson, boolean exportTitles) throws ExcelException {
-        SXSSFExcelTitle[][] excelTitles = this.parseCellsJson(titlesJson);
+        SXSSFTitleCell[][] excelTitles = this.parseCellsJson(titlesJson);
         return setTitles(excelTitles, exportTitles);
     }
 
     @Override
     public ExcelSheetExport parseTitlesJson(InputStream inputStream, boolean exportTitles) throws IOException, ExcelException {
-        SXSSFExcelTitle[][] excelTitles = (SXSSFExcelTitle[][]) this.parseCellsJson(inputStream);
+        SXSSFTitleCell[][] excelTitles = (SXSSFTitleCell[][]) this.parseCellsJson(inputStream);
         return setTitles(excelTitles, exportTitles);
     }
 
     @Override
     public ExcelSheetExport parseTitlesJson(File file, boolean exportTitles) throws IOException, ExcelException {
-        SXSSFExcelTitle[][] excelTitles = (SXSSFExcelTitle[][]) this.parseCellsJson(file);
+        SXSSFTitleCell[][] excelTitles = (SXSSFTitleCell[][]) this.parseCellsJson(file);
         return setTitles(excelTitles, exportTitles);
     }
 
     @Override
     public ExcelSheetExport setTitles(BaseExcelTitleCell[][] excelTitles, boolean exportTitles) throws ExcelException {
-        if (!(excelTitles instanceof SXSSFExcelTitle[][])) {
-            throw new ExportException("SXSSFExcelSheetExport setTitles excelTitles类型应该为SXSSFExcelTitle[][]");
+        if (!(excelTitles instanceof SXSSFTitleCell[][])) {
+            throw new ExportException("SXSSFExcelSheetExport setTitles excelTitles类型应该为SXSSFTitleCell[][]");
         }
         this.titleCells = handlerExcelTitles(excelTitles);
         this.dataTitleCells = this.searchDataTitleCells(this.titleCells);
@@ -487,9 +487,9 @@ public class SXSSFExcelSheetExport extends SXSSFExcelWorkBookExport implements E
 
     @Override
     public ExcelSheetExport setColumnFields(List<String> fields) throws ExcelException {
-        SXSSFExcelTitle[][] excelTitles = new SXSSFExcelTitle[1][fields.size()];
+        SXSSFTitleCell[][] excelTitles = new SXSSFTitleCell[1][fields.size()];
         for (int i = 0; i < fields.size(); i++) {
-            excelTitles[0][i] = new SXSSFExcelTitle(fields.get(i));
+            excelTitles[0][i] = new SXSSFTitleCell(fields.get(i));
         }
         return setTitles(excelTitles, false);
     }

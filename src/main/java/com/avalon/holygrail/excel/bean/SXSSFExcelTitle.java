@@ -4,7 +4,7 @@ package com.avalon.holygrail.excel.bean;
  * SXSSFWorkbook 表头
  * Created by 白超 on 2018/1/16.
  */
-public class SXSSFExcelTitle extends XSSFExcelTitle {
+public class SXSSFExcelTitle extends SXSSFTitleCell {
 
     public SXSSFExcelTitle() {
     }
@@ -23,9 +23,5 @@ public class SXSSFExcelTitle extends XSSFExcelTitle {
 
     public SXSSFExcelTitle(int startRowNum, int startColNum, int rowSpan, int colSpan) {
         super(startRowNum, startColNum, rowSpan, colSpan);
-    }
-
-    public SXSSFExcelTitle(String title, String field, int rowSpan, int colSpan) {
-        super(title, field, rowSpan, colSpan);
     }
 }
