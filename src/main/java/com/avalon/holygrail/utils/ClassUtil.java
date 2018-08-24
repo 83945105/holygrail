@@ -136,20 +136,20 @@ public class ClassUtil {
     /**
      * 设置属性
      *
-     * @param object       对象
+     * @param javaBean     对象
      * @param propertyName 属性名
      * @param value        属性值
      */
     @SuppressWarnings("unchecked")
-    public static void setProperty(Object object, String propertyName, Object value) {
-        Class clazz = object.getClass();
+    public static void setProperty(Object javaBean, String propertyName, Object value) {
+        Class clazz = javaBean.getClass();
         MethodAccess methodAccess = AsmAccessCacheManager.getMethodAccess(clazz);
         PropertyInfo propertyInfo = ClassPropertyInfoCacheManager.getPropertyInfo(clazz, propertyName);
         if (value.getClass() == propertyInfo.getType()) {
-            methodAccess.invoke(object, propertyInfo.getSetterMethodName(), value);
+            methodAccess.invoke(javaBean, propertyInfo.getSetterMethodName(), value);
             return;
         }
-        methodAccess.invoke(object, propertyInfo.getSetterMethodName(), TypeUtils.cast(value, propertyInfo.getType(), ParserConfig.getGlobalInstance()));
+        methodAccess.invoke(javaBean, propertyInfo.getSetterMethodName(), TypeUtils.cast(value, propertyInfo.getType(), ParserConfig.getGlobalInstance()));
     }
 
 }
