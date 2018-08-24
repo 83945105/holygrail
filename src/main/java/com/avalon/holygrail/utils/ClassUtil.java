@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author 白超
@@ -134,6 +135,23 @@ public class ClassUtil {
     }
 
     /**
+     * 获取属性
+     *
+     * @param javaBean     对象
+     * @param propertyName 属性名
+     * @return
+     */
+    public static Object getProperty(Object javaBean, String propertyName) {
+        if (javaBean instanceof Map) {
+            return ((Map) javaBean).get(propertyName);
+        }
+        Class clazz = javaBean.getClass();
+        MethodAccess methodAccess = AsmAccessCacheManager.getMethodAccess(clazz);
+        PropertyInfo propertyInfo = ClassPropertyInfoCacheManager.getPropertyInfo(clazz, propertyName);
+        return methodAccess.invoke(javaBean, propertyInfo.getGetterMethodName());
+    }
+
+    /**
      * 设置属性
      *
      * @param javaBean     对象
@@ -142,6 +160,10 @@ public class ClassUtil {
      */
     @SuppressWarnings("unchecked")
     public static void setProperty(Object javaBean, String propertyName, Object value) {
+        if (javaBean instanceof Map) {
+            ((Map) javaBean).put(propertyName, value);
+            return;
+        }
         Class clazz = javaBean.getClass();
         MethodAccess methodAccess = AsmAccessCacheManager.getMethodAccess(clazz);
         PropertyInfo propertyInfo = ClassPropertyInfoCacheManager.getPropertyInfo(clazz, propertyName);
