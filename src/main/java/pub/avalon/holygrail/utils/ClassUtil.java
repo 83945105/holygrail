@@ -164,6 +164,9 @@ public class ClassUtil {
             ((Map) javaBean).put(propertyName, value);
             return;
         }
+        if (value == null) {
+            return;
+        }
         Class clazz = javaBean.getClass();
         MethodAccess methodAccess = AsmAccessCacheManager.getMethodAccess(clazz);
         PropertyInfo propertyInfo = ClassPropertyInfoCacheManager.getPropertyInfo(clazz, propertyName);
