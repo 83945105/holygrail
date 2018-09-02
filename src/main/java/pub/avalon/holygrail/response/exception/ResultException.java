@@ -7,7 +7,7 @@ import pub.avalon.holygrail.response.beans.ResultInfo;
  *
  * @author 白超
  */
-public class ResultException extends Exception {
+public class ResultException extends RuntimeException {
 
     /**
      * 异常信息

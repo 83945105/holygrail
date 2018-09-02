@@ -48,4 +48,8 @@ public interface Time {
         return System.currentTimeMillis();
     }
 
+    static String localDateTimeNowSimple() {
+        return Time.localDateNow() + " " + Time.localTimeNow().substring(0, 8);
+    }
+
 }
