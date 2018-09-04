@@ -79,7 +79,8 @@ public abstract class AbstractQrCodePay<O> implements QrCodePay<O> {
                             ExceptionUtil.throwErrorException("保存客户付款成功状态失败,订单ID：" + orderId);
                         }
                     } else {
-
+                        //出现这种情况,说明未获取到第三方支付结果
+                        //暂不处理
                     }
                 });
                 return this.doResultsForLocalOrderWaitBuyerPayStatus(order, results);
