@@ -29,38 +29,16 @@ public interface QrCodePay<O> {
 
     boolean saveOrderStatusToSuccess(String orderId, String payName);
 
+    String getQrCode(O order, String payName);
+
     void register(PayManager<O> register);
 
     default void doResultsForQrCode(String payName, String qrCode, O order, final Map<String, Object> results) {
         results.put(payName, qrCode);
         results.put("orderStatus", OrderStatus.PRE_CREATED.name());
-        results.put("currentTime", Time.localDateTimeNow());
-        results.put("currentTimeStamp", Time.timeStamp());
     }
 
-    default Map<String, Object> doResultsForLocalOrderWaitBuyerPayStatus(O order, Map<String, Object> results) {
-        results.put("orderStatus", OrderStatus.WAIT_BUYER_PAY.name());
-        results.put("currentTime", Time.localDateTimeNow());
-        results.put("currentTimeStamp", Time.timeStamp());
-        return results;
-    }
-
-    default Map<String, Object> doResultsForLocalOrderSuccessStatus(O order, Map<String, Object> results) {
-        results.put("orderStatus", OrderStatus.SUCCESS.name());
-        results.put("currentTime", Time.localDateTimeNow());
-        results.put("currentTimeStamp", Time.timeStamp());
-        return results;
-    }
-
-    default Map<String, Object> doResultsForLocalOrderClosedStatus(O order, Map<String, Object> results) {
-        results.put("orderStatus", OrderStatus.CLOSED.name());
-        results.put("currentTime", Time.localDateTimeNow());
-        results.put("currentTimeStamp", Time.timeStamp());
-        return results;
-    }
-
-    default Map<String, Object> doResultsForLocalOrderFinishedStatus(O order, Map<String, Object> results) {
-        results.put("orderStatus", OrderStatus.FINISHED.name());
+    default Map<String, Object> initResultsForLocalOrder(O order, Map<String, Object> results) {
         results.put("currentTime", Time.localDateTimeNow());
         results.put("currentTimeStamp", Time.timeStamp());
         return results;

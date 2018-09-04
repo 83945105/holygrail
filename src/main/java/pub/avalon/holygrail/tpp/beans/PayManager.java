@@ -5,7 +5,9 @@ import pub.avalon.holygrail.tpp.api.QrCodePay;
 import pub.avalon.holygrail.tpp.exception.ThirdPartyPayException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
@@ -44,14 +46,16 @@ public class PayManager<O> {
         return null;
     }
 
-    protected void getTradeStatus(String orderId, BiConsumer<String, TradeStatus> consumer) {
+    protected Map<String, TradeStatus> getTradeStatus(String orderId) {
+        Map<String, TradeStatus> results = new HashMap<>(this.payList.size());
         for (Pay<Object, O> pay : this.payList) {
             Object payInfo = pay.executeTradeQuery(orderId);
             if (payInfo == null) {
                 continue;
             }
             TradeStatus tradeStatus = pay.getTradeStatus(payInfo);
-            consumer.accept(pay.getName(), tradeStatus);
+            results.put(pay.getName(), tradeStatus);
         }
+        return results;
     }
 }
