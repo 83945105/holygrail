@@ -19,4 +19,7 @@ public class ThirdPartyPayException extends RuntimeException {
         super(message, cause);
     }
 
+    public ThirdPartyPayException(Throwable cause) {
+        super(cause);
+    }
 }

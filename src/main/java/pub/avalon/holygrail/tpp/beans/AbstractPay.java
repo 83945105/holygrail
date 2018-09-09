@@ -9,7 +9,7 @@ import pub.avalon.holygrail.tpp.exception.ThirdPartyPayException;
  * @author 白超
  * @date 2018/9/2
  */
-public abstract class AbstractPay<R, O> implements Pay<R, O> {
+public abstract class AbstractPay<O> implements Pay<O> {
 
     protected String name;
 

@@ -1,14 +1,9 @@
 package pub.avalon.holygrail.tpp.beans;
 
 import pub.avalon.holygrail.tpp.api.Pay;
-import pub.avalon.holygrail.tpp.api.QrCodePay;
 import pub.avalon.holygrail.tpp.exception.ThirdPartyPayException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.*;
 
 /**
  * 第三方管理
@@ -18,44 +13,55 @@ import java.util.function.BiConsumer;
  */
 public class PayManager<O> {
 
-    private List<Pay<Object, O>> payList = new ArrayList<>();
-    private QrCodePay<O> qrCodePay;
+    private Map<String, Pay<O>> payMap = new LinkedHashMap<>();
 
-    public PayManager(QrCodePay<O> qrCodePay) {
-        this.qrCodePay = qrCodePay;
-    }
-
-    public PayManager addPay(Pay pay) {
+    public void addPay(Pay<O> pay) {
         if (pay != null) {
-            for (Pay p : payList) {
-                if (p.getName().equals(pay.getName())) {
-                    throw new ThirdPartyPayException("第三方支付名称重复:" + pay.getName());
-                }
+            Pay p = this.payMap.get(pay.getName());
+            if (p != null) {
+                throw new ThirdPartyPayException("第三方支付名称重复:" + pay.getName());
             }
-            this.payList.add(pay);
+            this.payMap.put(pay.getName(), pay);
         }
-        return this;
     }
 
-    protected String getQrCode(String payName, O order) {
-        for (Pay<Object, O> pay : payList) {
-            if (pay.getName().equals(payName)) {
-                return pay.getTradeQrCode(order);
-            }
+    /**
+     * 申请交易二维码
+     *
+     * @param order   订单数据
+     * @param payName 支付名称
+     * @return
+     */
+    protected String applyTradeQrCode(O order, String payName) {
+        Pay<O> pay = this.payMap.get(payName);
+        if (pay == null) {
+            return null;
         }
-        return null;
+        return pay.applyTradeQrCode(order);
     }
 
-    protected Map<String, TradeStatus> getTradeStatus(String orderId) {
-        Map<String, TradeStatus> results = new HashMap<>(this.payList.size());
-        for (Pay<Object, O> pay : this.payList) {
-            Object payInfo = pay.executeTradeQuery(orderId);
-            if (payInfo == null) {
-                continue;
-            }
-            TradeStatus tradeStatus = pay.getTradeStatus(payInfo);
-            results.put(pay.getName(), tradeStatus);
+    /**
+     * 查询交易状态
+     *
+     * @param orderId 订单ID
+     * @param payName 交易名称
+     * @return
+     */
+    protected TradeStatus queryTradeStatus(String orderId, String payName) {
+        Pay<O> pay = this.payMap.get(payName);
+        if (pay == null) {
+            return null;
         }
-        return results;
+        return pay.queryTradeStatus(orderId);
     }
+
+    /**
+     * 获取所有交易名称
+     *
+     * @return
+     */
+    protected Set<String> getPayNames() {
+        return this.payMap.keySet();
+    }
+
 }

@@ -8,14 +8,29 @@ import pub.avalon.holygrail.tpp.beans.TradeStatus;
  * @author 白超
  * @date 2018/9/2
  */
-public interface Pay<R, O> {
+public interface Pay<O> {
 
+    /**
+     * 获取支付名称
+     *
+     * @return
+     */
     String getName();
 
-    R executeTradeQuery(String orderId);
+    /**
+     * 查询交易状态
+     *
+     * @param orderId 订单ID
+     * @return
+     */
+    TradeStatus queryTradeStatus(String orderId);
 
-    TradeStatus getTradeStatus(R response);
-
-    String getTradeQrCode(O order);
+    /**
+     * 申请二维码
+     *
+     * @param order 订单信息
+     * @return
+     */
+    String applyTradeQrCode(O order);
 
 }
