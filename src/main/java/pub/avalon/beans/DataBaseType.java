@@ -14,5 +14,9 @@ public enum DataBaseType {
     /**
      * MySql数据库
      */
-    MYSQL
+    MYSQL,
+    /**
+     * SqlServer数据库
+     */
+    SQLSERVER
 }
