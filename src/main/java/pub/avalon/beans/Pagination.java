@@ -38,6 +38,14 @@ public class Pagination implements LimitHandler {
      * MySQL起始记录号
      */
     private int mySqlStartNum = -1;
+    /**
+     * SqlServer起始记录号
+     */
+    private int sqlServerStartNum;
+    /**
+     * SqlServer结束记录号
+     */
+    private int sqlServerEndNum;
 
     public Pagination(DataBaseType dataBaseType) {
         this.dataBaseType = dataBaseType;
@@ -139,6 +147,22 @@ public class Pagination implements LimitHandler {
         this.mySqlStartNum = mySQLStartNum > 0 ? mySQLStartNum : 0;
     }
 
+    public int getSqlServerStartNum() {
+        return this.sqlServerStartNum != 0 ? this.sqlServerStartNum : (this.currentPage - 1) * this.pageSize + 1;
+    }
+
+    public void setSqlServerStartNum(int sqlServerStartNum) {
+        this.sqlServerStartNum = sqlServerStartNum > 0 ? sqlServerStartNum : 1;
+    }
+
+    public int getSqlServerEndNum() {
+        return this.sqlServerEndNum != 0 ? this.sqlServerEndNum : this.currentPage * this.pageSize;
+    }
+
+    public void setSqlServerEndNum(int sqlServerEndNum) {
+        this.sqlServerEndNum = sqlServerEndNum > 0 ? sqlServerEndNum : 1;
+    }
+
     @Override
     public Integer getLimitStart() {
         switch (this.dataBaseType) {
@@ -146,6 +170,8 @@ public class Pagination implements LimitHandler {
                 return this.getOracleStartNum();
             case MYSQL:
                 return this.getMySqlStartNum();
+            case SQLSERVER:
+                return this.getSqlServerStartNum();
             default:
                 return null;
         }
@@ -160,6 +186,9 @@ public class Pagination implements LimitHandler {
             case MYSQL:
                 this.setMySQLStartNum(limitStart);
                 return;
+            case SQLSERVER:
+                this.setSqlServerStartNum(limitStart);
+                return;
             default:
         }
     }
@@ -171,6 +200,8 @@ public class Pagination implements LimitHandler {
                 return this.getOracleEndNum();
             case MYSQL:
                 return this.getPageSize();
+            case SQLSERVER:
+                return this.getSqlServerEndNum();
             default:
                 return 0;
         }
@@ -184,6 +215,9 @@ public class Pagination implements LimitHandler {
                 return;
             case MYSQL:
                 this.setPageSize(limitEnd);
+                return;
+            case SQLSERVER:
+                this.setSqlServerEndNum(limitEnd);
                 return;
             default:
         }
