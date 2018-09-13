@@ -173,6 +173,9 @@ public class ClassUtil {
         Class clazz = javaBean.getClass();
         MethodAccess methodAccess = AsmAccessCacheManager.getMethodAccess(clazz);
         PropertyInfo propertyInfo = ClassPropertyInfoCacheManager.getPropertyInfo(clazz, propertyName);
+        if (propertyInfo == null) {
+            return;
+        }
         if (value.getClass() == propertyInfo.getType()) {
             methodAccess.invoke(javaBean, propertyInfo.getSetterMethodName(), value);
             return;
