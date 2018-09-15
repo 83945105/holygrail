@@ -2,6 +2,7 @@ package pub.avalon.holygrail.resource.util;
 
 import pub.avalon.holygrail.resource.bean.CopyResult;
 import pub.avalon.holygrail.resource.bean.DownloadRecord;
+import pub.avalon.holygrail.resource.bean.UploadFile;
 import pub.avalon.holygrail.resource.bean.UploadResult;
 import pub.avalon.holygrail.resource.exception.DownLoadException;
 import pub.avalon.holygrail.resource.exception.FileException;
@@ -33,12 +34,12 @@ public class FileUtil {
     /**
      * 项目路径
      */
-    public static final String PROJECT_PATH = getProjectPath();
+//    public static final String PROJECT_PATH = getProjectPath();
 
     /**
      * 项目所在文件夹路径
      */
-    public static final String PROJECT_FOLDER_PATH = getProjectFolderPath();
+//    public static final String PROJECT_FOLDER_PATH = getProjectFolderPath();
 
     private static final Pattern PROJECT_PATH_PATTERN = Pattern.compile("^[/\\\\](.*?)[^/\\\\]+[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+[/\\\\]$");
 
@@ -83,9 +84,9 @@ public class FileUtil {
      * @param path 资源相对项目路径
      * @return 资源全路径
      */
-    public static String getRealPath(String path) {
+/*    public static String getRealPath(String path) {
         return PROJECT_PATH + File.separator + path;
-    }
+    }*/
 
     /**
      * 获取资源的真实项目所在文件夹路径
@@ -93,9 +94,9 @@ public class FileUtil {
      * @param path 资源项目于项目所在文件夹路径
      * @return 资源全路径
      */
-    public static String getRealProjectFolderPath(String path) {
+/*    public static String getRealProjectFolderPath(String path) {
         return PROJECT_FOLDER_PATH + File.separator + path;
-    }
+    }*/
 
     /**
      * 下载
@@ -239,10 +240,10 @@ public class FileUtil {
         /**
          * 接收上传结果
          *
-         * @param uploadResult 上传结果
+         * @param uploadFile 上传文件
          * @throws Exception
          */
-        void accept(UploadResult uploadResult) throws Exception;
+        void accept(UploadFile uploadFile) throws Exception;
     }
 
     /**
@@ -251,12 +252,12 @@ public class FileUtil {
      * @param file             文件
      * @param absoluteSavePath 文件保存绝对路径
      * @param relativeSavePath 文件保存相对路径
-     * @param saveName         文件保存名
+     * @param fileSaveName     文件保存名
      * @return
      * @throws Exception
      */
-    public static UploadResult uploadFile(MultipartFile file, String absoluteSavePath, String relativeSavePath, String saveName) throws Exception {
-        return uploadFile(file, absoluteSavePath, relativeSavePath, saveName, null, uploadResult -> {
+    public static UploadResult uploadFile(MultipartFile file, String absoluteSavePath, String relativeSavePath, String fileSaveName) throws Exception {
+        return uploadFile(file, absoluteSavePath, relativeSavePath, fileSaveName, null, uploadResult -> {
         });
     }
 
@@ -266,13 +267,13 @@ public class FileUtil {
      * @param file             文件
      * @param absoluteSavePath 文件保存绝对路径
      * @param relativeSavePath 文件保存相对路径
-     * @param saveName         文件保存名
+     * @param fileSaveName     文件保存名
      * @param saveSuffix       文件保存后缀名
      * @return
      * @throws Exception
      */
-    public static UploadResult uploadFile(MultipartFile file, String absoluteSavePath, String relativeSavePath, String saveName, String saveSuffix) throws Exception {
-        return uploadFile(file, absoluteSavePath, relativeSavePath, saveName, saveSuffix, uploadResult -> {
+    public static UploadResult uploadFile(MultipartFile file, String absoluteSavePath, String relativeSavePath, String fileSaveName, String saveSuffix) throws Exception {
+        return uploadFile(file, absoluteSavePath, relativeSavePath, fileSaveName, saveSuffix, uploadResult -> {
         });
     }
 
@@ -282,13 +283,13 @@ public class FileUtil {
      * @param file             文件
      * @param absoluteSavePath 文件保存绝对路径
      * @param relativeSavePath 文件保存相对路径
-     * @param saveName         文件保存名
+     * @param fileSaveName     文件保存名
      * @param uploadBefore     文件上传前的回调
      * @return
      * @throws Exception
      */
-    public static UploadResult uploadFile(MultipartFile file, String absoluteSavePath, String relativeSavePath, String saveName, UploadBefore uploadBefore) throws Exception {
-        return uploadFile(file, absoluteSavePath, relativeSavePath, saveName, null, uploadBefore);
+    public static UploadResult uploadFile(MultipartFile file, String absoluteSavePath, String relativeSavePath, String fileSaveName, UploadBefore uploadBefore) throws Exception {
+        return uploadFile(file, absoluteSavePath, relativeSavePath, fileSaveName, null, uploadBefore);
     }
 
     /**
@@ -297,22 +298,33 @@ public class FileUtil {
      * @param file             文件
      * @param absoluteSavePath 文件保存绝对路径
      * @param relativeSavePath 文件保存相对路径
-     * @param saveName         文件保存名
+     * @param fileSaveName     文件保存名
      * @param saveSuffix       文件保存后缀名
      * @param uploadBefore     文件上传前的回调
      * @return
      * @throws Exception
      */
-    public static UploadResult uploadFile(MultipartFile file, String absoluteSavePath, String relativeSavePath, String saveName, String saveSuffix, UploadBefore uploadBefore) throws Exception {
-        UploadResult result = new UploadResult();
-        result.setFileAbsoluteSavePath(absoluteSavePath);
-        result.setFileSaveName(saveName);
-        result.setFileSuffix(saveSuffix);
-        result.setFileRealName(file.getOriginalFilename());
+    public static UploadResult uploadFile(MultipartFile file, String absoluteSavePath, String relativeSavePath, String fileSaveName, String saveSuffix, UploadBefore uploadBefore) throws Exception {
+        UploadResult result = new UploadResult(absoluteSavePath, fileSaveName, saveSuffix);
         result.setFileRelativeSavePath(relativeSavePath);
-        uploadBefore.accept(result);
-        createFile(result.getFileAbsoluteSavePath(), result.getFileSaveFullName(), file);
-        return result;
+        return uploadFile(file, result, uploadBefore);
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param file         文件
+     * @param uploadFile   上传信息
+     * @param uploadBefore 文件上传前的回调
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public static <T extends UploadFile> T uploadFile(MultipartFile file, T uploadFile, UploadBefore uploadBefore) throws Exception {
+        uploadFile.setFileRealName(file.getOriginalFilename());
+        uploadBefore.accept(uploadFile);
+        createFile(uploadFile.getFileAbsoluteSavePath(), uploadFile.getFileSaveFullName(), file);
+        return uploadFile;
     }
 
     /**
@@ -331,20 +343,20 @@ public class FileUtil {
         if (!source.exists()) {
             throw new FileException("the source is not exist, copy fail.");
         }
-        CopyResult result = new CopyResult();
+        CopyResult result = new CopyResult(absoluteSavePath, saveFileName, suffix);
         result.setSourcePath(sourceFullPath);
         result.setFileRealName(source.getName());
-        result.setFileSaveName(saveFileName);
-        result.setFileSuffix(suffix);
         result.setFileRelativeSavePath(relativeSavePath);
-        result.setFileAbsoluteSavePath(absoluteSavePath);
         File dic = new File(result.getFileAbsoluteSavePath());
         if (!dic.exists()) {
-            dic.mkdirs();
+            boolean b = dic.mkdirs();
+            if (!b) {
+                throw new FileException("create dirs fail.");
+            }
         } else if (!dic.isDirectory()) {
             throw new FileException("savePath is not a folder.");
         }
-        File dest = new File(result.getFileSaveFullPath());
+        File dest = new File(result.getFileAbsoluteSaveFullPath());
         FileChannel inputChannel = null;
         FileChannel outputChannel = null;
         try {

@@ -8,7 +8,7 @@ import java.io.File;
  * @author 白超
  * @date 2018-4-4
  */
-public class FileResult {
+public class UploadFile {
 
     /**
      * 文件真实名称
@@ -34,6 +34,12 @@ public class FileResult {
      * 文件绝对保存路径
      */
     private String fileAbsoluteSavePath;
+
+    public UploadFile(String fileAbsoluteSavePath, String fileSaveName, String fileSuffix) {
+        this.fileAbsoluteSavePath = fileAbsoluteSavePath;
+        this.fileSaveName = fileSaveName;
+        this.fileSuffix = fileSuffix;
+    }
 
     public String getFileRealName() {
         return fileRealName;
@@ -77,15 +83,28 @@ public class FileResult {
 
     /**
      * 获取文件保存全名
+     *
+     * @return
      */
     public String getFileSaveFullName() {
         return this.getFileSaveName() + FilenameUtils.EXTENSION_SEPARATOR + this.getFileSuffix();
     }
 
     /**
-     * 获取文件保存全路径
+     * 获取文件绝对保存全路径
+     *
+     * @return
      */
-    public String getFileSaveFullPath() {
+    public String getFileAbsoluteSaveFullPath() {
         return this.getFileAbsoluteSavePath() + File.separator + this.getFileSaveFullName();
+    }
+
+    /**
+     * 获取文件相对保存全路径
+     *
+     * @return
+     */
+    public String getFileRelativeSaveFullPath() {
+        return this.getFileRelativeSavePath() + File.separator + this.getFileSaveFullName();
     }
 }
