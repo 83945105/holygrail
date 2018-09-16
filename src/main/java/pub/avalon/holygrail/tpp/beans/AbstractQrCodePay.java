@@ -190,6 +190,9 @@ public abstract class AbstractQrCodePay<O> implements QrCodePay {
                         if (tradeStatus == TradeStatus.TRADE_NOT_EXIST) {
                             //状态是交易未创建  重新申请二维码
                             this.applyTradeQrCode(orderId, order, payName, results);
+                        } else if (tradeStatus == TradeStatus.TRADE_SUCCESS || tradeStatus == TradeStatus.TRADE_FINISHED) {
+                            //在客户付款成功后,程序由于相关异常没有走到修改本地订单状态这一步,导致订单状态一直为WAIT_BUYER_PAY
+                            throw new ThirdPartyPayException("客户已经支付成功,但是未成功修改订单：" + orderId + "状态");
                         } else {
                             //交易不是未创建
                             //正常来说 客户只要能看到二维码 就说明二维码和订单状态已经保存成功,tradeStatus就不可能为null,不应该进入这个分支
