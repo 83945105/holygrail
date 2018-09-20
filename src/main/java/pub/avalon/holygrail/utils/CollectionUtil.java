@@ -2,7 +2,6 @@ package pub.avalon.holygrail.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,7 +23,7 @@ public class CollectionUtil {
          * @param records
          * @throws Exception
          */
-        void accept(List<T> records) throws Exception;
+        void accept(List<T> records);
     }
 
     public interface ListHandlerB<T> {
@@ -36,7 +35,7 @@ public class CollectionUtil {
          * @return
          * @throws Exception
          */
-        boolean apply(List<T> records) throws Exception;
+        boolean apply(List<T> records);
     }
 
     /**
@@ -50,7 +49,7 @@ public class CollectionUtil {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public static <T> void batchProcess(List<T> records, int start, int length, ListHandlerB<T> handler) throws Exception {
+    public static <T> void batchProcess(List<T> records, int start, int length, ListHandlerB<T> handler) {
         if (records == null || records.size() == 0) {
             return;
         }
@@ -60,7 +59,7 @@ public class CollectionUtil {
         if (length == 0) {
             return;
         }
-        List<T> list = records.getClass().newInstance();
+        List<T> list = new ArrayList<>();
         int i;
         int end = start + length;
         if (length > 0) {
@@ -96,7 +95,7 @@ public class CollectionUtil {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public static <T> void batchProcess(List<T> records, int size, ListHandlerB<T> handler) throws Exception {
+    public static <T> void batchProcess(List<T> records, int size, ListHandlerB<T> handler) {
         CollectionUtil.batchProcess(records, 0, Math.abs(size), handler);
     }
 
@@ -111,7 +110,7 @@ public class CollectionUtil {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public static <T> void batchProcess(List<T> records, int start, int length, ListHandlerA<T> handler) throws Exception {
+    public static <T> void batchProcess(List<T> records, int start, int length, ListHandlerA<T> handler) {
         CollectionUtil.batchProcess(records, start, length, row -> {
             handler.accept(row);
             return true;
@@ -128,7 +127,7 @@ public class CollectionUtil {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public static <T> void batchProcess(List<T> records, int size, ListHandlerA<T> handler) throws Exception {
+    public static <T> void batchProcess(List<T> records, int size, ListHandlerA<T> handler) {
         CollectionUtil.batchProcess(records, 0, Math.abs(size), handler);
     }
 
@@ -141,35 +140,6 @@ public class CollectionUtil {
      */
     public static <T> ArrayList<T> newArrayList(T... targets) {
         return new ArrayList<>(Arrays.asList(targets));
-    }
-
-    /**
-     * 新建HashMap集合
-     *
-     * @param key
-     * @param value
-     * @param <K>
-     * @param <V>
-     * @return
-     */
-    public static <K, V> HashMap<K, V> newHashMap(K key, V value) {
-        return newHashMap(16, key, value);
-    }
-
-    /**
-     * 新建HashMap集合
-     *
-     * @param initialCapacity 初始大小
-     * @param key
-     * @param value
-     * @param <K>
-     * @param <V>
-     * @return
-     */
-    public static <K, V> HashMap<K, V> newHashMap(int initialCapacity, K key, V value) {
-        HashMap<K, V> map = new HashMap<>(initialCapacity);
-        map.put(key, value);
-        return map;
     }
 
 }
