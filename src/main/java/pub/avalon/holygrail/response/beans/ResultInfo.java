@@ -1,17 +1,11 @@
 package pub.avalon.holygrail.response.beans;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
-
-import java.beans.Transient;
-import java.io.Serializable;
-
 /**
  * 结果集信息
  *
  * @author 白超
  */
-public interface ResultInfo extends Json, Serializable {
+public interface ResultInfo {
 
     /**
      * 获取结果值
@@ -56,37 +50,17 @@ public interface ResultInfo extends Json, Serializable {
     String getMessage();
 
     /**
+     * 获取消息代号
+     *
+     * @return
+     */
+    int getMessageCode();
+
+    /**
      * 获取异常信息
      *
      * @return
      */
     String getExceptionMessage();
-
-    /**
-     * 设置异常信息
-     *
-     * @param exceptionMessage
-     */
-    void setExceptionMessage(String exceptionMessage);
-
-    /**
-     * 获取 JSONObject对象
-     *
-     * @return JSONObject
-     */
-    @Override
-    @Transient
-    @JSONField(serialize = false)
-    default JSONObject getJsonObject() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("resultCode", getResultCode());
-        jsonObject.put("success", isSuccess());
-        jsonObject.put("fail", isFail());
-        jsonObject.put("error", isError());
-        jsonObject.put("type", getType());
-        jsonObject.put("message", getMessage());
-        jsonObject.put("exceptionMessage", getExceptionMessage());
-        return jsonObject;
-    }
 
 }

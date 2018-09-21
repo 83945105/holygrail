@@ -1,6 +1,7 @@
 package pub.avalon.holygrail.response.utils;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -11,22 +12,24 @@ import java.util.*;
  */
 public class ResourceUtil implements Serializable {
 
-    /**
-     * @Fields serialVersionUID : 序列化标识符
-     */
     private static final long serialVersionUID = -3889274686043327477L;
+
+    private ResourceUtil() {
+    }
 
     /**
      * 系统语言环境-默认中文
      */
-    public static final String LANGUAGE = "zh";
+    private static final String LANGUAGE = "zh";
     /**
      * 系统国家换将-默认中国
      */
-    public static final String COUNTRY = "CN";
+    private static final String COUNTRY = "CN";
+
+    private static final Locale LOCAL = new Locale(LANGUAGE, COUNTRY);
 
     private static Locale getLocale() {
-        return new Locale(LANGUAGE, COUNTRY);
+        return LOCAL;
     }
 
     /**
@@ -40,7 +43,7 @@ public class ResourceUtil implements Serializable {
         try {
             Locale locale = getLocale();
             ResourceBundle rb = ResourceBundle.getBundle(fileName, locale);
-            retValue = (String) rb.getObject(key);
+            retValue = new String(rb.getString(key).getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,13 +59,7 @@ public class ResourceUtil implements Serializable {
     public static ArrayList<String> getKeyArrayList(String fileName) {
         Locale locale = getLocale();
         ResourceBundle rb = ResourceBundle.getBundle(fileName, locale);
-
-        ArrayList<String> list = new ArrayList<>();
-        Set<String> keySet = rb.keySet();
-        for (Iterator<String> it = keySet.iterator(); it.hasNext(); ) {
-            list.add(it.next());
-        }
-        return list;
+        return new ArrayList<>(rb.keySet());
     }
 
     /**
@@ -87,8 +84,8 @@ public class ResourceUtil implements Serializable {
     public static HashMap<String, Object> getKeyValues(String fileName, Object[] params) {
         Locale locale = getLocale();
         ResourceBundle rb = ResourceBundle.getBundle(fileName, locale);
-        HashMap<String, Object> rs = new HashMap<>(16);
         Set<String> keySet = rb.keySet();
+        HashMap<String, Object> rs = new HashMap<>(keySet.size());
         for (String key : keySet) {
             rs.put(MessageFormat.format(key, params), rb.getObject(key));
         }

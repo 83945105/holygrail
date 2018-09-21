@@ -9,12 +9,18 @@ import pub.avalon.holygrail.response.beans.ResultCode;
 import pub.avalon.holygrail.response.beans.ResultInfoRealization;
 import pub.avalon.holygrail.response.beans.ResultInfo;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * 系统结果工具类
  *
  * @author 白超
  */
 public class ResultUtil {
+
+    private ResultUtil() {
+    }
 
     /**
      * 创建失败结果集
@@ -220,6 +226,21 @@ public class ResultUtil {
      */
     public static NotFoundException createNotFoundException(ResultInfo resultInfo) {
         return new NotFoundException(resultInfo);
+    }
+
+    /**
+     * 添加结果集明细
+     *
+     * @param resultInfo 结果集
+     */
+    public static void addDetail(ResultInfo resultInfo) {
+        ThreadLocal<Collection<ResultInfo>> threadLocal = new ThreadLocal<>();
+        Collection<ResultInfo> details = threadLocal.get();
+        if (details == null) {
+            details = new ArrayList<>();
+            threadLocal.set(details);
+        }
+        details.add(resultInfo);
     }
 
 }

@@ -2,7 +2,6 @@ package pub.avalon.holygrail.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
@@ -154,7 +153,7 @@ public class HttpUtil {
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-        if (StringUtils.isNotBlank(body)) {
+        if (!StringUtil.isEmpty(body)) {
             request.setEntity(new StringEntity(body, "utf-8"));
         }
         if (LOGGER.isDebugEnabled()) {
@@ -214,7 +213,7 @@ public class HttpUtil {
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-        if (StringUtils.isNotBlank(body)) {
+        if (!StringUtil.isEmpty(body)) {
             request.setEntity(new StringEntity(body, "utf-8"));
         }
         if (LOGGER.isDebugEnabled()) {
@@ -289,10 +288,10 @@ public class HttpUtil {
      */
     private static String buildUrl(String host, String path, Map<String, String> params) throws UnsupportedEncodingException {
         StringBuilder sbUrl = new StringBuilder();
-        if (!StringUtils.isBlank(host)) {
+        if (!StringUtil.isEmpty(host)) {
             sbUrl.append(host);
         }
-        if (!StringUtils.isBlank(path)) {
+        if (!StringUtil.isEmpty(path)) {
             sbUrl.append(path);
         }
         if (null != params) {
@@ -301,12 +300,12 @@ public class HttpUtil {
                 if (0 < sbQuery.length()) {
                     sbQuery.append("&");
                 }
-                if (StringUtils.isBlank(query.getKey()) && !StringUtils.isBlank(query.getValue())) {
+                if (StringUtil.isEmpty(query.getKey()) && !StringUtil.isEmpty(query.getValue())) {
                     sbQuery.append(query.getValue());
                 }
-                if (!StringUtils.isBlank(query.getKey())) {
+                if (!StringUtil.isEmpty(query.getKey())) {
                     sbQuery.append(query.getKey());
-                    if (!StringUtils.isBlank(query.getValue())) {
+                    if (!StringUtil.isEmpty(query.getValue())) {
                         sbQuery.append("=");
                         sbQuery.append(URLEncoder.encode(query.getValue(), "utf-8"));
                     }
@@ -330,7 +329,7 @@ public class HttpUtil {
         HttpClient httpClient = HttpClientBuilder.create().build();
         if (host != null && host.startsWith(HTTPS_PREFIX)) {
             return sslClient();
-        } else if (StringUtils.isBlank(host) && path != null && path.startsWith(HTTPS_PREFIX)) {
+        } else if (StringUtil.isEmpty(host) && path != null && path.startsWith(HTTPS_PREFIX)) {
             return sslClient();
         }
         return httpClient;

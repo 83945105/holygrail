@@ -117,6 +117,7 @@ public class ResultInfoRealization implements ResultInfo {
         this.message = message;
     }
 
+    @Override
     public int getMessageCode() {
         return messageCode;
     }
@@ -126,7 +127,6 @@ public class ResultInfoRealization implements ResultInfo {
         return exceptionMessage;
     }
 
-    @Override
     public void setExceptionMessage(String exceptionMessage) {
         this.exceptionMessage = exceptionMessage;
     }

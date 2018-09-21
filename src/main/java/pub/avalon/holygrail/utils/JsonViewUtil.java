@@ -36,12 +36,12 @@ public class JsonViewUtil {
      */
     public static void success(DataView dataView, JsonViewParseSuccess success) throws JsonViewParseException {
         if (dataView == null) {
-            throw new JsonViewParseException(null);
+            throw new JsonViewParseException(ResultUtil.createError("the param dataView can not be null."));
         }
         JsonView jsonView = (JsonView) dataView;
         ResultInfo resultInfo = jsonView.getResultInfo();
         if (resultInfo == null) {
-            throw new JsonViewParseException(null);
+            throw new JsonViewParseException(ResultUtil.createError("can not find resultInfo in jsonView."));
         }
         if (resultInfo.isSuccess()) {
             success.accept(jsonView);

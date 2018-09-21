@@ -6,7 +6,6 @@ package pub.avalon.holygrail.response.beans;
  * @author 白超
  */
 public enum ResultCode {
-
     /**
      * 失败
      */

@@ -10,5 +10,5 @@ public interface ResultConf {
     /**
      * 结果集信息配置文件路径
      */
-    String MESSAGE = "message.resultInfo";
+    String MESSAGE = "resultCode";
 }

@@ -21,24 +21,33 @@ public class StringUtil {
      * Map size == 0 => true
      * Array length == 0 => true
      *
-     * @param tar 对象
+     * @param object 对象
      * @return 空 => true | 非空 => false
      */
-    public static boolean isEmpty(Object tar) {
-        if (tar == null) {
+    public static boolean isEmpty(Object object) {
+        if (object == null) {
             return true;
         }
-        if (tar instanceof String) {
-            return tar.toString().length() == 0;
+        if (object instanceof String) {
+            int len;
+            if ((len = ((String) object).length()) == 0) {
+                return true;
+            }
+            for (int i = 0; i < len; i++) {
+                if ((!Character.isWhitespace(((String) object).charAt(i)))) {
+                    return false;
+                }
+            }
+            return true;
         }
-        if (tar instanceof Collection) {
-            return ((Collection) tar).size() == 0;
+        if (object instanceof Collection) {
+            return ((Collection) object).size() == 0;
         }
-        if (tar instanceof Map) {
-            return ((Map) tar).size() == 0;
+        if (object instanceof Map) {
+            return ((Map) object).size() == 0;
         }
-        if (tar.getClass().isArray()) {
-            return ((Object[]) tar).length == 0;
+        if (object.getClass().isArray()) {
+            return ((Object[]) object).length == 0;
         }
         return false;
     }

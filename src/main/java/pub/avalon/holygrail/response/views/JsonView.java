@@ -9,19 +9,25 @@ import pub.avalon.beans.Limit;
 import pub.avalon.holygrail.response.beans.ResultInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
  * @author 白超
  * @date 2018/6/3
  */
-public class JsonView extends HashMap<String, Object> implements DataView {
+public class JsonView extends LinkedHashMap<String, Object> implements DataView {
 
     @Override
     public ResultInfo getResultInfo() {
-        JSONObject r = (JSONObject) this.get(MessageView.RESULT_INFO_PARAM);
-        return JSONObject.parseObject(r.toJSONString(), JsonResultInfo.class);
+        Map map = (Map) this.get(MessageView.RESULT_INFO_PARAM);
+        if (map == null) {
+            return null;
+        }
+        JsonResultInfo resultInfo = new JsonResultInfo();
+        resultInfo.putAll(map);
+        return resultInfo;
     }
 
     public <T> T getRecord(Class<T> clazz) {
@@ -32,8 +38,8 @@ public class JsonView extends HashMap<String, Object> implements DataView {
         return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
     }
 
-    public JSONObject getRecords() {
-        return (JSONObject) this.get(ModelView.RECORDS_KEY);
+    public <K, V> Map<K, V> getRecords() {
+        return (Map<K, V>) this.get(ModelView.RECORDS_KEY);
     }
 
     public <T> T getRecords(Class<T> clazz) {
