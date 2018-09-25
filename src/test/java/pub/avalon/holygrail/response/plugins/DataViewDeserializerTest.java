@@ -1,11 +1,14 @@
 package pub.avalon.holygrail.response.plugins;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.util.TypeUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import pub.avalon.holygrail.bean.User;
+import pub.avalon.holygrail.response.beans.ResultDetail;
 import pub.avalon.holygrail.response.beans.ResultInfo;
 import pub.avalon.holygrail.response.utils.DataViewUtil;
 import pub.avalon.holygrail.response.utils.ResultUtil;
@@ -66,7 +69,7 @@ public class DataViewDeserializerTest {
         list.add(Collections.singletonMap("name", "张三"));
 
         ModelView modelView = new ModelView(ResultUtil.createSuccess("成功"));
-//        modelView.setRecords(map);
+        modelView.setRecords(map);
         modelView.setRecord(user);
         modelView.setRows(list);
 
@@ -79,6 +82,37 @@ public class DataViewDeserializerTest {
         Map records = jsonView.getRecords();
 
         System.out.println(records.size());
+
+        jsonView.getRecord();
+
+        jsonView.getRecord(User.class);
+
+        jsonView.getRows();
+
+        jsonView.getRows(row -> {
+
+            return TypeUtils.cast(row, User.class, ParserConfig.getGlobalInstance());
+        });
+
+        System.out.println("----------");
+
+    }
+
+    @Test
+    void test03() {
+
+        String json = "{\"resultInfo\":{\"resultCode\":\"SUCCESS\",\"messageCode\":0,\"message\":\"success\",\"exceptionMessage\":null,\"resultDetails\":[{\"resultInfo\":{\"resultCode\":\"FAIL\",\"messageCode\":0,\"message\":\"失败\",\"exceptionMessage\":null,\"resultDetails\":null,\"error\":false,\"type\":0,\"success\":false,\"fail\":true}},{\"resultInfo\":{\"resultCode\":\"FAIL\",\"messageCode\":0,\"message\":\"失败\",\"exceptionMessage\":null,\"resultDetails\":null,\"error\":false,\"type\":0,\"success\":false,\"fail\":true}},{\"resultInfo\":{\"resultCode\":\"FAIL\",\"messageCode\":0,\"message\":\"失败\",\"exceptionMessage\":null,\"resultDetails\":null,\"error\":false,\"type\":0,\"success\":false,\"fail\":true}}],\"error\":false,\"type\":1,\"success\":true,\"fail\":false}}";
+
+        JsonView jsonView = JsonUtil.parseObject(json, JsonView.class);
+
+        Collection<ResultDetail> resultDetails = jsonView.getResultInfo().getResultDetails();
+
+        for (ResultDetail resultDetail : resultDetails) {
+            System.out.println(resultDetail.getResultInfo());
+        }
+        
+        System.out.println(resultDetails.size());
+
     }
 
     void testJsonView() throws Exception {

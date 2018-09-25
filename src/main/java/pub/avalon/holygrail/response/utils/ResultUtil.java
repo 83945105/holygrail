@@ -1,16 +1,13 @@
 package pub.avalon.holygrail.response.utils;
 
+import pub.avalon.holygrail.response.beans.ResultCode;
+import pub.avalon.holygrail.response.beans.ResultInfo;
+import pub.avalon.holygrail.response.beans.ResultInfoRealization;
 import pub.avalon.holygrail.response.config.ResultConf;
-import pub.avalon.holygrail.response.exception.NotFoundException;
 import pub.avalon.holygrail.response.exception.NeedLoginException;
 import pub.avalon.holygrail.response.exception.NoAuthorityException;
+import pub.avalon.holygrail.response.exception.NotFoundException;
 import pub.avalon.holygrail.response.exception.ResultException;
-import pub.avalon.holygrail.response.beans.ResultCode;
-import pub.avalon.holygrail.response.beans.ResultInfoRealization;
-import pub.avalon.holygrail.response.beans.ResultInfo;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * 系统结果工具类
@@ -226,21 +223,6 @@ public class ResultUtil {
      */
     public static NotFoundException createNotFoundException(ResultInfo resultInfo) {
         return new NotFoundException(resultInfo);
-    }
-
-    /**
-     * 添加结果集明细
-     *
-     * @param resultInfo 结果集
-     */
-    public static void addDetail(ResultInfo resultInfo) {
-        ThreadLocal<Collection<ResultInfo>> threadLocal = new ThreadLocal<>();
-        Collection<ResultInfo> details = threadLocal.get();
-        if (details == null) {
-            details = new ArrayList<>();
-            threadLocal.set(details);
-        }
-        details.add(resultInfo);
     }
 
 }

@@ -17,7 +17,7 @@ public class ModelView extends LimitDataView {
     public static final String RECORD_KEY = "record";
     public static final String RECORDS_KEY = "records";
 
-    protected Object record = new Object();
+    protected Object record = new HashMap<>();
 
     protected Map<?, ?> records = new HashMap<>();
 

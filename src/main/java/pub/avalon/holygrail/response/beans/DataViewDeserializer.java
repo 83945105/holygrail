@@ -1,4 +1,4 @@
-package pub.avalon.holygrail.response.plugins;
+package pub.avalon.holygrail.response.beans;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;

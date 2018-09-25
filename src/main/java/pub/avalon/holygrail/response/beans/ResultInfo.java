@@ -1,5 +1,7 @@
 package pub.avalon.holygrail.response.beans;
 
+import java.util.Collection;
+
 /**
  * 结果集信息
  *
@@ -62,5 +64,12 @@ public interface ResultInfo {
      * @return
      */
     String getExceptionMessage();
+
+    /**
+     * 获取明细列表
+     *
+     * @return
+     */
+    Collection<ResultDetail> getResultDetails();
 
 }

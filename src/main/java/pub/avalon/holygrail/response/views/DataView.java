@@ -2,7 +2,7 @@ package pub.avalon.holygrail.response.views;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import pub.avalon.holygrail.response.beans.ResultInfo;
-import pub.avalon.holygrail.response.plugins.DataViewDeserializer;
+import pub.avalon.holygrail.response.beans.DataViewDeserializer;
 
 /**
  * 数据视图
@@ -12,6 +12,8 @@ import pub.avalon.holygrail.response.plugins.DataViewDeserializer;
  */
 @JsonDeserialize(using = DataViewDeserializer.class)
 public interface DataView {
+
+
 
     /**
      * 获取结果集

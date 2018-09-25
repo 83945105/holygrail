@@ -1,6 +1,9 @@
 package pub.avalon.holygrail.response.beans;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author 白超
@@ -8,15 +11,22 @@ import java.util.LinkedHashMap;
  */
 public class JsonResultInfo extends LinkedHashMap<String, Object> implements ResultInfo {
 
+    private ResultCode resultCode;
+
+    private Collection<ResultDetail> resultDetails;
+
     @Override
     public ResultCode getResultCode() {
-        String rc = (String) get("resultCode");
-        for (ResultCode resultCode : ResultCode.values()) {
-            if (resultCode.name().equals(rc)) {
-                return resultCode;
+        if (this.resultCode == null) {
+            String rc = (String) get("resultCode");
+            for (ResultCode resultCode : ResultCode.values()) {
+                if (resultCode.name().equals(rc)) {
+                    this.resultCode = resultCode;
+                    break;
+                }
             }
         }
-        return null;
+        return this.resultCode;
     }
 
     @Override
@@ -52,6 +62,24 @@ public class JsonResultInfo extends LinkedHashMap<String, Object> implements Res
     @Override
     public String getExceptionMessage() {
         return (String) get("exceptionMessage");
+    }
+
+    @Override
+    public Collection<ResultDetail> getResultDetails() {
+        if (this.resultDetails == null) {
+            Collection rds = (Collection) get("resultDetails");
+            this.resultDetails = new ArrayList<>(rds.size());
+            for (Object rd : rds) {
+                if (rd instanceof Map) {
+                    JsonResultDetail jsonResultDetail = new JsonResultDetail();
+                    for (Map.Entry<?, ?> entry : ((Map<?, ?>) rd).entrySet()) {
+                        jsonResultDetail.put((String) entry.getKey(), entry.getValue());
+                    }
+                    resultDetails.add(jsonResultDetail);
+                }
+            }
+        }
+        return this.resultDetails;
     }
 
 }
