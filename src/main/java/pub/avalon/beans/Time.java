@@ -72,6 +72,17 @@ public interface Time {
     }
 
     /**
+     * 时间戳转为字符串时间
+     * yyyy-MM-ddTHH:mm:ss.SSS
+     *
+     * @param timestamp
+     * @return
+     */
+    static String timeStampToString(long timestamp) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()).toString();
+    }
+
+    /**
      * 简化字符串时间转时间戳
      *
      * @param timeStr
