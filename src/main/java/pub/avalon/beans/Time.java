@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
  */
 public interface Time {
 
-    String TIME_SIMPLE_FORMATTER = "yyyy-MM-dd HH:mm:ss";
+    String DATE_TIME_SIMPLE_FORMATTER = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 获取当前日期
@@ -60,15 +60,28 @@ public interface Time {
     }
 
     /**
-     * 时间戳转为简化版字符串时间
+     * 时间戳转为简化版字符串日期时间
      * yyyy-MM-dd HH:mm:ss
      *
      * @param timestamp
      * @return
      */
-    static String timeStampToSimpleString(long timestamp) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(TIME_SIMPLE_FORMATTER);
+    static String timeStampToSimpleDateTimeString(long timestamp) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_SIMPLE_FORMATTER);
         return dateTimeFormatter.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()));
+    }
+
+    /**
+     * 简化字符串日期时间转时间戳
+     * yyyy-MM-dd HH:mm:ss
+     *
+     * @param timeStr
+     * @return
+     */
+    static long simpleDateTimeStringToTimeStamp(String timeStr) {
+        DateTimeFormatter ftf = DateTimeFormatter.ofPattern(DATE_TIME_SIMPLE_FORMATTER);
+        LocalDateTime parse = LocalDateTime.parse(timeStr, ftf);
+        return LocalDateTime.from(parse).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     /**
@@ -80,18 +93,6 @@ public interface Time {
      */
     static String timeStampToString(long timestamp) {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()).toString();
-    }
-
-    /**
-     * 简化字符串时间转时间戳
-     *
-     * @param timeStr
-     * @return
-     */
-    static long simpleStringToTimeStamp(String timeStr) {
-        DateTimeFormatter ftf = DateTimeFormatter.ofPattern(TIME_SIMPLE_FORMATTER);
-        LocalDateTime parse = LocalDateTime.parse(timeStr, ftf);
-        return LocalDateTime.from(parse).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
 }
