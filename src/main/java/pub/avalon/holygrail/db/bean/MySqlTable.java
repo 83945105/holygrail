@@ -47,6 +47,16 @@ public class MySqlTable extends AbstractTable {
         this.characterSet = characterSet;
     }
 
+    @Override
+    public String buildValidTableExistedSql(String tableName) {
+        return "select table_name from information_schema.TABLES where table_name = '" + tableName + "' and table_schema = (select database())";
+    }
+
+    @Override
+    public String buildClearTableSql(String tableName) {
+        return "delete from " + tableName;
+    }
+
     private void validateColumn(Map<String, Object> columns, String columnName, boolean join) throws DBException {
         if (columns.get(columnName) != null) {
             throw new DBException("column字段名重复,columnName:" + columnName);
@@ -97,6 +107,9 @@ public class MySqlTable extends AbstractTable {
         }
         Iterable<AbstractColumn> columns = this.getColumns();
         AbstractColumn column;
+        if (columns == null) {
+            throw new DBException("没有设置列");
+        }
         Iterator<AbstractColumn> iterator = columns.iterator();
         while (iterator.hasNext()) {
             column = iterator.next();
@@ -170,7 +183,7 @@ public class MySqlTable extends AbstractTable {
     }
 
     @Override
-    public String buildBatchInsertSql(Collection<Map<String, Object>> values) throws DBException {
+    public String buildBatchInsertSql(Collection<? extends Map> values) throws DBException {
         LinkedHashSet<AbstractColumn> columns = new LinkedHashSet<>();
         if (this.getPrimaryKey() != null) {
             columns.add(this.getPrimaryKey());
@@ -198,7 +211,7 @@ public class MySqlTable extends AbstractTable {
     }
 
     @Override
-    public String buildBatchInsertSql(Collection<Map<String, Object>> values, String... insertColumnNames) throws DBException {
+    public String buildBatchInsertSql(Collection<? extends Map> values, String... insertColumnNames) throws DBException {
         LinkedList<AbstractColumn> columns = new LinkedList<>();
         if (this.getPrimaryKey() != null) {
             columns.add(this.getPrimaryKey());

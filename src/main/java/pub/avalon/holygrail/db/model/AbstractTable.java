@@ -130,6 +130,23 @@ public abstract class AbstractTable {
     }
 
     /**
+     * 构建校验表是否存在语句
+     *
+     * @param tableName
+     * @return
+     * @throws Exception
+     */
+    abstract public String buildValidTableExistedSql(String tableName);
+
+    /**
+     * 构建清空表语句
+     *
+     * @param tableName
+     * @return
+     */
+    abstract public String buildClearTableSql(String tableName);
+
+    /**
      * 构建创建语句
      *
      * @return
@@ -196,7 +213,7 @@ public abstract class AbstractTable {
      * @return
      * @throws DBException
      */
-    abstract public String buildBatchInsertSql(Collection<Map<String, Object>> values) throws DBException;
+    abstract public String buildBatchInsertSql(Collection<? extends Map> values) throws DBException;
 
     /**
      * 构建批量插入语句
@@ -206,6 +223,6 @@ public abstract class AbstractTable {
      * @return
      * @throws DBException
      */
-    abstract public String buildBatchInsertSql(Collection<Map<String, Object>> values, String... insertColumnNames) throws DBException;
+    abstract public String buildBatchInsertSql(Collection<? extends Map> values, String... insertColumnNames) throws DBException;
 
 }
