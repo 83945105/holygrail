@@ -8,23 +8,23 @@ import pub.avalon.holygrail.response.beans.ResultInfo;
  *
  * @author 白超
  */
-public class PageView extends MessageView {
+public class LimitView extends MessageView {
 
     public static final String LIMIT_KEY = "limit";
 
     protected Limit limit;
 
-    public PageView(ResultInfo resultInfo) {
-        super(resultInfo);
+    public LimitView(Integer code, ResultInfo resultInfo) {
+        super(code, resultInfo);
     }
 
-    public PageView(ResultInfo resultInfo, Limit limit) {
-        super(resultInfo);
+    public LimitView(Integer code, ResultInfo resultInfo, Limit limit) {
+        super(code, resultInfo);
         this.limit = new PageViewLimit(limit.getTotal(), limit.getCurrentPage(), limit.getPageSize());
     }
 
-    public PageView(ResultInfo resultInfo, int total, int currPageNum, int pageSize) {
-        super(resultInfo);
+    public LimitView(Integer code, ResultInfo resultInfo, int total, int currPageNum, int pageSize) {
+        super(code, resultInfo);
         this.limit = new PageViewLimit(total, currPageNum, pageSize);
     }
 

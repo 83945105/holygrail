@@ -13,7 +13,12 @@ import pub.avalon.holygrail.response.beans.DataViewDeserializer;
 @JsonDeserialize(using = DataViewDeserializer.class)
 public interface DataView {
 
-
+    /**
+     * 获取消息代号
+     *
+     * @return
+     */
+    Integer getCode();
 
     /**
      * 获取结果集
@@ -21,6 +26,5 @@ public interface DataView {
      * @return
      */
     ResultInfo getResultInfo();
-
 
 }

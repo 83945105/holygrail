@@ -11,7 +11,7 @@ import java.util.Collection;
  *
  * @author 白超
  */
-public class LimitDataView extends PageView {
+public class LimitDataView extends LimitView {
 
     public static final String ROWS_KEY = "rows";
 
@@ -20,26 +20,26 @@ public class LimitDataView extends PageView {
      */
     private Collection<?> rows = new ArrayList<>();
 
-    public LimitDataView(ResultInfo resultInfo) {
-        super(resultInfo);
+    public LimitDataView(Integer code, ResultInfo resultInfo) {
+        super(code, resultInfo);
     }
 
-    public LimitDataView(ResultInfo resultInfo, Limit limit) {
-        super(resultInfo, limit);
+    public LimitDataView(Integer code, ResultInfo resultInfo, Limit limit) {
+        super(code, resultInfo, limit);
     }
 
-    public LimitDataView(ResultInfo resultInfo, Collection<?> rows) {
-        super(resultInfo);
+    public LimitDataView(Integer code, ResultInfo resultInfo, Collection<?> rows) {
+        super(code, resultInfo);
         this.rows = rows;
     }
 
-    public LimitDataView(ResultInfo resultInfo, Limit limit, Collection<?> rows) {
-        super(resultInfo, limit);
+    public LimitDataView(Integer code, ResultInfo resultInfo, Limit limit, Collection<?> rows) {
+        super(code, resultInfo, limit);
         this.rows = rows;
     }
 
-    public LimitDataView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows) {
-        super(resultInfo, total, currPage, pageSize);
+    public LimitDataView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows) {
+        super(code, resultInfo, total, currPage, pageSize);
         this.rows = rows;
     }
 

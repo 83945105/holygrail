@@ -9,7 +9,8 @@ import pub.avalon.holygrail.response.beans.ResultInfo;
  */
 public class NoAuthorityException extends ResultException {
 
-    public NoAuthorityException(ResultInfo resultInfo) {
-        super(resultInfo);
+    public NoAuthorityException(Integer code, ResultInfo resultInfo) {
+        super(code, resultInfo);
     }
+
 }

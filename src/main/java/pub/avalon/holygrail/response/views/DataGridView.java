@@ -18,34 +18,34 @@ public class DataGridView extends LimitDataView {
      */
     private Collection<?> footer = new ArrayList<>();
 
-    public DataGridView(ResultInfo resultInfo) {
-        super(resultInfo);
+    public DataGridView(Integer code, ResultInfo resultInfo) {
+        super(code, resultInfo);
     }
 
-    public DataGridView(ResultInfo resultInfo, Collection<?> rows) {
-        super(resultInfo, rows);
+    public DataGridView(Integer code, ResultInfo resultInfo, Collection<?> rows) {
+        super(code, resultInfo, rows);
     }
 
-    public DataGridView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows) {
-        super(resultInfo, total, currPage, pageSize, rows);
+    public DataGridView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows) {
+        super(code, resultInfo, total, currPage, pageSize, rows);
     }
 
-    public DataGridView(ResultInfo resultInfo, Limit limit, Collection<?> rows) {
-        super(resultInfo, limit, rows);
+    public DataGridView(Integer code, ResultInfo resultInfo, Limit limit, Collection<?> rows) {
+        super(code, resultInfo, limit, rows);
     }
 
-    public DataGridView(ResultInfo resultInfo, Collection<?> rows, Collection<?> footer) {
-        super(resultInfo, rows);
+    public DataGridView(Integer code, ResultInfo resultInfo, Collection<?> rows, Collection<?> footer) {
+        super(code, resultInfo, rows);
         this.footer = footer;
     }
 
-    public DataGridView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Collection<?> footer) {
-        super(resultInfo, total, currPage, pageSize, rows);
+    public DataGridView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Collection<?> footer) {
+        super(code, resultInfo, total, currPage, pageSize, rows);
         this.footer = footer;
     }
 
-    public DataGridView(ResultInfo resultInfo, Limit limit, Collection<?> rows, Collection<?> footer) {
-        super(resultInfo, limit, rows);
+    public DataGridView(Integer code, ResultInfo resultInfo, Limit limit, Collection<?> rows, Collection<?> footer) {
+        super(code, resultInfo, limit, rows);
         this.footer = footer;
     }
 

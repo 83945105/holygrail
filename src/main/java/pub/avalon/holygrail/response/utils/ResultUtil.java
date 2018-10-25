@@ -4,10 +4,6 @@ import pub.avalon.holygrail.response.beans.ResultCode;
 import pub.avalon.holygrail.response.beans.ResultInfo;
 import pub.avalon.holygrail.response.beans.ResultInfoRealization;
 import pub.avalon.holygrail.response.config.ResultConf;
-import pub.avalon.holygrail.response.exception.NeedLoginException;
-import pub.avalon.holygrail.response.exception.NoAuthorityException;
-import pub.avalon.holygrail.response.exception.NotFoundException;
-import pub.avalon.holygrail.response.exception.ResultException;
 
 /**
  * 系统结果工具类
@@ -195,34 +191,6 @@ public class ResultUtil {
      */
     public static ResultInfo createNotFound(String message) {
         return new ResultInfoRealization(ResultCode.NOT_FOUND, message);
-    }
-
-    /**
-     * 构建异常
-     */
-    public static ResultException createResultException(ResultInfo resultInfo) {
-        return new ResultException(resultInfo);
-    }
-
-    /**
-     * 构建需要登录异常
-     */
-    public static NeedLoginException createNeedLoginException(ResultInfo resultInfo) {
-        return new NeedLoginException(resultInfo);
-    }
-
-    /**
-     * 构建没有权限异常
-     */
-    public static NoAuthorityException createNoAuthorityException(ResultInfo resultInfo) {
-        return new NoAuthorityException(resultInfo);
-    }
-
-    /**
-     * 构建404异常
-     */
-    public static NotFoundException createNotFoundException(ResultInfo resultInfo) {
-        return new NotFoundException(resultInfo);
     }
 
 }

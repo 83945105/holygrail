@@ -9,7 +9,7 @@ import pub.avalon.holygrail.response.beans.ResultInfo;
  */
 public class NotFoundException extends ResultException {
 
-    public NotFoundException(ResultInfo resultInfo) {
-        super(resultInfo);
+    public NotFoundException(Integer code, ResultInfo resultInfo) {
+        super(code, resultInfo);
     }
 }

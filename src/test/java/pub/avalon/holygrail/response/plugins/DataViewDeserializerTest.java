@@ -68,7 +68,7 @@ public class DataViewDeserializerTest {
         list.add(Collections.singletonMap("name", "张三"));
         list.add(Collections.singletonMap("name", "张三"));
 
-        ModelView modelView = new ModelView(ResultUtil.createSuccess("成功"));
+        ModelView modelView = new ModelView(0, ResultUtil.createSuccess("成功"));
         modelView.setRecords(map);
         modelView.setRecord(user);
         modelView.setRows(list);
@@ -110,7 +110,7 @@ public class DataViewDeserializerTest {
         for (ResultDetail resultDetail : resultDetails) {
             System.out.println(resultDetail.getResultInfo());
         }
-        
+
         System.out.println(resultDetails.size());
 
     }

@@ -21,88 +21,88 @@ public class ModelView extends LimitDataView {
 
     protected Map<?, ?> records = new HashMap<>();
 
-    public ModelView(ResultInfo resultInfo) {
-        super(resultInfo);
+    public ModelView(Integer code, ResultInfo resultInfo) {
+        super(code, resultInfo);
     }
 
-    public ModelView(ResultInfo resultInfo, Collection<?> rows) {
-        super(resultInfo, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, Collection<?> rows) {
+        super(code, resultInfo, rows);
     }
 
-    public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows) {
-        super(resultInfo, total, currPage, pageSize, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows) {
+        super(code, resultInfo, total, currPage, pageSize, rows);
     }
 
-    public ModelView(ResultInfo resultInfo, Limit limit, Collection<?> rows) {
-        super(resultInfo, limit, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, Limit limit, Collection<?> rows) {
+        super(code, resultInfo, limit, rows);
     }
 
-    public ModelView(ResultInfo resultInfo, Map<?, ?> records) {
-        super(resultInfo);
+    public ModelView(Integer code, ResultInfo resultInfo, Map<?, ?> records) {
+        super(code, resultInfo);
         this.records = records;
     }
 
-    public ModelView(ResultInfo resultInfo, Collection<?> rows, Map<?, ?> records) {
-        super(resultInfo, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, Collection<?> rows, Map<?, ?> records) {
+        super(code, resultInfo, rows);
         this.records = records;
     }
 
-    public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Map<?, ?> records) {
-        super(resultInfo, total, currPage, pageSize, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Map<?, ?> records) {
+        super(code, resultInfo, total, currPage, pageSize, rows);
         this.records = records;
     }
 
-    public ModelView(ResultInfo resultInfo, Limit limit, Collection<?> rows, Map<?, ?> records) {
-        super(resultInfo, limit, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, Limit limit, Collection<?> rows, Map<?, ?> records) {
+        super(code, resultInfo, limit, rows);
         this.records = records;
     }
 
-    public ModelView(ResultInfo resultInfo, Object record) {
-        super(resultInfo);
+    public ModelView(Integer code, ResultInfo resultInfo, Object record) {
+        super(code, resultInfo);
         this.record = record;
     }
 
-    public ModelView(ResultInfo resultInfo, Collection<?> rows, Object record) {
-        super(resultInfo, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, Collection<?> rows, Object record) {
+        super(code, resultInfo, rows);
         this.record = record;
     }
 
-    public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Object record) {
-        super(resultInfo, total, currPage, pageSize, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Object record) {
+        super(code, resultInfo, total, currPage, pageSize, rows);
         this.record = record;
     }
 
-    public ModelView(ResultInfo resultInfo, Limit limit, Collection<?> rows, Object record) {
-        super(resultInfo, limit, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, Limit limit, Collection<?> rows, Object record) {
+        super(code, resultInfo, limit, rows);
         this.record = record;
     }
 
-    public ModelView(ResultInfo resultInfo, Map<?, ?> records, Object record) {
-        super(resultInfo);
-        this.records = records;
-        this.record = record;
-    }
-
-    public ModelView(ResultInfo resultInfo, Collection<?> rows, Map<?, ?> records, Object record) {
-        super(resultInfo, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, Map<?, ?> records, Object record) {
+        super(code, resultInfo);
         this.records = records;
         this.record = record;
     }
 
-    public ModelView(ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Map<?, ?> records, Object record) {
-        super(resultInfo, total, currPage, pageSize, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, Collection<?> rows, Map<?, ?> records, Object record) {
+        super(code, resultInfo, rows);
         this.records = records;
         this.record = record;
     }
 
-    public ModelView(ResultInfo resultInfo, Limit limit, Collection<?> rows, Map<?, ?> records, Object record) {
-        super(resultInfo, limit, rows);
+    public ModelView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Map<?, ?> records, Object record) {
+        super(code, resultInfo, total, currPage, pageSize, rows);
         this.records = records;
         this.record = record;
     }
 
-    public ModelView(ResultInfo resultInfo, Map<?, ?> records, Limit limit) {
-        super(resultInfo, limit);
+    public ModelView(Integer code, ResultInfo resultInfo, Limit limit, Collection<?> rows, Map<?, ?> records, Object record) {
+        super(code, resultInfo, limit, rows);
+        this.records = records;
+        this.record = record;
+    }
+
+    public ModelView(Integer code, ResultInfo resultInfo, Map<?, ?> records, Limit limit) {
+        super(code, resultInfo, limit);
         this.records = records;
     }
 

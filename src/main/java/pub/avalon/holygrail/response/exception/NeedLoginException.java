@@ -9,7 +9,8 @@ import pub.avalon.holygrail.response.beans.ResultInfo;
  */
 public class NeedLoginException extends ResultException {
 
-    public NeedLoginException(ResultInfo resultInfo) {
-        super(resultInfo);
+    public NeedLoginException(Integer code, ResultInfo resultInfo) {
+        super(code, resultInfo);
     }
+
 }

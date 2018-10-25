@@ -8,8 +8,8 @@ import pub.avalon.holygrail.response.beans.ResultInfo;
  */
 public class JsonViewParseException extends ResultException {
 
-    public JsonViewParseException(ResultInfo resultInfo) {
-        super(resultInfo);
+    public JsonViewParseException(Integer code, ResultInfo resultInfo) {
+        super(code, resultInfo);
     }
 
 }

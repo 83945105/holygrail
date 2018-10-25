@@ -16,16 +16,28 @@ import java.util.function.Function;
  */
 public class JsonView extends LinkedHashMap<String, Object> implements DataView {
 
+    private ResultInfo resultInfo;
+    private Limit limit;
+
+    @Override
+    public Integer getCode() {
+        Object code = this.get(MessageView.CODE);
+        return code == null ? null : Integer.parseInt(code.toString());
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public ResultInfo getResultInfo() {
-        Map<String, Object> map = (Map) this.get(MessageView.RESULT_INFO_PARAM);
-        if (map == null) {
-            return null;
+        if (this.resultInfo == null) {
+            Map<String, Object> map = (Map) this.get(MessageView.RESULT_INFO_PARAM);
+            if (map == null) {
+                return null;
+            }
+            JsonResultInfo resultInfo = new JsonResultInfo();
+            resultInfo.putAll(map);
+            this.resultInfo = resultInfo;
         }
-        JsonResultInfo resultInfo = new JsonResultInfo();
-        resultInfo.putAll(map);
-        return resultInfo;
+        return this.resultInfo;
     }
 
     @SuppressWarnings("unchecked")
@@ -58,6 +70,9 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
     @SuppressWarnings("unchecked")
     public <T> ArrayList<T> getRows(Function<Map<String, Object>, T> formatterRow) {
         Collection<Map<String, Object>> rows = (Collection<Map<String, Object>>) this.get(LimitDataView.ROWS_KEY);
+        if (rows == null) {
+            return new ArrayList<>(0);
+        }
         ArrayList<T> results = new ArrayList<>(rows.size());
         rows.forEach(row -> results.add(formatterRow.apply(row)));
         return results;
@@ -65,22 +80,22 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
 
     @SuppressWarnings("unchecked")
     public <T> ArrayList<T> getRows(Class<T> clazz) {
-        Collection<Map<String, Object>> rows = (Collection<Map<String, Object>>) this.get(LimitDataView.ROWS_KEY);
-        ArrayList<T> results = new ArrayList<>(rows.size());
-        rows.forEach(row -> results.add(TypeUtils.cast(row, clazz, ParserConfig.getGlobalInstance())));
-        return results;
+        return getRows(row -> TypeUtils.cast(row, clazz, ParserConfig.getGlobalInstance()));
     }
 
-    public Pagination getLimit() {
-        Object obj = this.get(PageView.LIMIT_KEY);
-        if (obj == null) {
-            return null;
+    public Limit getLimit() {
+        if (this.limit == null) {
+            Object obj = this.get(LimitView.LIMIT_KEY);
+            if (obj == null) {
+                return null;
+            }
+            this.limit = TypeUtils.cast(obj, Pagination.class, ParserConfig.getGlobalInstance());
         }
-        return TypeUtils.cast(obj, Pagination.class, ParserConfig.getGlobalInstance());
+        return this.limit;
     }
 
     public <T extends Limit> T getLimit(Class<T> clazz) {
-        Object obj = this.get(PageView.LIMIT_KEY);
+        Object obj = this.get(LimitView.LIMIT_KEY);
         if (obj == null) {
             return null;
         }
