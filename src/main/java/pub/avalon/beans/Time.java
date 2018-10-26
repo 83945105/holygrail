@@ -2,6 +2,8 @@ package pub.avalon.beans;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 时间
@@ -93,6 +95,42 @@ public interface Time {
      */
     static String timeStampToString(long timestamp) {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()).toString();
+    }
+
+    /**
+     * Date转换为LocalDateTime
+     *
+     * @param date
+     */
+    static LocalDateTime dateToLocalDateTime(Date date) {
+        Instant instant = date.toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+        return instant.atZone(zoneId).toLocalDateTime();
+    }
+
+    /**
+     * LocalDateTime转换为Date
+     *
+     * @param localDateTime
+     */
+    static Date localDateTimeToDate(LocalDateTime localDateTime) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = localDateTime.atZone(zoneId);
+        return Date.from(zdt.toInstant());
+    }
+
+    /**
+     * 获取指定日期之前N天的日期
+     *
+     * @param date
+     * @param day
+     * @return
+     */
+    static Date dateTimeBeforeDate(Date date, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - day);
+        return calendar.getTime();
     }
 
 }
