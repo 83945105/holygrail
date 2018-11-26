@@ -40,6 +40,10 @@ public class DataViewUtil {
         return new ModelView(0, ResultUtil.createSuccess("success"), records);
     }
 
+    public static ModelView getModelViewSuccess(Map<?, ?> records, Limit limit) {
+        return new ModelView(0, ResultUtil.createSuccess("success"), records, limit);
+    }
+
     public static ModelView getModelViewSuccess(String message, Map<?, ?> records) {
         return new ModelView(0, ResultUtil.createSuccess(message), records);
     }
