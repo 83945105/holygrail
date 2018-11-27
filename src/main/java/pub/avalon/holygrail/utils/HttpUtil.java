@@ -24,7 +24,6 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -96,31 +95,65 @@ public class HttpUtil {
     }
 
     /**
-     * post form
+     * get
+     *
+     * @param uri
+     * @return
+     * @throws Exception
+     */
+    public static HttpResponse doGet(String uri)
+            throws Exception {
+        HttpClient httpClient = wrapClient(uri, uri);
+        HttpGet request = new HttpGet(buildUrl(uri, null, null));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("http get uri:" + request.getURI());
+        }
+        return httpClient.execute(request);
+    }
+
+    /**
+     * get
+     *
+     * @param url
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    public static HttpResponse doGet(String url, Map<String, String> params)
+            throws Exception {
+        HttpClient httpClient = wrapClient(url, url);
+        HttpGet request = new HttpGet(buildUrl(url, null, params));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("http get uri:" + request.getURI());
+        }
+        return httpClient.execute(request);
+    }
+
+    /**
+     * post
      *
      * @param host
      * @param path
      * @param headers
      * @param params
-     * @param bodys
+     * @param bodies
      * @return
      * @throws Exception
      */
     public static HttpResponse doPost(String host, String path,
                                       Map<String, String> headers,
                                       Map<String, String> params,
-                                      Map<String, String> bodys)
+                                      Map<String, String> bodies)
             throws Exception {
         HttpClient httpClient = wrapClient(host, path);
         HttpPost request = new HttpPost(buildUrl(host, path, params));
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-        if (bodys != null) {
+        if (bodies != null) {
             List<NameValuePair> nameValuePairList = new ArrayList<>();
-
-            for (String key : bodys.keySet()) {
-                nameValuePairList.add(new BasicNameValuePair(key, bodys.get(key)));
+            for (Map.Entry<String, String> entry : bodies.entrySet()) {
+                nameValuePairList.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
             }
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(nameValuePairList, "utf-8");
             formEntity.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
@@ -133,7 +166,25 @@ public class HttpUtil {
     }
 
     /**
-     * Post String
+     * post
+     *
+     * @param url
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    public static HttpResponse doPost(String url, Map<String, String> params)
+            throws Exception {
+        HttpClient httpClient = wrapClient(url, url);
+        HttpPost request = new HttpPost(buildUrl(url, null, params));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("http post uri:" + request.getURI());
+        }
+        return httpClient.execute(request);
+    }
+
+    /**
+     * Post
      *
      * @param host
      * @param path
@@ -294,7 +345,7 @@ public class HttpUtil {
         if (!StringUtil.isEmpty(path)) {
             sbUrl.append(path);
         }
-        if (null != params) {
+        if (!StringUtil.isEmpty(params)) {
             StringBuilder sbQuery = new StringBuilder();
             for (Map.Entry<String, String> query : params.entrySet()) {
                 if (0 < sbQuery.length()) {
@@ -311,7 +362,7 @@ public class HttpUtil {
                     }
                 }
             }
-            if (0 < sbQuery.length()) {
+            if (sbQuery.length() > 0) {
                 sbUrl.append("?").append(sbQuery);
             }
         }
@@ -370,9 +421,8 @@ public class HttpUtil {
                     .register("https", socketFactory).build();
             // 创建ConnectionManager，添加Connection配置信息
             PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-            CloseableHttpClient closeableHttpClient = HttpClients.custom().setConnectionManager(connectionManager)
+            return HttpClients.custom().setConnectionManager(connectionManager)
                     .setDefaultRequestConfig(requestConfig).build();
-            return closeableHttpClient;
         } catch (KeyManagementException | NoSuchAlgorithmException ex) {
             throw new RuntimeException(ex);
         }
