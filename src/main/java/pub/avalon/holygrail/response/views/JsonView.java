@@ -26,50 +26,51 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public ResultInfo getResultInfo() {
         if (this.resultInfo == null) {
-            Map<String, Object> map = (Map) this.get(MessageView.RESULT_INFO_PARAM);
-            if (map == null) {
+            Object resultInfo = this.get(MessageView.RESULT_INFO_PARAM);
+            if (resultInfo == null) {
                 return null;
             }
-            JsonResultInfo resultInfo = new JsonResultInfo();
-            resultInfo.putAll(map);
-            this.resultInfo = resultInfo;
+            if (!(resultInfo instanceof Map)) {
+                return null;
+            }
+            JsonResultInfo jsonResultInfo = new JsonResultInfo();
+            jsonResultInfo.putAll((Map<? extends String, ?>) resultInfo);
+            this.resultInfo = jsonResultInfo;
         }
         return this.resultInfo;
     }
 
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> getRecord() {
-        return (Map<String, Object>) this.get(ModelView.RECORD_KEY);
+    public Object getRecord() {
+        return this.get(ModelView.RECORD_KEY);
     }
 
     public <T> T getRecord(Class<T> clazz) {
-        Object obj = this.get(ModelView.RECORD_KEY);
+        Object obj = getRecord();
         if (obj == null) {
             return null;
         }
         return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
     }
 
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> getRecords() {
-        Map<String, Object> records = (Map<String, Object>) this.get(ModelView.RECORDS_KEY);
+    public Map getRecords() {
+        Object records = this.get(ModelView.RECORDS_KEY);
         if (records == null) {
             return new HashMap<>(0);
         }
-        return records;
+        if (records instanceof Map) {
+            return (Map) records;
+        }
+        return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public Collection<Map<String, Object>> getRows() {
-        return (Collection<Map<String, Object>>) this.get(LimitDataView.ROWS_KEY);
+    public Collection getRows() {
+        return (Collection) this.get(LimitDataView.ROWS_KEY);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> ArrayList<T> getRows(Function<Map<String, Object>, T> formatterRow) {
-        Collection<Map<String, Object>> rows = (Collection<Map<String, Object>>) this.get(LimitDataView.ROWS_KEY);
+    public <T> ArrayList<T> getRows(Function<Object, T> formatterRow) {
+        Collection rows = getRows();
         if (rows == null) {
             return new ArrayList<>(0);
         }
@@ -78,7 +79,6 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
         return results;
     }
 
-    @SuppressWarnings("unchecked")
     public <T> ArrayList<T> getRows(Class<T> clazz) {
         return getRows(row -> TypeUtils.cast(row, clazz, ParserConfig.getGlobalInstance()));
     }
