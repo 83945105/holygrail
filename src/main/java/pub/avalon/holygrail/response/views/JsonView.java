@@ -36,7 +36,10 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
                 return null;
             }
             JsonResultInfo jsonResultInfo = new JsonResultInfo();
-            jsonResultInfo.putAll((Map<? extends String, ?>) resultInfo);
+            for (Object o : ((Map) resultInfo).entrySet()) {
+                Map.Entry entry = (Map.Entry) o;
+                jsonResultInfo.put(String.valueOf(entry), entry.getValue());
+            }
             this.resultInfo = jsonResultInfo;
         }
         return this.resultInfo;
@@ -54,32 +57,32 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
         return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
     }
 
-    public Map getRecords() {
+    public Map<?, ?> getRecords() {
         Object records = this.get(ModelView.RECORDS_KEY);
         if (records == null) {
             return new HashMap<>(0);
         }
         if (records instanceof Map) {
-            return (Map) records;
+            return (Map<?, ?>) records;
         }
         return null;
     }
 
-    public Collection getRows() {
-        return (Collection) this.get(LimitDataView.ROWS_KEY);
+    public Collection<?> getRows() {
+        return (Collection<?>) this.get(LimitDataView.ROWS_KEY);
     }
 
-    public <T> ArrayList<T> getRows(Function<Object, T> formatterRow) {
-        Collection rows = getRows();
+    public <T> Collection<T> getRows(Function<Object, T> formatterRow) {
+        Collection<?> rows = getRows();
         if (rows == null) {
             return new ArrayList<>(0);
         }
-        ArrayList<T> results = new ArrayList<>(rows.size());
-        rows.forEach(row -> results.add(formatterRow.apply(row)));
-        return results;
+        ArrayList<T> list = new ArrayList<>(rows.size());
+        rows.forEach(obj -> list.add(formatterRow.apply(obj)));
+        return list;
     }
 
-    public <T> ArrayList<T> getRows(Class<T> clazz) {
+    public <T> Collection<T> getRows(Class<T> clazz) {
         return getRows(row -> TypeUtils.cast(row, clazz, ParserConfig.getGlobalInstance()));
     }
 

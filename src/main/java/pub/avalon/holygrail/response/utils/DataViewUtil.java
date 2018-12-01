@@ -1,8 +1,11 @@
 package pub.avalon.holygrail.response.utils;
 
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.util.TypeUtils;
 import pub.avalon.beans.Limit;
 import pub.avalon.holygrail.response.views.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -12,6 +15,96 @@ import java.util.Map;
 public class DataViewUtil {
 
     private DataViewUtil() {
+    }
+
+    public static boolean isSuccess(DataView dataView) {
+        if (dataView instanceof MessageView) {
+            return dataView.getResultInfo().isSuccess();
+        }
+        if (dataView instanceof JsonView) {
+            return dataView.getResultInfo().isSuccess();
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return false;
+    }
+
+    public static Object getRecord(DataView dataView) {
+        if (dataView instanceof ModelView) {
+            return ((ModelView) dataView).getRecord();
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecord();
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    public static <T> T getRecord(Class<T> returnType, DataView dataView) {
+        if (dataView instanceof ModelView) {
+            return TypeUtils.cast(((ModelView) dataView).getRecord(), returnType, ParserConfig.getGlobalInstance());
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecord(returnType);
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    public static Map<?, ?> getRecords(DataView dataView) {
+        if (dataView instanceof ModelView) {
+            return ((ModelView) dataView).getRecords();
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecords();
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    public static Collection getRows(DataView dataView) {
+        if (dataView instanceof LimitDataView) {
+            return ((LimitDataView) dataView).getRows();
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRows();
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    public static <T> Collection<T> getRows(Class<T> returnType, DataView dataView) {
+        if (dataView instanceof LimitDataView) {
+            ArrayList<T> list = new ArrayList<>();
+            ((LimitDataView) dataView).getRows().forEach(obj -> list.add(TypeUtils.cast(obj, returnType, ParserConfig.getGlobalInstance())));
+            return list;
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRows(returnType);
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    public static Limit getLimit(DataView dataView) {
+        if (dataView instanceof LimitView) {
+            return ((LimitView) dataView).getLimit();
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getLimit();
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    public static <T extends Limit> T getLimit(Class<T> returnType, DataView dataView) {
+        if (dataView instanceof LimitView) {
+            return TypeUtils.cast(((LimitView) dataView).getLimit(), returnType, ParserConfig.getGlobalInstance());
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getLimit(returnType);
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
     }
 
     public static MessageView getMessageViewSuccess(String message) {
