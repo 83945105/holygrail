@@ -38,7 +38,7 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
             JsonResultInfo jsonResultInfo = new JsonResultInfo();
             for (Object o : ((Map) resultInfo).entrySet()) {
                 Map.Entry entry = (Map.Entry) o;
-                jsonResultInfo.put(String.valueOf(entry), entry.getValue());
+                jsonResultInfo.put(String.valueOf(entry.getKey()), entry.getValue());
             }
             this.resultInfo = jsonResultInfo;
         }
