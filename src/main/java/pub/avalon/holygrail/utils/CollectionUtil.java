@@ -1,7 +1,6 @@
 package pub.avalon.holygrail.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -54,9 +53,13 @@ public class CollectionUtil {
             return;
         }
         if (start < 0) {
-            return;
+            throw new RuntimeException("The starting number should not be less than zero.");
         }
         if (length == 0) {
+            throw new RuntimeException("Processing length cannot be equal to zero.");
+        }
+        if (start == 0 && length > records.size()) {
+            handler.apply(records);
             return;
         }
         List<T> list = new ArrayList<>();
@@ -79,7 +82,7 @@ public class CollectionUtil {
                 list.add(records.get(i));
             }
         }
-        if (handler.apply(list) && i < records.size()) {
+        if (handler.apply(list) && i >= 0 && i < records.size()) {
             CollectionUtil.batchProcess(records, i, length, handler);
         }
     }
@@ -111,8 +114,8 @@ public class CollectionUtil {
      * @throws InstantiationException
      */
     public static <T> void batchProcess(List<T> records, int start, int length, ListHandlerA<T> handler) {
-        CollectionUtil.batchProcess(records, start, length, row -> {
-            handler.accept(row);
+        CollectionUtil.batchProcess(records, start, length, rows -> {
+            handler.accept(rows);
             return true;
         });
     }
@@ -129,17 +132,6 @@ public class CollectionUtil {
      */
     public static <T> void batchProcess(List<T> records, int size, ListHandlerA<T> handler) {
         CollectionUtil.batchProcess(records, 0, Math.abs(size), handler);
-    }
-
-    /**
-     * 新建ArrayList集合
-     *
-     * @param targets 集合元素
-     * @param <T>
-     * @return
-     */
-    public static <T> ArrayList<T> newArrayList(T... targets) {
-        return new ArrayList<>(Arrays.asList(targets));
     }
 
 }
