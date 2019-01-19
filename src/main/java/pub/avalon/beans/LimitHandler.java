@@ -20,7 +20,7 @@ public interface LimitHandler extends Limit {
      *
      * @param limitStart 分页开始号
      */
-    void setLimitStart(int limitStart);
+    void setLimitStart(Integer limitStart);
 
     /**
      * 获取分页结束号
@@ -34,6 +34,6 @@ public interface LimitHandler extends Limit {
      *
      * @param limitEnd 分页结束号
      */
-    void setLimitEnd(int limitEnd);
+    void setLimitEnd(Integer limitEnd);
 
 }

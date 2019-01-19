@@ -51,13 +51,13 @@ public class Pagination implements LimitHandler {
         this.dataBaseType = dataBaseType;
     }
 
-    public Pagination(DataBaseType dataBaseType, int currentPage, int pageSize) {
+    public Pagination(DataBaseType dataBaseType, Integer currentPage, Integer pageSize) {
         this.dataBaseType = dataBaseType;
         this.setCurrentPage(currentPage);
         this.setPageSize(pageSize);
     }
 
-    public Pagination(DataBaseType dataBaseType, int total, int currentPage, int pageSize) {
+    public Pagination(DataBaseType dataBaseType, Integer total, Integer currentPage, Integer pageSize) {
         this.dataBaseType = dataBaseType;
         this.setTotal(total);
         this.setCurrentPage(currentPage);
@@ -101,66 +101,62 @@ public class Pagination implements LimitHandler {
     /**
      * 设置总记录数
      */
-    public void setTotal(int total) {
-        this.total = total > 0 ? total : 0;
+    public void setTotal(Integer total) {
+        this.total = (total == null || total <= 0) ? 0 : total;
     }
 
     /**
      * 设置当前页号
      */
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage > 0 ? currentPage : 1;
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = (currentPage == null || currentPage <= 0) ? 1 : currentPage;
     }
 
     /**
      * 设置每页显示条数
      */
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize > 0 ? pageSize : 1;
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = (pageSize == null || pageSize <= 0) ? 1 : pageSize;
     }
 
     public int getOracleStartNum() {
-        return this.oracleStartNum != 0 ? this.oracleStartNum : (this.currentPage - 1) * this.pageSize + 1;
+        return this.oracleStartNum > 0 ? this.oracleStartNum : (this.currentPage - 1) * this.pageSize + 1;
     }
 
-    public void setOracleStartNum(int oracleStartNum) {
-        this.oracleStartNum = oracleStartNum > 0 ? oracleStartNum : 1;
+    public void setOracleStartNum(Integer oracleStartNum) {
+        this.oracleStartNum = (oracleStartNum == null || oracleStartNum <= 0) ? 1 : oracleStartNum;
     }
 
     public int getOracleEndNum() {
-        return this.oracleEndNum != 0 ? this.oracleEndNum : this.currentPage * this.pageSize;
+        return this.oracleEndNum > 0 ? this.oracleEndNum : this.currentPage * this.pageSize;
     }
 
-    public void setOracleEndNum(int oracleEndNum) {
-        this.oracleEndNum = oracleEndNum > 0 ? oracleEndNum : 1;
+    public void setOracleEndNum(Integer oracleEndNum) {
+        this.oracleEndNum = (oracleEndNum == null || oracleEndNum <= 0) ? 1 : oracleEndNum;
     }
 
     public int getMySqlStartNum() {
-        return this.mySqlStartNum != -1 ? this.mySqlStartNum : (this.currentPage - 1) * this.pageSize;
+        return this.mySqlStartNum >= 0 ? this.mySqlStartNum : (this.currentPage - 1) * this.pageSize;
     }
 
-    public void setMySqlStartNum(int mySqlStartNum) {
-        this.mySqlStartNum = mySqlStartNum;
-    }
-
-    public void setMySQLStartNum(int mySQLStartNum) {
-        this.mySqlStartNum = mySQLStartNum > 0 ? mySQLStartNum : 0;
+    public void setMySQLStartNum(Integer mySQLStartNum) {
+        this.mySqlStartNum = (mySQLStartNum == null || mySQLStartNum <= 0) ? 0 : mySQLStartNum;
     }
 
     public int getSqlServerStartNum() {
-        return this.sqlServerStartNum != 0 ? this.sqlServerStartNum : (this.currentPage - 1) * this.pageSize + 1;
+        return this.sqlServerStartNum > 0 ? this.sqlServerStartNum : (this.currentPage - 1) * this.pageSize + 1;
     }
 
-    public void setSqlServerStartNum(int sqlServerStartNum) {
-        this.sqlServerStartNum = sqlServerStartNum > 0 ? sqlServerStartNum : 1;
+    public void setSqlServerStartNum(Integer sqlServerStartNum) {
+        this.sqlServerStartNum = (sqlServerStartNum == null || sqlServerStartNum <= 0) ? 1 : sqlServerStartNum;
     }
 
     public int getSqlServerEndNum() {
-        return this.sqlServerEndNum != 0 ? this.sqlServerEndNum : this.currentPage * this.pageSize;
+        return this.sqlServerEndNum > 0 ? this.sqlServerEndNum : this.currentPage * this.pageSize;
     }
 
-    public void setSqlServerEndNum(int sqlServerEndNum) {
-        this.sqlServerEndNum = sqlServerEndNum > 0 ? sqlServerEndNum : 1;
+    public void setSqlServerEndNum(Integer sqlServerEndNum) {
+        this.sqlServerEndNum = (sqlServerEndNum == null || sqlServerEndNum <= 0) ? 1 : sqlServerEndNum;
     }
 
     @Override
@@ -178,7 +174,7 @@ public class Pagination implements LimitHandler {
     }
 
     @Override
-    public void setLimitStart(int limitStart) {
+    public void setLimitStart(Integer limitStart) {
         switch (this.dataBaseType) {
             case ORACLE:
                 this.setOracleStartNum(limitStart);
@@ -208,7 +204,7 @@ public class Pagination implements LimitHandler {
     }
 
     @Override
-    public void setLimitEnd(int limitEnd) {
+    public void setLimitEnd(Integer limitEnd) {
         switch (this.dataBaseType) {
             case ORACLE:
                 this.setOracleEndNum(limitEnd);
