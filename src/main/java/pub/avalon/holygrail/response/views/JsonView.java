@@ -2,9 +2,9 @@ package pub.avalon.holygrail.response.views;
 
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
+import pub.avalon.beans.Limit;
 import pub.avalon.beans.Pagination;
 import pub.avalon.holygrail.response.beans.JsonResultInfo;
-import pub.avalon.beans.Limit;
 import pub.avalon.holygrail.response.beans.ResultInfo;
 
 import java.util.*;
@@ -66,6 +66,14 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
             return (Map<?, ?>) records;
         }
         return null;
+    }
+
+    public <T> T getRecords(Class<T> clazz) {
+        Object records = this.get(ModelView.RECORDS_KEY);
+        if (records == null) {
+            return null;
+        }
+        return TypeUtils.cast(records, clazz, ParserConfig.getGlobalInstance());
     }
 
     public Collection<?> getRows() {

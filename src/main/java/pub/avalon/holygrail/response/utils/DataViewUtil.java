@@ -61,6 +61,29 @@ public class DataViewUtil {
         return null;
     }
 
+    public static <T> T getRecords(Class<T> returnType, DataView dataView) {
+        if (dataView instanceof ModelView) {
+            return TypeUtils.cast(((ModelView) dataView).getRecords(), returnType, ParserConfig.getGlobalInstance());
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecords(returnType);
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    public static <T> T getRecordsValue(String key, Class<T> valueType, DataView dataView) {
+        Map records = getRecords(dataView);
+        if (records == null) {
+            ExceptionUtil.throwErrorException("records不存在");
+        }
+        Object value = records.get(key);
+        if (value == null) {
+            return null;
+        }
+        return TypeUtils.cast(value, valueType, ParserConfig.getGlobalInstance());
+    }
+
     public static Collection getRows(DataView dataView) {
         if (dataView instanceof LimitDataView) {
             return ((LimitDataView) dataView).getRows();
