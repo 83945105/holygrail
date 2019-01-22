@@ -6,14 +6,7 @@ package pub.avalon.holygrail.function.beans;
  * @author 白超
  * @date 2019/1/19
  */
-public interface TreeNode {
-
-    /**
-     * 唯一标识符
-     *
-     * @return
-     */
-    Object getKey();
+public interface TreeNode<T extends TreeNode> {
 
     /**
      * 获取排序喜爱宝
@@ -23,10 +16,22 @@ public interface TreeNode {
     long getSortIndex();
 
     /**
-     * 获取父级唯一标识
+     * 判断是否是兄弟节点
      *
+     * @param node
      * @return
      */
-    Object getParentKey();
+    boolean isBrother(T node);
+
+    /**
+     * 判断父级唯一标识符是否相等
+     *
+     * @param sourceNode
+     * @param targetNode
+     * @return
+     */
+    static boolean isBrother(TreeNode sourceNode, TreeNode targetNode) {
+        return sourceNode.isBrother(targetNode);
+    }
 
 }

@@ -2,13 +2,13 @@ package pub.avalon.holygrail.function;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import pub.avalon.holygrail.function.beans.TreeNode;
+import org.springframework.lang.Nullable;
 import pub.avalon.holygrail.function.beans.DropType;
+import pub.avalon.holygrail.function.beans.TreeNode;
 import pub.avalon.holygrail.utils.SortUtil;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 树节点拖动
@@ -21,66 +21,76 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
     Log LOGGER = LogFactory.getLog(TreeNodeDraggable.class);
 
     /**
-     * 查询指定开区间(不包含俩端值)排序下标的所有兄弟节点
+     * 查询排序下标的之间的所有兄弟节点
+     * 只有当拖拽节点和放置节点的parentKey相同时才有可能触发
      *
-     * @param startBrotherSortIndex 开始的兄弟节点排序下标
-     * @param endBrotherSortIndex   结束的兄弟节点排序下标
-     * @param parentKey             父级key
-     * @param params                传递的参数
+     * @param startNode
+     * @param endNode
+     * @param params    传递的参数
      * @return
      */
-    List<T> findBrotherNodesByOpenIntervalIndex(long startBrotherSortIndex, long endBrotherSortIndex, Object parentKey, P params);
+    List<T> findBrotherNodesInSortIndex(T startNode, T endNode, P params);
 
     /**
      * 查询放置节点相邻的上一个节点
      *
-     * @param key
-     * @param sortIndex
-     * @param parentKey
+     * @param drop
      * @param params
      * @return
      */
-    T findDropPreviousBrotherNodeByKey(Object key, long sortIndex, Object parentKey, P params);
+    T findDropPreviousBrotherNode(T drop, P params);
 
     /**
      * 查询拖拽节点相邻的下一个节点
      *
-     * @param key
-     * @param sortIndex
-     * @param parentKey
+     * @param drag
      * @param params
      * @return
      */
-    T findDragNextBrotherNodeByKey(Object key, long sortIndex, Object parentKey, P params);
+    T findDragNextBrotherNode(T drag, P params);
 
     /**
      * 查询放置节点相邻的下一个节点
      *
-     * @param key
-     * @param sortIndex
-     * @param parentKey
+     * @param drop
      * @param params
      * @return
      */
-    T findDropNextBrotherNodeByKey(Object key, long sortIndex, Object parentKey, P params);
+    T findDropNextBrotherNode(T drop, P params);
 
     /**
-     * 查询出指定节点下最大下标
+     * 查找父级节点
      *
-     * @param key
+     * @param node
+     * @return
+     */
+    T findParentNode(T node);
+
+    /**
+     * 获取下标间隔
+     * 主要用于在最后一个节点后面追加节点时,设置sortIndex用
+     *
+     * @return
+     */
+    long getSortIndexInterval();
+
+    /**
+     * 查询出放置节点下最大下标
+     *
+     * @param drop
      * @param params
      * @return
      */
-    long findChildMaxSortIndexByKey(Object key, P params);
+    long findDropChildMaxSortIndex(T drop, P params);
 
     /**
-     * 根据key更新节点的排序下标
+     * 更新节点的排序下标
      *
-     * @param key
+     * @param node
      * @param sortIndex
      * @param params
      */
-    void updateNodeSortIndexByKey(Object key, long sortIndex, P params);
+    void updateNodeSortIndex(T node, long sortIndex, P params);
 
     /**
      * 将所有相同父级节点的放置节点后移一位
@@ -88,70 +98,56 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
      * 比如你的sortIndex是按照 [0, 10, 20, ..., 100, ...] 间隔10的方式递增,那你就要将对应的节点的sortIndex增加10
      * 该操作的目的是给即将插入过来的节点腾出位置
      *
-     * @param parentKey
+     * @param drop
      * @param params
      */
-    void updateDropBrotherNodesSortIndexToNext(Object parentKey, P params);
+    void updateDropBrotherNodesSortIndexToNext(T drop, P params);
 
     /**
-     * 将节点的排序下标更新为指定兄弟下标的下一个
-     * 下一个指的是将sortIndex增加一个单位,至于增加多少,根据你自己的规则而定
-     * 比如你的sortIndex是按照 [0, 10, 20, ..., 100, ...] 间隔10的方式递增,那你就要将对应的节点的sortIndex增加10
-     * 该操作的目的是将一个节点移动到一个节点的最后
+     * 将节点下标减去指定数值
      *
-     * @param key
-     * @param brotherSortIndex
-     * @param params
-     */
-    void updateNodeSortIndexToBrotherSortIndexNextByKey(Object key, long brotherSortIndex, P params);
-
-    /**
-     * 将指定key的节点下标减去指定数值
-     *
-     * @param keys
+     * @param nodes
      * @param minusNum 始终大于0
      * @param params
      */
-    void minusNodesSortIndexByKeys(Set<Object> keys, long minusNum, P params);
+    void minusNodesSortIndex(List<T> nodes, long minusNum, P params);
 
     /**
-     * 将所有排序下标大于指定排序下标的拖拽兄弟节点的排序下标减去指定数值
+     * 将节点下标加上指定数值
      *
-     * @param sortIndex
-     * @param minusNum
-     * @param parentKey
-     * @param params
-     */
-    void minusDragBrotherNodesSortIndexGreaterThanSortIndex(long sortIndex, long minusNum, Object parentKey, P params);
-
-    /**
-     * 将指定key的节点下标加上指定数值
-     *
-     * @param keys
+     * @param nodes
      * @param plusNum 始终大于0
      * @param params
      */
-    void plusNodesSortIndexByKeys(Set<Object> keys, long plusNum, P params);
+    void plusNodesSortIndex(Collection<T> nodes, long plusNum, P params);
 
     /**
-     * 将所有排序下标大于指定排序下标的放置兄弟节点的排序下标加上指定数值
+     * 将大于节点排序下标的兄弟节点排序下标减去指定数值
      *
-     * @param sortIndex
-     * @param plusNum
-     * @param parentKey
+     * @param node
+     * @param minusNum
      * @param params
      */
-    void plusDropBrotherNodesSortIndexGreaterThanSortIndex(long sortIndex, long plusNum, Object parentKey, P params);
+    void minusGreaterThanNodeSortIndexBrotherNodesSortIndex(T node, long minusNum, P params);
+
+    /**
+     * 将大于节点排序下标的兄弟节点排序下标加上指定数值
+     *
+     * @param node
+     * @param plusNum
+     * @param params
+     */
+    void plusGreaterThanNodeSortIndexBrotherNodesSortIndex(T node, long plusNum, P params);
 
     /**
      * 改变拖拽节点的父级
      * 注意: 如果节点的子孙节点记录了如父级节点路径,记得同时将子孙节点对应字段也做修改
      *
-     * @param key          当前节点key
-     * @param newParentKey 新的父级节点key
+     * @param drag          拖拽节点
+     * @param newParentNode 新的父级节点
      * @param params
      */
-    void changeDragNodeParentByKey(Object key, Object newParentKey, P params);
+    void changeDragNodeParent(T drag, @Nullable T newParentNode, P params);
 
     /**
      * 拖拽
@@ -200,16 +196,14 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
         if (drop == null) {
             throw new RuntimeException("drop cannot be null.");
         }
-        Object dragParentKey = drag.getParentKey();
-        Object dropParentKey = drop.getParentKey();
-        if (dragParentKey.equals(dropParentKey)) {
+        if (drag.isBrother(drop)) {
             // 兄弟节点之间拖拽
             draggableBrotherBefore(drag, drop, params);
             return;
         }
         // 跨节点拖拽, 改变父级
         // 查询出拖拽节点的下一个节点
-        T nextDrag = findDragNextBrotherNodeByKey(drag.getKey(), drag.getSortIndex(), drag.getParentKey(), params);
+        T nextDrag = findDragNextBrotherNode(drag, params);
         if (nextDrag != null) {
             //存在下一个
             long minusNum = nextDrag.getSortIndex() - drag.getSortIndex();
@@ -218,13 +212,13 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
                 return;
             }
             // 更新拖拽节点同级后所有节点的下标
-            minusDragBrotherNodesSortIndexGreaterThanSortIndex(drag.getSortIndex(), minusNum, drag.getParentKey(), params);
+            minusGreaterThanNodeSortIndexBrotherNodesSortIndex(drag, minusNum, params);
         }
         // 查询出目标节点的上一个节点
-        T previousDrop = findDropPreviousBrotherNodeByKey(drop.getKey(), drop.getSortIndex(), drop.getParentKey(), params);
+        T previousDrop = findDropPreviousBrotherNode(drop, params);
         if (previousDrop == null) {
             //没有上一个, 说明是第一个, 所有兄弟节点(包括自身)后移一位
-            updateDropBrotherNodesSortIndexToNext(drop.getParentKey(), params);
+            updateDropBrotherNodesSortIndexToNext(drop, params);
         } else {
             // 有上一个, 后移所有后面的兄弟节点
             long plusNum = drop.getSortIndex() - previousDrop.getSortIndex();
@@ -233,11 +227,12 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
                 return;
             }
             //后移所有兄弟节点
-            plusDropBrotherNodesSortIndexGreaterThanSortIndex(previousDrop.getSortIndex(), plusNum, drop.getParentKey(), params);
+            plusGreaterThanNodeSortIndexBrotherNodesSortIndex(previousDrop, plusNum, params);
         }
         // 改变父级并设置sortIndex为目标节点
-        changeDragNodeParentByKey(drag.getKey(), drop.getParentKey(), params);
-        updateNodeSortIndexByKey(drag.getKey(), drop.getSortIndex(), params);
+        T newParentNode = findParentNode(drop);
+        changeDragNodeParent(drag, newParentNode, params);
+        updateNodeSortIndex(drag, drop.getSortIndex(), params);
     }
 
     /**
@@ -284,9 +279,9 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
         if (drop == null) {
             throw new RuntimeException("drop cannot be null.");
         }
-        List<T> drags = findBrotherNodesByOpenIntervalIndex(drag.getSortIndex(), drop.getSortIndex(), drag.getParentKey(), params);
+        List<T> drags = findBrotherNodesInSortIndex(drag, drop, params);
         if (drags == null) {
-            LOGGER.warn("findBrotherNodesByOpenIntervalIndex can not return null.");
+            LOGGER.warn("findBrotherNodesInSortIndex can not return null.");
             return;
         }
         if (drags.size() == 0) {
@@ -303,9 +298,9 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
             return;
         }
         //将拖动放置之间的节点减少一定排序下标
-        minusNodesSortIndexByKeys(drags.stream().map(TreeNode::getKey).collect(Collectors.toSet()), minusNum, params);
+        minusNodesSortIndex(drags, minusNum, params);
         //将拖动节点放置到最后一个节点位置上
-        updateNodeSortIndexByKey(drag.getKey(), drags.get(drags.size() - 1).getSortIndex(), params);
+        updateNodeSortIndex(drag, drags.get(drags.size() - 1).getSortIndex(), params);
     }
 
     /**
@@ -322,15 +317,15 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
         if (drop == null) {
             throw new RuntimeException("drop cannot be null.");
         }
-        List<T> drags = findBrotherNodesByOpenIntervalIndex(drop.getSortIndex(), drag.getSortIndex(), drag.getParentKey(), params);
+        List<T> drags = findBrotherNodesInSortIndex(drop, drag, params);
         if (drags == null) {
-            LOGGER.warn("findBrotherNodesByOpenIntervalIndex can not return null.");
+            LOGGER.warn("findBrotherNodesInSortIndex can not return null.");
             return;
         }
         if (drags.size() == 0) {
             //这种情况是相邻节点, 只需要交换位置
-            updateNodeSortIndexByKey(drag.getKey(), drop.getSortIndex(), params);
-            updateNodeSortIndexByKey(drop.getKey(), drag.getSortIndex(), params);
+            updateNodeSortIndex(drag, drop.getSortIndex(), params);
+            updateNodeSortIndex(drop, drag.getSortIndex(), params);
             return;
         }
         //从小到大排序
@@ -340,11 +335,10 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
             LOGGER.warn("draggableBrotherBeforeFromDownToUp: plusNum must be greater than zero.");
             return;
         }
-        Set<Object> keys = drags.stream().map(TreeNode::getKey).collect(Collectors.toSet());
-        keys.add(drop.getKey());
-        plusNodesSortIndexByKeys(keys, plusNum, params);
+        drags.add(drop);
+        plusNodesSortIndex(drags, plusNum, params);
         //将拖动节点放置到目标元素的位置
-        updateNodeSortIndexByKey(drag.getKey(), drop.getSortIndex(), params);
+        updateNodeSortIndex(drag, drop.getSortIndex(), params);
     }
 
     /**
@@ -361,16 +355,14 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
         if (drop == null) {
             throw new RuntimeException("drop cannot be null.");
         }
-        Object dragParentKey = drag.getParentKey();
-        Object dropParentKey = drop.getParentKey();
-        if (dragParentKey.equals(dropParentKey)) {
+        if (drag.isBrother(drop)) {
             // 兄弟节点之间拖拽
             draggableBrotherAfter(drag, drop, params);
             return;
         }
         // 跨节点拖拽, 改变父级
         // 查询出拖拽节点的下一个节点
-        T nextDrag = findDragNextBrotherNodeByKey(drag.getKey(), drag.getSortIndex(), drag.getParentKey(), params);
+        T nextDrag = findDragNextBrotherNode(drag, params);
         if (nextDrag != null) {
             long minusNum = nextDrag.getSortIndex() - drag.getSortIndex();
             if (minusNum <= 0) {
@@ -378,15 +370,17 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
                 return;
             }
             // 更新拖拽节点同级后所有节点的下标
-            minusDragBrotherNodesSortIndexGreaterThanSortIndex(drag.getSortIndex(), minusNum, drag.getParentKey(), params);
+            minusGreaterThanNodeSortIndexBrotherNodesSortIndex(drag, minusNum, params);
         }
         // 查询目标节点的下一个节点
-        T nextDrop = findDropNextBrotherNodeByKey(drop.getKey(), drop.getSortIndex(), drop.getParentKey(), params);
+        T nextDrop = findDropNextBrotherNode(drop, params);
         if (nextDrop == null) {
             //没有下一个, 改变父级
-            changeDragNodeParentByKey(drag.getKey(), drop.getParentKey(), params);
+            T newParentNode = findParentNode(drop);
+            changeDragNodeParent(drag, newParentNode, params);
             //设置index为下一个
-            updateNodeSortIndexToBrotherSortIndexNextByKey(drag.getKey(), drop.getSortIndex(), params);
+            long indexInterval = this.getSortIndexInterval();
+            updateNodeSortIndex(drag, drop.getSortIndex() + indexInterval, params);
             return;
         }
         // 有下一个, 后移所有后面的兄弟节点
@@ -396,11 +390,12 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
             return;
         }
         //后移所有兄弟节点
-        plusDropBrotherNodesSortIndexGreaterThanSortIndex(drop.getSortIndex(), plusNum, drop.getParentKey(), params);
+        plusGreaterThanNodeSortIndexBrotherNodesSortIndex(drop, plusNum, params);
         //改变拖拽父级节点
-        changeDragNodeParentByKey(drag.getKey(), drop.getParentKey(), params);
+        T newParentNode = findParentNode(drop);
+        changeDragNodeParent(drag, newParentNode, params);
         //设置排序号为放置节点的下一个节点
-        updateNodeSortIndexByKey(drag.getKey(), nextDrop.getSortIndex(), params);
+        updateNodeSortIndex(drag, nextDrop.getSortIndex(), params);
     }
 
     /**
@@ -447,15 +442,15 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
         if (drop == null) {
             throw new RuntimeException("drop cannot be null.");
         }
-        List<T> drags = findBrotherNodesByOpenIntervalIndex(drag.getSortIndex(), drop.getSortIndex(), drag.getParentKey(), params);
+        List<T> drags = findBrotherNodesInSortIndex(drag, drop, params);
         if (drags == null) {
-            LOGGER.warn("findBrotherNodesByOpenIntervalIndex can not return null.");
+            LOGGER.warn("findBrotherNodesInSortIndex can not return null.");
             return;
         }
         if (drags.size() == 0) {
             //这种情况是相邻节点, 只需要交换位置
-            updateNodeSortIndexByKey(drag.getKey(), drop.getSortIndex(), params);
-            updateNodeSortIndexByKey(drop.getKey(), drag.getSortIndex(), params);
+            updateNodeSortIndex(drag, drop.getSortIndex(), params);
+            updateNodeSortIndex(drop, drag.getSortIndex(), params);
             return;
         }
         //从小到大排序
@@ -466,11 +461,10 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
             LOGGER.warn("draggableBrotherBeforeFromUpToDown: minusNum must be greater than zero.");
             return;
         }
-        Set<Object> keys = drags.stream().map(TreeNode::getKey).collect(Collectors.toSet());
-        keys.add(drop.getKey());
-        minusNodesSortIndexByKeys(keys, minusNum, params);
+        drags.add(drop);
+        minusNodesSortIndex(drags, minusNum, params);
         //将拖动节点放置目标节点位置上
-        updateNodeSortIndexByKey(drag.getKey(), drop.getSortIndex(), params);
+        updateNodeSortIndex(drag, drop.getSortIndex(), params);
     }
 
     /**
@@ -487,9 +481,9 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
         if (drop == null) {
             throw new RuntimeException("drop cannot be null.");
         }
-        List<T> drags = findBrotherNodesByOpenIntervalIndex(drop.getSortIndex(), drag.getSortIndex(), drag.getParentKey(), params);
+        List<T> drags = findBrotherNodesInSortIndex(drop, drag, params);
         if (drags == null) {
-            LOGGER.warn("findBrotherNodesByOpenIntervalIndex can not return null.");
+            LOGGER.warn("findBrotherNodesInSortIndex can not return null.");
             return;
         }
         if (drags.size() == 0) {
@@ -504,8 +498,8 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
             LOGGER.warn("draggableBrotherBeforeFromDownToUp: plusNum must be greater than zero.");
             return;
         }
-        plusNodesSortIndexByKeys(drags.stream().map(TreeNode::getKey).collect(Collectors.toSet()), plusNum, params);
-        updateNodeSortIndexByKey(drag.getKey(), drags.get(0).getSortIndex(), params);
+        plusNodesSortIndex(drags, plusNum, params);
+        updateNodeSortIndex(drag, drags.get(0).getSortIndex(), params);
     }
 
     /**
@@ -524,9 +518,9 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
             throw new RuntimeException("drop cannot be null.");
         }
         //查询出指定节点下子级的最大下标
-        long maxSortIndex = findChildMaxSortIndexByKey(drop.getKey(), params);
+        long maxSortIndex = findDropChildMaxSortIndex(drop, params);
         // 查询出拖拽节点的下一个节点
-        T nextDrag = findDragNextBrotherNodeByKey(drag.getKey(), drag.getSortIndex(), drag.getParentKey(), params);
+        T nextDrag = findDragNextBrotherNode(drag, params);
         if (nextDrag != null) {
             //存在下一个
             long minusNum = nextDrag.getSortIndex() - drag.getSortIndex();
@@ -535,11 +529,12 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
                 return;
             }
             // 更新拖拽节点同级后所有节点的下标
-            minusDragBrotherNodesSortIndexGreaterThanSortIndex(drag.getSortIndex(), minusNum, drag.getParentKey(), params);
+            minusGreaterThanNodeSortIndexBrotherNodesSortIndex(drag, minusNum, params);
         }
         //改变父级
-        changeDragNodeParentByKey(drag.getKey(), drop.getKey(), params);
-        updateNodeSortIndexToBrotherSortIndexNextByKey(drag.getKey(), maxSortIndex, params);
+        changeDragNodeParent(drag, drop, params);
+        long indexInterval = this.getSortIndexInterval();
+        updateNodeSortIndex(drag, maxSortIndex + indexInterval, params);
     }
 
 }
