@@ -3,7 +3,6 @@ package pub.avalon.holygrail.response.views;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
 import pub.avalon.beans.Limit;
-import pub.avalon.beans.Pagination;
 import pub.avalon.holygrail.response.beans.JsonResultInfo;
 import pub.avalon.holygrail.response.beans.ResultInfo;
 
@@ -100,7 +99,7 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
             if (obj == null) {
                 return null;
             }
-            this.limit = TypeUtils.cast(obj, Pagination.class, ParserConfig.getGlobalInstance());
+            this.limit = TypeUtils.cast(obj, JsonPagination.class, ParserConfig.getGlobalInstance());
         }
         return this.limit;
     }
@@ -112,4 +111,52 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
         }
         return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
     }
+
+    private class JsonPagination implements Limit {
+
+        private Integer total;
+
+        private Integer currentPage;
+
+        private Integer pageSize;
+
+        private Integer pageCount;
+
+        @Override
+        public Integer getTotal() {
+            return total;
+        }
+
+        public void setTotal(Integer total) {
+            this.total = total;
+        }
+
+        @Override
+        public Integer getCurrentPage() {
+            return currentPage;
+        }
+
+        public void setCurrentPage(Integer currentPage) {
+            this.currentPage = currentPage;
+        }
+
+        @Override
+        public Integer getPageSize() {
+            return pageSize;
+        }
+
+        public void setPageSize(Integer pageSize) {
+            this.pageSize = pageSize;
+        }
+
+        @Override
+        public Integer getPageCount() {
+            return pageCount;
+        }
+
+        public void setPageCount(Integer pageCount) {
+            this.pageCount = pageCount;
+        }
+    }
+
 }
