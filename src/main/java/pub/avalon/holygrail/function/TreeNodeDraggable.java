@@ -110,7 +110,7 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
      * @param minusNum 始终大于0
      * @param params
      */
-    void minusNodesSortIndex(List<T> nodes, long minusNum, P params);
+    void minusNodesSortIndex(Collection<T> nodes, long minusNum, P params);
 
     /**
      * 将节点下标加上指定数值
