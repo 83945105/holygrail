@@ -112,7 +112,7 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
         return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
     }
 
-    private class JsonPagination implements Limit {
+    private static class JsonPagination implements Limit {
 
         private Integer total;
 
