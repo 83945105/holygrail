@@ -98,7 +98,11 @@ public class DataViewUtil {
     public static <T> Collection<T> getRows(Class<T> returnType, DataView dataView) {
         if (dataView instanceof LimitDataView) {
             ArrayList<T> list = new ArrayList<>();
-            ((LimitDataView) dataView).getRows().forEach(obj -> list.add(TypeUtils.cast(obj, returnType, ParserConfig.getGlobalInstance())));
+            Collection<?> rows = ((LimitDataView) dataView).getRows();
+            if (rows == null) {
+                return null;
+            }
+            rows.forEach(obj -> list.add(TypeUtils.cast(obj, returnType, ParserConfig.getGlobalInstance())));
             return list;
         }
         if (dataView instanceof JsonView) {
