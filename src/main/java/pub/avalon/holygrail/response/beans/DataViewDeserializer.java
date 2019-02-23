@@ -22,6 +22,9 @@ import java.util.LinkedHashMap;
  */
 public class DataViewDeserializer extends JsonDeserializer<DataView> {
 
+    private final static TypeReference<LinkedHashMap<String, Object>> JSON_VIEW_TYPE_REFERENCE = new TypeReference<LinkedHashMap<String, Object>>() {
+    };
+
     @Override
     public DataView deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
@@ -36,12 +39,11 @@ public class DataViewDeserializer extends JsonDeserializer<DataView> {
             throw new JsonParseException(jsonParser, "not find json in jsonParser.");
         }
         JsonView jsonView = new JsonView();
-        LinkedHashMap<String, Object> viewData = JsonUtil.parseObject(json, new TypeReference<LinkedHashMap<String, Object>>() {
-        });
-        if (viewData == null) {
-            return jsonView;
+        LinkedHashMap<String, Object> properties = JsonUtil.parseObject(json, JSON_VIEW_TYPE_REFERENCE);
+        if (properties == null) {
+            return null;
         }
-        jsonView.putAll(viewData);
+        jsonView.putAll(properties);
         return jsonView;
     }
 }
