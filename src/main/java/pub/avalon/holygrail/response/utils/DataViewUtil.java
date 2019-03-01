@@ -1,13 +1,17 @@
 package pub.avalon.holygrail.response.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import pub.avalon.beans.DataBaseType;
 import pub.avalon.beans.Limit;
+import pub.avalon.beans.Pagination;
 import pub.avalon.holygrail.response.views.*;
+import pub.avalon.holygrail.utils.JsonUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiFunction;
 
 /**
  * @author 白超
@@ -17,6 +21,12 @@ public class DataViewUtil {
     private DataViewUtil() {
     }
 
+    /**
+     * 是否成功
+     *
+     * @param dataView
+     * @return
+     */
     public static boolean isSuccess(DataView dataView) {
         if (dataView instanceof MessageView) {
             return dataView.getResultInfo().isSuccess();
@@ -28,6 +38,12 @@ public class DataViewUtil {
         return false;
     }
 
+    /**
+     * 获取单个对象
+     *
+     * @param dataView
+     * @return
+     */
     public static Object getRecord(DataView dataView) {
         if (dataView instanceof ModelView) {
             return ((ModelView) dataView).getRecord();
@@ -39,6 +55,14 @@ public class DataViewUtil {
         return null;
     }
 
+    /**
+     * 获取单个对象
+     *
+     * @param returnType 返回值类型
+     * @param dataView
+     * @param <T>
+     * @return
+     */
     public static <T> T getRecord(Class<T> returnType, DataView dataView) {
         if (dataView instanceof ModelView) {
             return TypeUtils.cast(((ModelView) dataView).getRecord(), returnType, ParserConfig.getGlobalInstance());
@@ -50,6 +74,12 @@ public class DataViewUtil {
         return null;
     }
 
+    /**
+     * 获取Map对象
+     *
+     * @param dataView
+     * @return
+     */
     public static Map<?, ?> getRecords(DataView dataView) {
         if (dataView instanceof ModelView) {
             return ((ModelView) dataView).getRecords();
@@ -61,6 +91,14 @@ public class DataViewUtil {
         return null;
     }
 
+    /**
+     * 获取Map对象
+     *
+     * @param returnType 返回值类型
+     * @param dataView
+     * @param <T>
+     * @return
+     */
     public static <T> T getRecords(Class<T> returnType, DataView dataView) {
         if (dataView instanceof ModelView) {
             return TypeUtils.cast(((ModelView) dataView).getRecords(), returnType, ParserConfig.getGlobalInstance());
@@ -72,16 +110,14 @@ public class DataViewUtil {
         return null;
     }
 
-    public static <T> T getRecordsValue(String key, Class<T> valueType, DataView dataView) {
-        Map records = getRecords(dataView);
-        if (records == null) {
-            ExceptionUtil.throwErrorException("records不存在");
-        }
-        Object value = records.get(key);
-        if (value == null) {
-            return null;
-        }
-        return TypeUtils.cast(value, valueType, ParserConfig.getGlobalInstance());
+    public static void main(String[] args) {
+        Map<String, Object> records = new HashMap<>();
+        records.put("key", 123);
+        DataView dataView = DataViewUtil.getModelViewSuccess(records);
+        String json = JSONObject.toJSONString(dataView);
+        System.out.println(json);
+
+
     }
 
     public static Collection getRows(DataView dataView) {
@@ -110,6 +146,27 @@ public class DataViewUtil {
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
+    }
+
+    public static void getRows(DataView dataView, BiFunction<Object, Long, Boolean> callback) {
+        Collection<?> rows = null;
+        if (dataView instanceof LimitDataView) {
+            rows = ((LimitDataView) dataView).getRows();
+        } else if (dataView instanceof JsonView) {
+            rows = ((JsonView) dataView).getRows();
+        } else {
+            ExceptionUtil.throwErrorException("不支持的DataView类型");
+        }
+        if (rows == null) {
+            return;
+        }
+        Iterator iterator = rows.iterator();
+        long i = 0;
+        while (iterator.hasNext()) {
+            if (!callback.apply(iterator.next(), i++)) {
+                break;
+            }
+        }
     }
 
     public static Limit getLimit(DataView dataView) {
@@ -206,7 +263,8 @@ public class DataViewUtil {
         return new ModelView(0, ResultUtil.createSuccess(message), rows, records);
     }
 
-    public static ModelView getModelViewSuccess(Integer code, String message, Collection<?> rows, Map<?, ?> records) {
+    public static ModelView getModelViewSuccess(Integer code, String message, Collection<?> rows, Map<?, ?>
+            records) {
         return new ModelView(code, ResultUtil.createSuccess(message), rows, records);
     }
 
@@ -215,11 +273,13 @@ public class DataViewUtil {
         return new ModelView(0, ResultUtil.createSuccess("success"), limit, rows, records);
     }
 
-    public static ModelView getModelViewSuccess(String message, Collection<?> rows, Map<?, ?> records, Limit limit) {
+    public static ModelView getModelViewSuccess(String message, Collection<?> rows, Map<?, ?> records, Limit
+            limit) {
         return new ModelView(0, ResultUtil.createSuccess(message), limit, rows, records);
     }
 
-    public static ModelView getModelViewSuccess(Integer code, String message, Collection<?> rows, Map<?, ?> records, Limit limit) {
+    public static ModelView getModelViewSuccess(Integer code, String message, Collection<?> rows, Map<?, ?>
+            records, Limit limit) {
         return new ModelView(code, ResultUtil.createSuccess(message), limit, rows, records);
     }
 
