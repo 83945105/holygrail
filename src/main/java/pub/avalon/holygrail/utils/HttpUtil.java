@@ -85,8 +85,10 @@ public class HttpUtil {
             throws Exception {
         HttpClient httpClient = wrapClient(host, path);
         HttpGet request = new HttpGet(buildUrl(host, path, params));
-        for (Map.Entry<String, String> e : headers.entrySet()) {
-            request.addHeader(e.getKey(), e.getValue());
+        if (!StringUtil.isEmpty(headers)) {
+            for (Map.Entry<String, String> e : headers.entrySet()) {
+                request.addHeader(e.getKey(), e.getValue());
+            }
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http get uri:" + request.getURI());
@@ -147,10 +149,12 @@ public class HttpUtil {
             throws Exception {
         HttpClient httpClient = wrapClient(host, path);
         HttpPost request = new HttpPost(buildUrl(host, path, params));
-        for (Map.Entry<String, String> e : headers.entrySet()) {
-            request.addHeader(e.getKey(), e.getValue());
+        if (!StringUtil.isEmpty(headers)) {
+            for (Map.Entry<String, String> e : headers.entrySet()) {
+                request.addHeader(e.getKey(), e.getValue());
+            }
         }
-        if (bodies != null) {
+        if (!StringUtil.isEmpty(bodies)) {
             List<NameValuePair> nameValuePairList = new ArrayList<>();
             for (Map.Entry<String, String> entry : bodies.entrySet()) {
                 nameValuePairList.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
@@ -201,8 +205,10 @@ public class HttpUtil {
             throws Exception {
         HttpClient httpClient = wrapClient(host, path);
         HttpPost request = new HttpPost(buildUrl(host, path, params));
-        for (Map.Entry<String, String> e : headers.entrySet()) {
-            request.addHeader(e.getKey(), e.getValue());
+        if (!StringUtil.isEmpty(headers)) {
+            for (Map.Entry<String, String> e : headers.entrySet()) {
+                request.addHeader(e.getKey(), e.getValue());
+            }
         }
         if (!StringUtil.isEmpty(body)) {
             request.setEntity(new StringEntity(body, "utf-8"));
@@ -231,10 +237,12 @@ public class HttpUtil {
             throws Exception {
         HttpClient httpClient = wrapClient(host, path);
         HttpPost request = new HttpPost(buildUrl(host, path, params));
-        for (Map.Entry<String, String> e : headers.entrySet()) {
-            request.addHeader(e.getKey(), e.getValue());
+        if (!StringUtil.isEmpty(headers)) {
+            for (Map.Entry<String, String> e : headers.entrySet()) {
+                request.addHeader(e.getKey(), e.getValue());
+            }
         }
-        if (body != null) {
+        if (!StringUtil.isEmpty(body)) {
             request.setEntity(new ByteArrayEntity(body));
         }
         if (LOGGER.isDebugEnabled()) {
@@ -261,8 +269,10 @@ public class HttpUtil {
             throws Exception {
         HttpClient httpClient = wrapClient(host, path);
         HttpPut request = new HttpPut(buildUrl(host, path, params));
-        for (Map.Entry<String, String> e : headers.entrySet()) {
-            request.addHeader(e.getKey(), e.getValue());
+        if (!StringUtil.isEmpty(headers)) {
+            for (Map.Entry<String, String> e : headers.entrySet()) {
+                request.addHeader(e.getKey(), e.getValue());
+            }
         }
         if (!StringUtil.isEmpty(body)) {
             request.setEntity(new StringEntity(body, "utf-8"));
@@ -291,10 +301,12 @@ public class HttpUtil {
             throws Exception {
         HttpClient httpClient = wrapClient(host, path);
         HttpPut request = new HttpPut(buildUrl(host, path, params));
-        for (Map.Entry<String, String> e : headers.entrySet()) {
-            request.addHeader(e.getKey(), e.getValue());
+        if (!StringUtil.isEmpty(headers)) {
+            for (Map.Entry<String, String> e : headers.entrySet()) {
+                request.addHeader(e.getKey(), e.getValue());
+            }
         }
-        if (body != null) {
+        if (!StringUtil.isEmpty(body)) {
             request.setEntity(new ByteArrayEntity(body));
         }
         if (LOGGER.isDebugEnabled()) {
@@ -319,8 +331,10 @@ public class HttpUtil {
             throws Exception {
         HttpClient httpClient = wrapClient(host, path);
         HttpDelete request = new HttpDelete(buildUrl(host, path, params));
-        for (Map.Entry<String, String> e : headers.entrySet()) {
-            request.addHeader(e.getKey(), e.getValue());
+        if (!StringUtil.isEmpty(headers)) {
+            for (Map.Entry<String, String> e : headers.entrySet()) {
+                request.addHeader(e.getKey(), e.getValue());
+            }
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http delete uri:" + request.getURI());
