@@ -1,12 +1,18 @@
 package pub.avalon.holygrail.response.views;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 import pub.avalon.beans.Limit;
 import pub.avalon.holygrail.response.beans.JsonResultInfo;
 import pub.avalon.holygrail.response.beans.ResultInfo;
+import pub.avalon.holygrail.utils.JsonUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -58,9 +64,6 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
 
     public Map<?, ?> getRecords() {
         Object records = this.get(ModelView.RECORDS_KEY);
-        if (records == null) {
-            return new HashMap<>(0);
-        }
         if (records instanceof Map) {
             return (Map<?, ?>) records;
         }
@@ -68,11 +71,19 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
     }
 
     public <T> T getRecords(Class<T> clazz) {
-        Object records = this.get(ModelView.RECORDS_KEY);
-        if (records == null) {
-            return null;
-        }
+        Map<?, ?> records = getRecords();
         return TypeUtils.cast(records, clazz, ParserConfig.getGlobalInstance());
+    }
+
+    public <T> T getRecords(TypeReference<T> typeReference) {
+        Map<?, ?> records = getRecords();
+        return JsonUtil.parseObject("", typeReference);
+    }
+
+    public static void main(String[] args) {
+        TypeReference<Map<String, Integer>> typeReference = new TypeReference<Map<String, Integer>>() {
+        };
+        Map<String, Integer> map = new JsonView().getRecords(typeReference);
     }
 
     public Collection<?> getRows() {

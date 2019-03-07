@@ -3,12 +3,8 @@ package pub.avalon.holygrail.response.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
-import pub.avalon.beans.DataBaseType;
 import pub.avalon.beans.Limit;
-import pub.avalon.beans.Pagination;
 import pub.avalon.holygrail.response.views.*;
-import pub.avalon.holygrail.utils.JsonUtil;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -24,8 +20,8 @@ public class DataViewUtil {
     /**
      * 是否成功
      *
-     * @param dataView
-     * @return
+     * @param dataView 数据视图
+     * @return true - 成功 / false - 不成功
      */
     public static boolean isSuccess(DataView dataView) {
         if (dataView instanceof MessageView) {
@@ -41,8 +37,8 @@ public class DataViewUtil {
     /**
      * 获取单个对象
      *
-     * @param dataView
-     * @return
+     * @param dataView 数据视图
+     * @return 对象
      */
     public static Object getRecord(DataView dataView) {
         if (dataView instanceof ModelView) {
