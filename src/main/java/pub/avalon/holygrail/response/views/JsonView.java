@@ -138,6 +138,7 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
             return total;
         }
 
+        @Override
         public void setTotal(Integer total) {
             this.total = total;
         }
@@ -147,6 +148,7 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
             return currentPage;
         }
 
+        @Override
         public void setCurrentPage(Integer currentPage) {
             this.currentPage = currentPage;
         }
@@ -156,6 +158,7 @@ public class JsonView extends LinkedHashMap<String, Object> implements DataView 
             return pageSize;
         }
 
+        @Override
         public void setPageSize(Integer pageSize) {
             this.pageSize = pageSize;
         }
