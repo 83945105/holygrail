@@ -53,8 +53,18 @@ public class LimitView extends MessageView {
         }
 
         @Override
+        public void setTotal(Integer total) {
+            this.total = (total == null || total <= 0) ? 0 : total;
+        }
+
+        @Override
         public Integer getCurrentPage() {
             return this.currentPage;
+        }
+
+        @Override
+        public void setCurrentPage(Integer currentPage) {
+            this.currentPage = (currentPage == null || currentPage <= 0) ? 1 : currentPage;
         }
 
         @Override
@@ -63,26 +73,22 @@ public class LimitView extends MessageView {
         }
 
         @Override
+        public void setPageSize(Integer pageSize) {
+            this.pageSize = (pageSize == null || pageSize <= 0) ? 1 : pageSize;
+        }
+
+        @Override
         public Integer getPageCount() {
-            if (this.total % this.pageSize == 0) {
-                return this.total / this.pageSize;
-            } else if (total % pageSize > 0) {
-                return this.total / this.pageSize + 1;
-            } else {
+            if (this.total <= 0) {
                 return 1;
             }
-        }
-
-        private void setTotal(int total) {
-            this.total = total > 0 ? total : 0;
-        }
-
-        private void setCurrentPage(int currentPage) {
-            this.currentPage = currentPage > 0 ? currentPage : 1;
-        }
-
-        private void setPageSize(int pageSize) {
-            this.pageSize = pageSize > 0 ? pageSize : 1;
+            if (this.total % this.pageSize == 0) {
+                return this.total / this.pageSize;
+            }
+            if (total % pageSize > 0) {
+                return this.total / this.pageSize + 1;
+            }
+            return 1;
         }
 
     }

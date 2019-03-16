@@ -78,8 +78,18 @@ public class Pagination implements LimitHandler {
     }
 
     @Override
+    public void setTotal(Integer total) {
+        this.total = (total == null || total <= 0) ? 0 : total;
+    }
+
+    @Override
     public Integer getCurrentPage() {
         return this.currentPage;
+    }
+
+    @Override
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = (currentPage == null || currentPage <= 0) ? 1 : currentPage;
     }
 
     @Override
@@ -88,35 +98,23 @@ public class Pagination implements LimitHandler {
     }
 
     @Override
-    public Integer getPageCount() {
-        if (this.total % this.pageSize == 0) {
-            return this.total / this.pageSize;
-        } else if (total % pageSize > 0) {
-            return this.total / this.pageSize + 1;
-        } else {
-            return 1;
-        }
-    }
-
-    /**
-     * 设置总记录数
-     */
-    public void setTotal(Integer total) {
-        this.total = (total == null || total <= 0) ? 0 : total;
-    }
-
-    /**
-     * 设置当前页号
-     */
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = (currentPage == null || currentPage <= 0) ? 1 : currentPage;
-    }
-
-    /**
-     * 设置每页显示条数
-     */
     public void setPageSize(Integer pageSize) {
         this.pageSize = (pageSize == null || pageSize <= 0) ? 1 : pageSize;
+    }
+
+
+    @Override
+    public Integer getPageCount() {
+        if (this.total <= 0) {
+            return 1;
+        }
+        if (this.total % this.pageSize == 0) {
+            return this.total / this.pageSize;
+        }
+        if (total % pageSize > 0) {
+            return this.total / this.pageSize + 1;
+        }
+        return 1;
     }
 
     public int getOracleStartNum() {
