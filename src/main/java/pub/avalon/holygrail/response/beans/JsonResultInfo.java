@@ -1,85 +1,66 @@
 package pub.avalon.holygrail.response.beans;
 
-import java.util.ArrayList;
+import pub.avalon.holygrail.utils.JsonUtil;
+
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * @author 白超
- * @date 2018/6/22
+ * @date 2019/3/25
  */
-public class JsonResultInfo extends LinkedHashMap<String, Object> implements ResultInfo {
+public class JsonResultInfo extends AbstractJsonResultInfo {
 
-    private ResultCode resultCode;
+    private ResultInfo resultInfo;
 
-    private Collection<ResultDetail> resultDetails;
+    public JsonResultInfo(String json) {
+        if(json == null) {
+            throw new RuntimeException("JsonResultInfo Constructor arg json is null.");
+        }
+        this.resultInfo = new JacksonResultInfo(JsonUtil.readTree(json));
+    }
 
     @Override
     public ResultCode getResultCode() {
-        if (this.resultCode == null) {
-            String rc = (String) get("resultCode");
-            for (ResultCode resultCode : ResultCode.values()) {
-                if (resultCode.name().equals(rc)) {
-                    this.resultCode = resultCode;
-                    break;
-                }
-            }
-        }
-        return this.resultCode;
+        return this.resultInfo.getResultCode();
     }
 
     @Override
     public boolean isSuccess() {
-        return (boolean) get("success");
+        return this.resultInfo.isSuccess();
     }
 
     @Override
     public boolean isFail() {
-        return (boolean) get("fail");
+        return this.resultInfo.isFail();
     }
 
     @Override
     public boolean isError() {
-        return (boolean) get("error");
+        return this.resultInfo.isError();
     }
 
     @Override
     public int getType() {
-        return (int) get("type");
+        return this.resultInfo.getType();
     }
 
     @Override
     public String getMessage() {
-        return (String) get("message");
+        return this.resultInfo.getMessage();
     }
 
     @Override
     public int getMessageCode() {
-        return (int) get("messageCode");
+        return this.resultInfo.getMessageCode();
     }
 
     @Override
     public String getExceptionMessage() {
-        return (String) get("exceptionMessage");
+        return this.resultInfo.getExceptionMessage();
     }
 
     @Override
     public Collection<ResultDetail> getResultDetails() {
-        if (this.resultDetails == null) {
-            Collection rds = (Collection) get("resultDetails");
-            this.resultDetails = new ArrayList<>(rds.size());
-            for (Object rd : rds) {
-                if (rd instanceof Map) {
-                    JsonResultDetail jsonResultDetail = new JsonResultDetail();
-                    for (Map.Entry<?, ?> entry : ((Map<?, ?>) rd).entrySet()) {
-                        jsonResultDetail.put((String) entry.getKey(), entry.getValue());
-                    }
-                    resultDetails.add(jsonResultDetail);
-                }
-            }
-        }
-        return this.resultDetails;
+        return this.resultInfo.getResultDetails();
     }
-
 }

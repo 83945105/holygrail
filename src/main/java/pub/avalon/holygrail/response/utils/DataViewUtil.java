@@ -27,7 +27,7 @@ public class DataViewUtil {
         if (dataView instanceof MessageView) {
             return dataView.getResultInfo().isSuccess();
         }
-        if (dataView instanceof JsonView) {
+        if (dataView instanceof AbstractJsonView) {
             return dataView.getResultInfo().isSuccess();
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
@@ -44,8 +44,8 @@ public class DataViewUtil {
         if (dataView instanceof ModelView) {
             return ((ModelView) dataView).getRecord();
         }
-        if (dataView instanceof JsonView) {
-            return ((JsonView) dataView).getRecord();
+        if (dataView instanceof AbstractJsonView) {
+            return ((AbstractJsonView) dataView).getRecord();
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -63,8 +63,8 @@ public class DataViewUtil {
         if (dataView instanceof ModelView) {
             return TypeUtils.cast(((ModelView) dataView).getRecord(), returnType, ParserConfig.getGlobalInstance());
         }
-        if (dataView instanceof JsonView) {
-            return ((JsonView) dataView).getRecord(returnType);
+        if (dataView instanceof AbstractJsonView) {
+            return ((AbstractJsonView) dataView).getRecord(returnType);
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -80,8 +80,8 @@ public class DataViewUtil {
         if (dataView instanceof ModelView) {
             return ((ModelView) dataView).getRecords();
         }
-        if (dataView instanceof JsonView) {
-            return ((JsonView) dataView).getRecords();
+        if (dataView instanceof AbstractJsonView) {
+            return ((AbstractJsonView) dataView).getRecords();
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -99,8 +99,8 @@ public class DataViewUtil {
         if (dataView instanceof ModelView) {
             return TypeUtils.cast(((ModelView) dataView).getRecords(), returnType, ParserConfig.getGlobalInstance());
         }
-        if (dataView instanceof JsonView) {
-            return ((JsonView) dataView).getRecords(returnType);
+        if (dataView instanceof AbstractJsonView) {
+            return ((AbstractJsonView) dataView).getRecords(returnType);
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -120,8 +120,8 @@ public class DataViewUtil {
         if (dataView instanceof LimitDataView) {
             return ((LimitDataView) dataView).getRows();
         }
-        if (dataView instanceof JsonView) {
-            return ((JsonView) dataView).getRows();
+        if (dataView instanceof AbstractJsonView) {
+            return ((AbstractJsonView) dataView).getRows();
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -137,8 +137,8 @@ public class DataViewUtil {
             rows.forEach(obj -> list.add(TypeUtils.cast(obj, returnType, ParserConfig.getGlobalInstance())));
             return list;
         }
-        if (dataView instanceof JsonView) {
-            return ((JsonView) dataView).getRows(returnType);
+        if (dataView instanceof AbstractJsonView) {
+            return ((AbstractJsonView) dataView).getRows(returnType);
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -148,8 +148,8 @@ public class DataViewUtil {
         Collection<?> rows = null;
         if (dataView instanceof LimitDataView) {
             rows = ((LimitDataView) dataView).getRows();
-        } else if (dataView instanceof JsonView) {
-            rows = ((JsonView) dataView).getRows();
+        } else if (dataView instanceof AbstractJsonView) {
+            rows = ((AbstractJsonView) dataView).getRows();
         } else {
             ExceptionUtil.throwErrorException("不支持的DataView类型");
         }
@@ -169,8 +169,8 @@ public class DataViewUtil {
         if (dataView instanceof LimitView) {
             return ((LimitView) dataView).getLimit();
         }
-        if (dataView instanceof JsonView) {
-            return ((JsonView) dataView).getLimit();
+        if (dataView instanceof AbstractJsonView) {
+            return ((AbstractJsonView) dataView).getLimit();
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -180,8 +180,8 @@ public class DataViewUtil {
         if (dataView instanceof LimitView) {
             return TypeUtils.cast(((LimitView) dataView).getLimit(), returnType, ParserConfig.getGlobalInstance());
         }
-        if (dataView instanceof JsonView) {
-            return ((JsonView) dataView).getLimit(returnType);
+        if (dataView instanceof AbstractJsonView) {
+            return ((AbstractJsonView) dataView).getLimit(returnType);
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;

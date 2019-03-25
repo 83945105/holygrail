@@ -1,21 +1,26 @@
 package pub.avalon.holygrail.response.beans;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 /**
  * @author 白超
- * @date 2018/9/25
+ * @date 2019/3/25
  */
-public class JsonResultDetail extends LinkedHashMap<String, Object> implements ResultDetail {
+public class JsonResultDetail extends AbstractJsonResultDetail {
+
+    private String json;
+
+    public JsonResultDetail(String json) {
+        if(json == null) {
+            throw new RuntimeException("JsonResultDetail Constructor arg json is null.");
+        }
+        this.json = json;
+    }
 
     @Override
     public ResultInfo getResultInfo() {
-        Map<?, ?> resultInfo = (Map) get("resultInfo");
-        JsonResultInfo jsonResultInfo = new JsonResultInfo();
-        for (Map.Entry<?, ?> entry : resultInfo.entrySet()) {
-            jsonResultInfo.put((String) entry.getKey(), entry.getValue());
+        if (this.resultInfo != null) {
+            return this.resultInfo;
         }
-        return jsonResultInfo;
+        this.resultInfo = new JsonResultInfo(this.json);
+        return this.resultInfo;
     }
 }

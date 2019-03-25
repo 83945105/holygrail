@@ -1,6 +1,7 @@
 package pub.avalon.holygrail.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -62,6 +63,21 @@ public class JsonUtil {
     public static <T> T parseObject(String json, TypeReference<T> valueTypeRef) {
         try {
             return OBJECT_MAPPER.readValue(json, valueTypeRef);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 解析json
+     *
+     * @param json
+     * @return
+     */
+    public static TreeNode readTree(String json) {
+        try {
+            return OBJECT_MAPPER.readTree(json);
         } catch (IOException e) {
             e.printStackTrace();
         }
