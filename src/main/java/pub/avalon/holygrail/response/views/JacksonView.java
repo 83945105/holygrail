@@ -110,7 +110,8 @@ public class JacksonView extends AbstractJsonView {
 
         ResultInfo resultInfo = dv.getResultInfo();
 
-        resultInfo.getResultDetails().iterator().next().getResultInfo();
+        resultInfo = resultInfo.getResultDetails().iterator().next().getResultInfo();
+        System.out.println(resultInfo.getResultCode());
 
         long use = System.nanoTime() - begin;
         System.out.println(use + " = " + use / (1000 * 1000));
