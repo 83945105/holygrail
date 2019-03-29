@@ -85,11 +85,6 @@ public class DataViewDeserializerTest {
 
         jsonView.getRows();
 
-        jsonView.getRows(row -> {
-
-            return TypeUtils.cast(row, User.class, ParserConfig.getGlobalInstance());
-        });
-
         System.out.println("----------");
 
     }

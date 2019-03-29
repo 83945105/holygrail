@@ -138,7 +138,8 @@ public class DataViewUtil {
             return list;
         }
         if (dataView instanceof AbstractJsonView) {
-            return ((AbstractJsonView) dataView).getRows(returnType);
+//            return ((AbstractJsonView) dataView).getRows(returnType);
+            return null;
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
