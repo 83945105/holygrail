@@ -6,15 +6,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import pub.avalon.beans.DataBaseType;
 import pub.avalon.beans.Limit;
-import pub.avalon.beans.Pagination;
 import pub.avalon.holygrail.response.beans.JacksonResultInfo;
 import pub.avalon.holygrail.response.beans.ResultInfo;
-import pub.avalon.holygrail.response.beans.ResultInfoRealization;
-import pub.avalon.holygrail.response.beans.User;
-import pub.avalon.holygrail.response.utils.DataViewUtil;
-import pub.avalon.holygrail.response.utils.ResultUtil;
 import pub.avalon.holygrail.utils.JsonUtil;
 
 import java.lang.reflect.Type;
@@ -27,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author 白超
  * @date 2018/6/3
  */
-public class JacksonView extends AbstractJsonView {
+public class JacksonView implements JsonView {
 
     private TreeNode treeNode;
 
@@ -119,15 +113,15 @@ public class JacksonView extends AbstractJsonView {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getRecord(Class<T> clazz) {
+    public <T> T getRecord(Class<T> returnType) {
         if (this.recordClassReferenceCache == null) {
             this.recordClassReferenceCache = new ConcurrentHashMap<>(1);
         }
-        Object record = this.recordClassReferenceCache.get(clazz);
+        Object record = this.recordClassReferenceCache.get(returnType);
         if (record == null) {
             this.initRecordJson();
-            record = JsonUtil.parseObject(this.recordJson, clazz);
-            this.recordClassReferenceCache.put(clazz, record);
+            record = JsonUtil.parseObject(this.recordJson, returnType);
+            this.recordClassReferenceCache.put(returnType, record);
         }
         return (T) record;
     }
@@ -170,15 +164,15 @@ public class JacksonView extends AbstractJsonView {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getRecords(Class<T> clazz) {
+    public <T> T getRecords(Class<T> returnType) {
         if (this.recordsClassReferenceCache == null) {
             this.recordsClassReferenceCache = new ConcurrentHashMap<>(1);
         }
-        Object records = this.recordsClassReferenceCache.get(clazz);
+        Object records = this.recordsClassReferenceCache.get(returnType);
         if (records == null) {
             this.initRecordsJson();
-            records = JsonUtil.parseObject(this.recordsJson, clazz);
-            this.recordsClassReferenceCache.put(clazz, records);
+            records = JsonUtil.parseObject(this.recordsJson, returnType);
+            this.recordsClassReferenceCache.put(returnType, records);
         }
         return (T) records;
     }
@@ -221,19 +215,19 @@ public class JacksonView extends AbstractJsonView {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> List<T> getRows(Class<T> clazz) {
+    public <T> List<T> getRows(Class<T> beanType) {
         if (this.rowsClassReferenceCache == null) {
             this.rowsClassReferenceCache = new ConcurrentHashMap<>(1);
         }
-        Object rows = this.rowsClassReferenceCache.get(clazz);
+        Object rows = this.rowsClassReferenceCache.get(beanType);
         if (rows == null) {
             TreeNode treeNode = this.treeNode.get(LimitDataView.ROWS_KEY);
             if (treeNode instanceof ArrayNode) {
                 rows = new ArrayList<>(treeNode.size());
                 for (JsonNode jsonNode : (ArrayNode) treeNode) {
-                    ((ArrayList) rows).add(JsonUtil.parseObject(jsonNode.toString(), clazz));
+                    ((ArrayList) rows).add(JsonUtil.parseObject(jsonNode.toString(), beanType));
                 }
-                this.rowsClassReferenceCache.put(clazz, rows);
+                this.rowsClassReferenceCache.put(beanType, rows);
             } else {
                 return new ArrayList<>(0);
             }
@@ -279,42 +273,17 @@ public class JacksonView extends AbstractJsonView {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends Limit> T getLimit(Class<T> clazz) {
+    public <T extends Limit> T getLimit(Class<T> returnType) {
         if (this.limitClassReferenceCache == null) {
             this.limitClassReferenceCache = new ConcurrentHashMap<>(1);
         }
-        Object limit = this.limitClassReferenceCache.get(clazz);
+        Object limit = this.limitClassReferenceCache.get(returnType);
         if (limit == null) {
             this.initLimitJson();
-            limit = JsonUtil.parseObject(this.limitJson, clazz);
-            this.limitClassReferenceCache.put(clazz, limit);
+            limit = JsonUtil.parseObject(this.limitJson, returnType);
+            this.limitClassReferenceCache.put(returnType, limit);
         }
         return (T) limit;
-    }
-
-    public static void main(String[] args) {
-        User user = new User();
-        user.setId("666");
-        List<User> list = new ArrayList<>();
-        list.add(user);
-        Pagination pagination = new Pagination(DataBaseType.MYSQL, 100, 1, 20);
-        DataView dataView = DataViewUtil.getModelViewSuccess(10, "666", list, pagination);
-        ResultInfoRealization rr = (ResultInfoRealization) dataView.getResultInfo();
-        rr.addResultDetail(() -> ResultUtil.createError("666"));
-        String json = JsonUtil.toJsonString(dataView);
-        DataView dv = JsonUtil.parseObject(json, new TypeReference<DataView>() {
-        });
-        long begin = System.nanoTime();
-
-        if (dv instanceof JacksonView) {
-
-            Limit limit = ((JacksonView) dv).getLimit(JacksonPagination.class);
-            System.out.println(limit);
-
-        }
-
-        long use = System.nanoTime() - begin;
-        System.out.println(use + " = " + use / (1000 * 1000));
     }
 
     private static class JacksonPagination implements Limit {

@@ -1,8 +1,6 @@
 package pub.avalon.holygrail.response.plugins;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.util.TypeUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import pub.avalon.holygrail.bean.User;
@@ -11,7 +9,7 @@ import pub.avalon.holygrail.response.beans.ResultInfo;
 import pub.avalon.holygrail.response.utils.DataViewUtil;
 import pub.avalon.holygrail.response.utils.ResultUtil;
 import pub.avalon.holygrail.response.views.DataView;
-import pub.avalon.holygrail.response.views.AbstractJsonView;
+import pub.avalon.holygrail.response.views.JsonView;
 import pub.avalon.holygrail.response.views.ModelView;
 import pub.avalon.holygrail.utils.JsonUtil;
 
@@ -37,7 +35,7 @@ public class DataViewDeserializerTest {
 
         String json = JsonUtil.toJsonString(dataView);
 
-        AbstractJsonView jsonView = JsonUtil.parseObject(json, AbstractJsonView.class);
+        JsonView jsonView = JsonUtil.parseObject(json, JsonView.class);
         ResultInfo resultInfo = jsonView.getResultInfo();
         System.out.println(resultInfo.isSuccess());
         System.out.println(resultInfo.getMessageCode());
@@ -73,7 +71,7 @@ public class DataViewDeserializerTest {
 
         System.out.println(json);
 
-        AbstractJsonView jsonView = JsonUtil.parseObject(json, AbstractJsonView.class);
+        JsonView jsonView = JsonUtil.parseObject(json, JsonView.class);
 
         Map records = jsonView.getRecords();
 
@@ -94,7 +92,7 @@ public class DataViewDeserializerTest {
 
         String json = "{\"resultInfo\":{\"resultCode\":\"SUCCESS\",\"messageCode\":0,\"message\":\"success\",\"exceptionMessage\":null,\"resultDetails\":[{\"resultInfo\":{\"resultCode\":\"FAIL\",\"messageCode\":0,\"message\":\"失败\",\"exceptionMessage\":null,\"resultDetails\":null,\"error\":false,\"type\":0,\"success\":false,\"fail\":true}},{\"resultInfo\":{\"resultCode\":\"FAIL\",\"messageCode\":0,\"message\":\"失败\",\"exceptionMessage\":null,\"resultDetails\":null,\"error\":false,\"type\":0,\"success\":false,\"fail\":true}},{\"resultInfo\":{\"resultCode\":\"FAIL\",\"messageCode\":0,\"message\":\"失败\",\"exceptionMessage\":null,\"resultDetails\":null,\"error\":false,\"type\":0,\"success\":false,\"fail\":true}}],\"error\":false,\"type\":1,\"success\":true,\"fail\":false}}";
 
-        AbstractJsonView jsonView = JsonUtil.parseObject(json, AbstractJsonView.class);
+        JsonView jsonView = JsonUtil.parseObject(json, JsonView.class);
 
         Collection<ResultDetail> resultDetails = jsonView.getResultInfo().getResultDetails();
 
@@ -125,9 +123,9 @@ public class DataViewDeserializerTest {
         System.out.println(json);
         System.out.println(json1);
 
-        AbstractJsonView jsonView = objectMapper.readValue(json, AbstractJsonView.class);
+        JsonView jsonView = objectMapper.readValue(json, JsonView.class);
 
-        AbstractJsonView jsonView1 = JSONObject.parseObject(json, AbstractJsonView.class);
+        JsonView jsonView1 = JSONObject.parseObject(json, JsonView.class);
 
         int count = 1;
         long tt;
@@ -139,7 +137,7 @@ public class DataViewDeserializerTest {
             tt = 0;
             for (int i = 0; i < count; i++) {
                 long st = System.nanoTime();
-                JSONObject.parseObject(json, AbstractJsonView.class);
+                JSONObject.parseObject(json, JsonView.class);
                 long et = System.nanoTime() - st;
                 tt += et;
             }

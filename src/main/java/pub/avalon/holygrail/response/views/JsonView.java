@@ -2,84 +2,126 @@ package pub.avalon.holygrail.response.views;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import pub.avalon.beans.Limit;
-import pub.avalon.holygrail.response.beans.ResultInfo;
 
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author 白超
- * @date 2019/3/25
+ * @date 2018/6/3
  */
-public class JsonView extends AbstractJsonView {
+public interface JsonView extends DataView {
 
-    @Override
-    public Map<String, Object> getRecord() {
-        return null;
-    }
+    /**
+     * 获取存储于record的对象
+     * 一般存储者放入的是非Map对象
+     *
+     * @return
+     */
+    Map<String, Object> getRecord();
 
-    @Override
-    public <T> T getRecord(TypeReference<T> typeReference) {
-        return null;
-    }
+    /**
+     * 获取存储于record的对象
+     * 一般存储者放入的是非Map对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    <T> T getRecord(TypeReference<T> typeReference);
 
-    @Override
-    public <T> T getRecord(Class<T> clazz) {
-        return null;
-    }
+    /**
+     * 获取存储于record的对象并转为指定的类型
+     * 一般存储者放入的是非Map对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    <T> T getRecord(Class<T> returnType);
 
-    @Override
-    public Map<String, Object> getRecords() {
-        return null;
-    }
+    /**
+     * 获取存储于records的对象
+     * 一般存储者放入的是Map对象
+     *
+     * @return
+     */
+    Map<String, Object> getRecords();
 
-    @Override
-    public <T> T getRecords(TypeReference<T> typeReference) {
-        return null;
-    }
+    /**
+     * 获取存储于records的对象并转为指定的类型
+     * 一般存储者放入的是Map对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    <T> T getRecords(TypeReference<T> typeReference);
 
-    @Override
-    public <T> T getRecords(Class<T> clazz) {
-        return null;
-    }
+    /**
+     * 获取存储于records的对象并转为指定的类型
+     * 一般存储者放入的是Map对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    <T> T getRecords(Class<T> returnType);
 
-    @Override
-    public List<Map<String, Object>> getRows() {
-        return null;
-    }
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @return
+     */
+    List<Map<String, Object>> getRows();
 
-    @Override
-    public <T> T getRows(TypeReference<T> typeReference) {
-        return null;
-    }
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    <T> T getRows(TypeReference<T> typeReference);
 
-    @Override
-    public <T> List<T> getRows(Class<T> clazz) {
-        return null;
-    }
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @param beanType
+     * @param <T>
+     * @return
+     */
+    <T> List<T> getRows(Class<T> beanType);
 
-    @Override
-    public Limit getLimit() {
-        return null;
-    }
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @return
+     */
+    Limit getLimit();
 
-    @Override
-    public <T extends Limit> T getLimit(TypeReference<T> typeReference) {
-        return null;
-    }
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    <T extends Limit> T getLimit(TypeReference<T> typeReference);
 
-    @Override
-    public <T extends Limit> T getLimit(Class<T> clazz) {
-        return null;
-    }
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    <T extends Limit> T getLimit(Class<T> returnType);
 
-    @Override
-    public Integer getCode() {
-        return null;
-    }
-
-    @Override
-    public ResultInfo getResultInfo() {
-        return null;
-    }
 }

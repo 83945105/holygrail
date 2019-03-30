@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import pub.avalon.holygrail.utils.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -113,7 +114,7 @@ public class JacksonResultInfo extends AbstractJsonResultInfo {
         if (treeNode instanceof ArrayNode) {
             Collection<ResultDetail> resultDetails = new ArrayList<>();
             for (JsonNode jsonNode : ((ArrayNode) treeNode)) {
-                resultDetails.add(new JsonResultDetail(jsonNode.toString()));
+                resultDetails.add(new JacksonResultDetail(JsonUtil.readTree(jsonNode.toString())));
             }
             return resultDetails;
         }

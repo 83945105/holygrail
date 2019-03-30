@@ -3,8 +3,14 @@ package pub.avalon.holygrail.response.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import pub.avalon.beans.DataBaseType;
 import pub.avalon.beans.Limit;
+import pub.avalon.beans.Pagination;
+import pub.avalon.holygrail.response.beans.ResultInfoRealization;
+import pub.avalon.holygrail.response.beans.User;
 import pub.avalon.holygrail.response.views.*;
+import pub.avalon.holygrail.utils.JsonUtil;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -27,7 +33,7 @@ public class DataViewUtil {
         if (dataView instanceof MessageView) {
             return dataView.getResultInfo().isSuccess();
         }
-        if (dataView instanceof AbstractJsonView) {
+        if (dataView instanceof JsonView) {
             return dataView.getResultInfo().isSuccess();
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
@@ -35,19 +41,169 @@ public class DataViewUtil {
     }
 
     /**
-     * 获取单个对象
+     * 获取存储于record的对象
+     * 一般存储者放入的是非Map对象
      *
-     * @param dataView 数据视图
-     * @return 对象
+     * @return
      */
-    public static Object getRecord(DataView dataView) {
+    public static Map<String, Object> getRecord(DataView dataView) {
         if (dataView instanceof ModelView) {
-            return ((ModelView) dataView).getRecord();
+            Object record = ((ModelView) dataView).getRecord();
+            if (record == null) {
+                return null;
+            }
+            return JsonUtil.parseObject(JsonUtil.toJsonString(record), new TypeReference<Map<String, Object>>() {
+            });
         }
-        if (dataView instanceof AbstractJsonView) {
-            return ((AbstractJsonView) dataView).getRecord();
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecord();
+        }
+        if (dataView instanceof MessageView) {
+            ExceptionUtil.throwErrorException("无法从消息视图MessageView中获取record属性");
+            return null;
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    /**
+     * 获取存储于record的对象
+     * 一般存储者放入的是非Map对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRecord(DataView dataView, TypeReference<T> typeReference) {
+        if (dataView instanceof ModelView) {
+            Object record = ((ModelView) dataView).getRecord();
+            if (record == null) {
+                return null;
+            }
+            return JsonUtil.parseObject(JsonUtil.toJsonString(record), typeReference);
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecord(typeReference);
+        }
+        if (dataView instanceof MessageView) {
+            ExceptionUtil.throwErrorException("无法从消息视图MessageView中获取record属性");
+            return null;
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    /**
+     * 获取存储于record的对象并转为指定的类型
+     * 一般存储者放入的是非Map对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRecord(DataView dataView, Class<T> returnType) {
+        return null;
+    }
+
+    /**
+     * 获取存储于records的对象
+     * 一般存储者放入的是Map对象
+     *
+     * @return
+     */
+    public static Map<String, Object> getRecords() {
+        return null;
+    }
+
+    /**
+     * 获取存储于records的对象并转为指定的类型
+     * 一般存储者放入的是Map对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRecords(TypeReference<T> typeReference) {
+        return null;
+    }
+
+    /**
+     * 获取存储于records的对象并转为指定的类型
+     * 一般存储者放入的是Map对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRecords(Class<T> returnType) {
+        return null;
+    }
+
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @return
+     */
+    public static List<Map<String, Object>> getRows() {
+        return null;
+    }
+
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRows(TypeReference<T> typeReference) {
+        return null;
+    }
+
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @param beanType
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> getRows(Class<T> beanType) {
+        return null;
+    }
+
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @return
+     */
+    public static Limit getLimit() {
+        return null;
+    }
+
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    public static <T extends Limit> T getLimit(TypeReference<T> typeReference) {
+        return null;
+    }
+
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    public static <T extends Limit> T getLimit(Class<T> returnType) {
         return null;
     }
 
@@ -63,8 +219,8 @@ public class DataViewUtil {
         if (dataView instanceof ModelView) {
             return TypeUtils.cast(((ModelView) dataView).getRecord(), returnType, ParserConfig.getGlobalInstance());
         }
-        if (dataView instanceof AbstractJsonView) {
-            return ((AbstractJsonView) dataView).getRecord(returnType);
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecord(returnType);
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -80,8 +236,8 @@ public class DataViewUtil {
         if (dataView instanceof ModelView) {
             return ((ModelView) dataView).getRecords();
         }
-        if (dataView instanceof AbstractJsonView) {
-            return ((AbstractJsonView) dataView).getRecords();
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecords();
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -99,29 +255,19 @@ public class DataViewUtil {
         if (dataView instanceof ModelView) {
             return TypeUtils.cast(((ModelView) dataView).getRecords(), returnType, ParserConfig.getGlobalInstance());
         }
-        if (dataView instanceof AbstractJsonView) {
-            return ((AbstractJsonView) dataView).getRecords(returnType);
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecords(returnType);
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
-    }
-
-    public static void main(String[] args) {
-        Map<String, Object> records = new HashMap<>();
-        records.put("key", 123);
-        DataView dataView = DataViewUtil.getModelViewSuccess(records);
-        String json = JSONObject.toJSONString(dataView);
-        System.out.println(json);
-
-
     }
 
     public static Collection getRows(DataView dataView) {
         if (dataView instanceof LimitDataView) {
             return ((LimitDataView) dataView).getRows();
         }
-        if (dataView instanceof AbstractJsonView) {
-            return ((AbstractJsonView) dataView).getRows();
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRows();
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -137,7 +283,7 @@ public class DataViewUtil {
             rows.forEach(obj -> list.add(TypeUtils.cast(obj, returnType, ParserConfig.getGlobalInstance())));
             return list;
         }
-        if (dataView instanceof AbstractJsonView) {
+        if (dataView instanceof JsonView) {
 //            return ((AbstractJsonView) dataView).getRows(returnType);
             return null;
         }
@@ -149,8 +295,8 @@ public class DataViewUtil {
         Collection<?> rows = null;
         if (dataView instanceof LimitDataView) {
             rows = ((LimitDataView) dataView).getRows();
-        } else if (dataView instanceof AbstractJsonView) {
-            rows = ((AbstractJsonView) dataView).getRows();
+        } else if (dataView instanceof JsonView) {
+            rows = ((JsonView) dataView).getRows();
         } else {
             ExceptionUtil.throwErrorException("不支持的DataView类型");
         }
@@ -170,8 +316,8 @@ public class DataViewUtil {
         if (dataView instanceof LimitView) {
             return ((LimitView) dataView).getLimit();
         }
-        if (dataView instanceof AbstractJsonView) {
-            return ((AbstractJsonView) dataView).getLimit();
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getLimit();
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
@@ -181,11 +327,42 @@ public class DataViewUtil {
         if (dataView instanceof LimitView) {
             return TypeUtils.cast(((LimitView) dataView).getLimit(), returnType, ParserConfig.getGlobalInstance());
         }
-        if (dataView instanceof AbstractJsonView) {
-            return ((AbstractJsonView) dataView).getLimit(returnType);
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getLimit(returnType);
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
+    }
+
+    public static void main(String[] args) {
+        User user = new User();
+        user.setId("666");
+
+        Map map = TypeUtils.cast(user, LinkedHashMap.class, ParserConfig.getGlobalInstance());
+        System.out.println(map);
+
+        if (false) {
+            return;
+        }
+
+        List<User> list = new ArrayList<>();
+        list.add(user);
+        Pagination pagination = new Pagination(DataBaseType.MYSQL, 100, 1, 20);
+        DataView dataView = DataViewUtil.getModelViewSuccess(10, "666", list, pagination);
+        ResultInfoRealization rr = (ResultInfoRealization) dataView.getResultInfo();
+        rr.addResultDetail(() -> ResultUtil.createError("666"));
+        String json = JsonUtil.toJsonString(dataView);
+        DataView dv = JsonUtil.parseObject(json, new TypeReference<DataView>() {
+        });
+        long begin = System.nanoTime();
+
+        if (dv instanceof JacksonView) {
+
+
+        }
+
+        long use = System.nanoTime() - begin;
+        System.out.println(use + " = " + use / (1000 * 1000));
     }
 
     public static MessageView getMessageViewSuccess(String message) {
