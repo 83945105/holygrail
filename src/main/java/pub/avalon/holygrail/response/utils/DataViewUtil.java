@@ -2,11 +2,14 @@ package pub.avalon.holygrail.response.utils;
 
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 import pub.avalon.beans.Limit;
 import pub.avalon.holygrail.response.views.*;
+import pub.avalon.holygrail.utils.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,6 +20,13 @@ public class DataViewUtil {
     private DataViewUtil() {
     }
 
+    /**
+     * 是否成功
+     *
+     * @param dataView 数据视图
+     * @param dataView
+     * @return
+     */
     public static boolean isSuccess(DataView dataView) {
         if (dataView instanceof MessageView) {
             return dataView.getResultInfo().isSuccess();
@@ -28,9 +38,20 @@ public class DataViewUtil {
         return false;
     }
 
+    /**
+     * 获取存储于record的对象
+     * 一般存储者放入的是非Map对象
+     *
+     * @param dataView
+     * @return
+     */
     public static Object getRecord(DataView dataView) {
         if (dataView instanceof ModelView) {
-            return ((ModelView) dataView).getRecord();
+            Object record = ((ModelView) dataView).getRecord();
+            if (record == null) {
+                return null;
+            }
+            return record;
         }
         if (dataView instanceof JsonView) {
             return ((JsonView) dataView).getRecord();
@@ -39,7 +60,40 @@ public class DataViewUtil {
         return null;
     }
 
-    public static <T> T getRecord(Class<T> returnType, DataView dataView) {
+    /**
+     * 获取存储于record的对象
+     * 一般存储者放入的是非Map对象
+     *
+     * @param dataView
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRecord(DataView dataView, TypeReference<T> typeReference) {
+        if (dataView instanceof ModelView) {
+            Object record = ((ModelView) dataView).getRecord();
+            if (record == null) {
+                return null;
+            }
+            return JsonUtil.parseObject(JsonUtil.toJsonString(record), typeReference);
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecord(typeReference);
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    /**
+     * 获取存储于record的对象并转为指定的类型
+     * 一般存储者放入的是非Map对象
+     *
+     * @param dataView
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRecord(DataView dataView, Class<T> returnType) {
         if (dataView instanceof ModelView) {
             return TypeUtils.cast(((ModelView) dataView).getRecord(), returnType, ParserConfig.getGlobalInstance());
         }
@@ -50,6 +104,13 @@ public class DataViewUtil {
         return null;
     }
 
+    /**
+     * 获取存储于records的对象
+     * 一般存储者放入的是Map对象
+     *
+     * @param dataView
+     * @return
+     */
     public static Map<?, ?> getRecords(DataView dataView) {
         if (dataView instanceof ModelView) {
             return ((ModelView) dataView).getRecords();
@@ -61,7 +122,39 @@ public class DataViewUtil {
         return null;
     }
 
-    public static <T> T getRecords(Class<T> returnType, DataView dataView) {
+    /**
+     * 获取存储于records的对象并转为指定的类型
+     * 一般存储者放入的是Map对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRecords(DataView dataView, TypeReference<T> typeReference) {
+        if (dataView instanceof ModelView) {
+            Map<?, ?> records = ((ModelView) dataView).getRecords();
+            if (records == null) {
+                return null;
+            }
+            return JsonUtil.parseObject(JsonUtil.toJsonString(records), typeReference);
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRecords(typeReference);
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    /**
+     * 获取存储于records的对象并转为指定的类型
+     * 一般存储者放入的是Map对象
+     *
+     * @param dataView
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRecords(DataView dataView, Class<T> returnType) {
         if (dataView instanceof ModelView) {
             return TypeUtils.cast(((ModelView) dataView).getRecords(), returnType, ParserConfig.getGlobalInstance());
         }
@@ -72,19 +165,14 @@ public class DataViewUtil {
         return null;
     }
 
-    public static <T> T getRecordsValue(String key, Class<T> valueType, DataView dataView) {
-        Map records = getRecords(dataView);
-        if (records == null) {
-            ExceptionUtil.throwErrorException("records不存在");
-        }
-        Object value = records.get(key);
-        if (value == null) {
-            return null;
-        }
-        return TypeUtils.cast(value, valueType, ParserConfig.getGlobalInstance());
-    }
-
-    public static Collection getRows(DataView dataView) {
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @param dataView
+     * @return
+     */
+    public static Collection<?> getRows(DataView dataView) {
         if (dataView instanceof LimitDataView) {
             return ((LimitDataView) dataView).getRows();
         }
@@ -95,23 +183,56 @@ public class DataViewUtil {
         return null;
     }
 
-    public static <T> Collection<T> getRows(Class<T> returnType, DataView dataView) {
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    public static <T> T getRows(DataView dataView, TypeReference<T> typeReference) {
         if (dataView instanceof LimitDataView) {
-            ArrayList<T> list = new ArrayList<>();
             Collection<?> rows = ((LimitDataView) dataView).getRows();
-            if (rows == null) {
-                return null;
-            }
-            rows.forEach(obj -> list.add(TypeUtils.cast(obj, returnType, ParserConfig.getGlobalInstance())));
-            return list;
+            return JsonUtil.parseObject(JsonUtil.toJsonString(rows), typeReference);
         }
         if (dataView instanceof JsonView) {
-            return ((JsonView) dataView).getRows(returnType);
+            return ((JsonView) dataView).getRows(typeReference);
         }
         ExceptionUtil.throwErrorException("不支持的DataView类型");
         return null;
     }
 
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @param dataView
+     * @param beanType
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> getRows(DataView dataView, Class<T> beanType) {
+        if (dataView instanceof LimitDataView) {
+            Collection<?> rows = ((LimitDataView) dataView).getRows();
+            ArrayList<T> list = new ArrayList<>(rows.size());
+            rows.forEach(row -> list.add(TypeUtils.cast(row, beanType, ParserConfig.getGlobalInstance())));
+            return list;
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getRows(beanType);
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @param dataView
+     * @return
+     */
     public static Limit getLimit(DataView dataView) {
         if (dataView instanceof LimitView) {
             return ((LimitView) dataView).getLimit();
@@ -123,7 +244,39 @@ public class DataViewUtil {
         return null;
     }
 
-    public static <T extends Limit> T getLimit(Class<T> returnType, DataView dataView) {
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @param dataView
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    public static <T extends Limit> T getLimit(DataView dataView, TypeReference<T> typeReference) {
+        if (dataView instanceof LimitView) {
+            Limit limit = ((LimitView) dataView).getLimit();
+            if (limit == null) {
+                return null;
+            }
+            return JsonUtil.parseObject(JsonUtil.toJsonString(limit), typeReference);
+        }
+        if (dataView instanceof JsonView) {
+            return ((JsonView) dataView).getLimit(typeReference);
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    public static <T extends Limit> T getLimit(DataView dataView, Class<T> returnType) {
         if (dataView instanceof LimitView) {
             return TypeUtils.cast(((LimitView) dataView).getLimit(), returnType, ParserConfig.getGlobalInstance());
         }
@@ -206,7 +359,8 @@ public class DataViewUtil {
         return new ModelView(0, ResultUtil.createSuccess(message), rows, records);
     }
 
-    public static ModelView getModelViewSuccess(Integer code, String message, Collection<?> rows, Map<?, ?> records) {
+    public static ModelView getModelViewSuccess(Integer code, String message, Collection<?> rows, Map<?, ?>
+            records) {
         return new ModelView(code, ResultUtil.createSuccess(message), rows, records);
     }
 
@@ -215,11 +369,13 @@ public class DataViewUtil {
         return new ModelView(0, ResultUtil.createSuccess("success"), limit, rows, records);
     }
 
-    public static ModelView getModelViewSuccess(String message, Collection<?> rows, Map<?, ?> records, Limit limit) {
+    public static ModelView getModelViewSuccess(String message, Collection<?> rows, Map<?, ?> records, Limit
+            limit) {
         return new ModelView(0, ResultUtil.createSuccess(message), limit, rows, records);
     }
 
-    public static ModelView getModelViewSuccess(Integer code, String message, Collection<?> rows, Map<?, ?> records, Limit limit) {
+    public static ModelView getModelViewSuccess(Integer code, String message, Collection<?> rows, Map<?, ?>
+            records, Limit limit) {
         return new ModelView(code, ResultUtil.createSuccess(message), limit, rows, records);
     }
 

@@ -1,6 +1,6 @@
 package pub.avalon.holygrail;
 
-import pub.avalon.holygrail.bean.User;
+import pub.avalon.holygrail.response.beans.User;
 import pub.avalon.holygrail.excel.exception.ExcelException;
 import pub.avalon.holygrail.excel.factory.ImportFactory;
 import org.junit.jupiter.api.Test;
