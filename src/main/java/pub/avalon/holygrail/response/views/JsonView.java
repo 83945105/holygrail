@@ -1,162 +1,127 @@
 package pub.avalon.holygrail.response.views;
 
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.util.TypeUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 import pub.avalon.beans.Limit;
-import pub.avalon.holygrail.response.beans.JsonResultInfo;
-import pub.avalon.holygrail.response.beans.ResultInfo;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 白超
  * @date 2018/6/3
  */
-public class JsonView extends LinkedHashMap<String, Object> implements DataView {
+public interface JsonView extends DataView {
 
-    private ResultInfo resultInfo;
-    private Limit limit;
+    /**
+     * 获取存储于record的对象
+     * 一般存储者放入的是非Map对象
+     *
+     * @return
+     */
+    Map<String, Object> getRecord();
 
-    @Override
-    public Integer getCode() {
-        Object code = this.get(MessageView.CODE);
-        return code == null ? null : Integer.parseInt(code.toString());
-    }
+    /**
+     * 获取存储于record的对象
+     * 一般存储者放入的是非Map对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    <T> T getRecord(TypeReference<T> typeReference);
 
-    @Override
-    public ResultInfo getResultInfo() {
-        if (this.resultInfo == null) {
-            Object resultInfo = this.get(MessageView.RESULT_INFO_PARAM);
-            if (resultInfo == null) {
-                return null;
-            }
-            if (!(resultInfo instanceof Map)) {
-                return null;
-            }
-            JsonResultInfo jsonResultInfo = new JsonResultInfo();
-            for (Object o : ((Map) resultInfo).entrySet()) {
-                Map.Entry entry = (Map.Entry) o;
-                jsonResultInfo.put(String.valueOf(entry.getKey()), entry.getValue());
-            }
-            this.resultInfo = jsonResultInfo;
-        }
-        return this.resultInfo;
-    }
+    /**
+     * 获取存储于record的对象并转为指定的类型
+     * 一般存储者放入的是非Map对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    <T> T getRecord(Class<T> returnType);
 
-    public Object getRecord() {
-        return this.get(ModelView.RECORD_KEY);
-    }
+    /**
+     * 获取存储于records的对象
+     * 一般存储者放入的是Map对象
+     *
+     * @return
+     */
+    Map<String, Object> getRecords();
 
-    public <T> T getRecord(Class<T> clazz) {
-        Object obj = getRecord();
-        if (obj == null) {
-            return null;
-        }
-        return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
-    }
+    /**
+     * 获取存储于records的对象并转为指定的类型
+     * 一般存储者放入的是Map对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    <T> T getRecords(TypeReference<T> typeReference);
 
-    public Map<?, ?> getRecords() {
-        Object records = this.get(ModelView.RECORDS_KEY);
-        if (records == null) {
-            return new HashMap<>(0);
-        }
-        if (records instanceof Map) {
-            return (Map<?, ?>) records;
-        }
-        return null;
-    }
+    /**
+     * 获取存储于records的对象并转为指定的类型
+     * 一般存储者放入的是Map对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    <T> T getRecords(Class<T> returnType);
 
-    public <T> T getRecords(Class<T> clazz) {
-        Object records = this.get(ModelView.RECORDS_KEY);
-        if (records == null) {
-            return null;
-        }
-        return TypeUtils.cast(records, clazz, ParserConfig.getGlobalInstance());
-    }
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @return
+     */
+    List<Map<String, Object>> getRows();
 
-    public Collection<?> getRows() {
-        return (Collection<?>) this.get(LimitDataView.ROWS_KEY);
-    }
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    <T> T getRows(TypeReference<T> typeReference);
 
-    public <T> Collection<T> getRows(Function<Object, T> formatterRow) {
-        Collection<?> rows = getRows();
-        if (rows == null) {
-            return new ArrayList<>(0);
-        }
-        ArrayList<T> list = new ArrayList<>(rows.size());
-        rows.forEach(obj -> list.add(formatterRow.apply(obj)));
-        return list;
-    }
+    /**
+     * 获取存储于rows的对象
+     * 一般存储者放入的是集合对象
+     *
+     * @param beanType
+     * @param <T>
+     * @return
+     */
+    <T> List<T> getRows(Class<T> beanType);
 
-    public <T> Collection<T> getRows(Class<T> clazz) {
-        return getRows(row -> TypeUtils.cast(row, clazz, ParserConfig.getGlobalInstance()));
-    }
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @return
+     */
+    Limit getLimit();
 
-    public Limit getLimit() {
-        if (this.limit == null) {
-            Object obj = this.get(LimitView.LIMIT_KEY);
-            if (obj == null) {
-                return null;
-            }
-            this.limit = TypeUtils.cast(obj, JsonPagination.class, ParserConfig.getGlobalInstance());
-        }
-        return this.limit;
-    }
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @param typeReference
+     * @param <T>
+     * @return
+     */
+    <T extends Limit> T getLimit(TypeReference<T> typeReference);
 
-    public <T extends Limit> T getLimit(Class<T> clazz) {
-        Object obj = this.get(LimitView.LIMIT_KEY);
-        if (obj == null) {
-            return null;
-        }
-        return TypeUtils.cast(obj, clazz, ParserConfig.getGlobalInstance());
-    }
-
-    private static class JsonPagination implements Limit {
-
-        private Integer total;
-
-        private Integer currentPage;
-
-        private Integer pageSize;
-
-        private Integer pageCount;
-
-        @Override
-        public Integer getTotal() {
-            return total;
-        }
-
-        public void setTotal(Integer total) {
-            this.total = total;
-        }
-
-        @Override
-        public Integer getCurrentPage() {
-            return currentPage;
-        }
-
-        public void setCurrentPage(Integer currentPage) {
-            this.currentPage = currentPage;
-        }
-
-        @Override
-        public Integer getPageSize() {
-            return pageSize;
-        }
-
-        public void setPageSize(Integer pageSize) {
-            this.pageSize = pageSize;
-        }
-
-        @Override
-        public Integer getPageCount() {
-            return pageCount;
-        }
-
-        public void setPageCount(Integer pageCount) {
-            this.pageCount = pageCount;
-        }
-    }
+    /**
+     * 获取存储于limit的对象
+     * 一般存储者放入的是分页对象
+     *
+     * @param returnType
+     * @param <T>
+     * @return
+     */
+    <T extends Limit> T getLimit(Class<T> returnType);
 
 }

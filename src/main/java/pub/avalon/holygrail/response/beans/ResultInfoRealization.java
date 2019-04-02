@@ -8,7 +8,6 @@ import java.util.Collection;
  *
  * @author 白超
  */
-@SuppressWarnings("unused")
 public class ResultInfoRealization implements ResultInfo {
 
     /**
