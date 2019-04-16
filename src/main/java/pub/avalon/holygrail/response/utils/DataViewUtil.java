@@ -4,6 +4,7 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import pub.avalon.beans.Limit;
+import pub.avalon.holygrail.response.beans.ResultInfo;
 import pub.avalon.holygrail.response.views.*;
 import pub.avalon.holygrail.utils.JsonUtil;
 
@@ -24,7 +25,6 @@ public class DataViewUtil {
      * 是否成功
      *
      * @param dataView 数据视图
-     * @param dataView
      * @return
      */
     public static boolean isSuccess(DataView dataView) {
@@ -39,19 +39,66 @@ public class DataViewUtil {
     }
 
     /**
+     * 是否失败
+     *
+     * @param dataView 数据视图
+     * @return
+     */
+    public static boolean isFail(DataView dataView) {
+        if (dataView instanceof MessageView) {
+            return dataView.getResultInfo().isFail();
+        }
+        if (dataView instanceof JsonView) {
+            return dataView.getResultInfo().isFail();
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return false;
+    }
+
+    /**
+     * 是否错误
+     *
+     * @param dataView 数据视图
+     * @return
+     */
+    public static boolean isError(DataView dataView) {
+        if (dataView instanceof MessageView) {
+            return dataView.getResultInfo().isError();
+        }
+        if (dataView instanceof JsonView) {
+            return dataView.getResultInfo().isError();
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return false;
+    }
+
+    /**
+     * 获取消息结果集
+     *
+     * @param dataView 数据视图
+     * @return
+     */
+    public static ResultInfo getResultInfo(DataView dataView) {
+        if (dataView instanceof MessageView) {
+            return dataView.getResultInfo();
+        }
+        if (dataView instanceof JsonView) {
+            return dataView.getResultInfo();
+        }
+        ExceptionUtil.throwErrorException("不支持的DataView类型");
+        return null;
+    }
+
+    /**
      * 获取存储于record的对象
      * 一般存储者放入的是非Map对象
      *
-     * @param dataView
+     * @param dataView 数据视图
      * @return
      */
     public static Object getRecord(DataView dataView) {
         if (dataView instanceof ModelView) {
-            Object record = ((ModelView) dataView).getRecord();
-            if (record == null) {
-                return null;
-            }
-            return record;
+            return ((ModelView) dataView).getRecord();
         }
         if (dataView instanceof JsonView) {
             return ((JsonView) dataView).getRecord();
@@ -64,7 +111,7 @@ public class DataViewUtil {
      * 获取存储于record的对象
      * 一般存储者放入的是非Map对象
      *
-     * @param dataView
+     * @param dataView      数据视图
      * @param typeReference
      * @param <T>
      * @return
@@ -88,7 +135,7 @@ public class DataViewUtil {
      * 获取存储于record的对象并转为指定的类型
      * 一般存储者放入的是非Map对象
      *
-     * @param dataView
+     * @param dataView   数据视图
      * @param returnType
      * @param <T>
      * @return
@@ -108,7 +155,7 @@ public class DataViewUtil {
      * 获取存储于records的对象
      * 一般存储者放入的是Map对象
      *
-     * @param dataView
+     * @param dataView 数据视图
      * @return
      */
     public static Map<?, ?> getRecords(DataView dataView) {
@@ -126,6 +173,7 @@ public class DataViewUtil {
      * 获取存储于records的对象并转为指定的类型
      * 一般存储者放入的是Map对象
      *
+     * @param dataView      数据视图
      * @param typeReference
      * @param <T>
      * @return
@@ -149,7 +197,7 @@ public class DataViewUtil {
      * 获取存储于records的对象并转为指定的类型
      * 一般存储者放入的是Map对象
      *
-     * @param dataView
+     * @param dataView   数据视图
      * @param returnType
      * @param <T>
      * @return
@@ -169,7 +217,7 @@ public class DataViewUtil {
      * 获取存储于rows的对象
      * 一般存储者放入的是集合对象
      *
-     * @param dataView
+     * @param dataView 数据视图
      * @return
      */
     public static Collection<?> getRows(DataView dataView) {
@@ -187,6 +235,7 @@ public class DataViewUtil {
      * 获取存储于rows的对象
      * 一般存储者放入的是集合对象
      *
+     * @param dataView      数据视图
      * @param typeReference
      * @param <T>
      * @return
@@ -207,7 +256,7 @@ public class DataViewUtil {
      * 获取存储于rows的对象
      * 一般存储者放入的是集合对象
      *
-     * @param dataView
+     * @param dataView 数据视图
      * @param beanType
      * @param <T>
      * @return
@@ -230,7 +279,7 @@ public class DataViewUtil {
      * 获取存储于limit的对象
      * 一般存储者放入的是分页对象
      *
-     * @param dataView
+     * @param dataView 数据视图
      * @return
      */
     public static Limit getLimit(DataView dataView) {
@@ -248,7 +297,7 @@ public class DataViewUtil {
      * 获取存储于limit的对象
      * 一般存储者放入的是分页对象
      *
-     * @param dataView
+     * @param dataView      数据视图
      * @param typeReference
      * @param <T>
      * @return
@@ -272,6 +321,7 @@ public class DataViewUtil {
      * 获取存储于limit的对象
      * 一般存储者放入的是分页对象
      *
+     * @param dataView   数据视图
      * @param returnType
      * @param <T>
      * @return
