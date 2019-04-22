@@ -133,4 +133,72 @@ public interface Time {
         return calendar.getTime();
     }
 
+    /**
+     * 计算2个日期之间相差的年月日
+     * 例: 2011-02-02 到  2017-03-02 相差 6年，1个月，0天
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    static int[] simpleDateDisparityYearMonthDay(Date fromDate, Date toDate) {
+        Calendar from = Calendar.getInstance();
+        from.setTime(fromDate);
+        Calendar to = Calendar.getInstance();
+        to.setTime(toDate);
+
+        int fromYear = from.get(Calendar.YEAR);
+        int fromMonth = from.get(Calendar.MONTH);
+        int fromDay = from.get(Calendar.DAY_OF_MONTH);
+
+        int toYear = to.get(Calendar.YEAR);
+        int toMonth = to.get(Calendar.MONTH);
+        int toDay = to.get(Calendar.DAY_OF_MONTH);
+        int year = toYear - fromYear;
+        int month = toMonth - fromMonth;
+        int day = toDay - fromDay;
+        return new int[]{year, month, day};
+    }
+
+    /**
+     * 计算2个日期之间相差的 总计 年月日
+     * 例: 2011-02-02 到  2017-03-02
+     * 以年为单位相差为：6年
+     * 以月为单位相差为：73个月
+     * 以日为单位相差为：2220天
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    static int[] simpleDateDisparityTotalYearMonthDay(Date fromDate, Date toDate) {
+        Calendar from = Calendar.getInstance();
+        from.setTime(fromDate);
+        Calendar to = Calendar.getInstance();
+        to.setTime(toDate);
+        //只要年月
+        int fromYear = from.get(Calendar.YEAR);
+        int fromMonth = from.get(Calendar.MONTH);
+
+        int toYear = to.get(Calendar.YEAR);
+        int toMonth = to.get(Calendar.MONTH);
+
+        int year = toYear - fromYear;
+        int month = toYear * 12 + toMonth - (fromYear * 12 + fromMonth);
+        int day = (int) ((to.getTimeInMillis() - from.getTimeInMillis()) / (24 * 3600 * 1000));
+        return new int[]{year, month, day};
+    }
+
+    /**
+     * 判断日期是否是该月第一天
+     *
+     * @param date
+     * @return
+     */
+    static boolean simpleDateIsFirstDayOfMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.DAY_OF_MONTH) == 1;
+    }
+
 }
