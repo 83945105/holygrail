@@ -15,6 +15,7 @@ import java.util.Set;
  */
 public interface Time {
 
+    String DATE_YEAR_MONTH_FORMATTER = "yyyy-MM";
     String DATE_SIMPLE_FORMATTER = "yyyy-MM-dd";
     String DATE_TIME_SIMPLE_FORMATTER = "yyyy-MM-dd HH:mm:ss";
 
@@ -65,6 +66,18 @@ public interface Time {
     }
 
     /**
+     * 时间戳转为年月
+     * yyyy-MM
+     *
+     * @param timestamp
+     * @return
+     */
+    static String timeStampToYearMonth(long timestamp) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_YEAR_MONTH_FORMATTER);
+        return dateTimeFormatter.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()));
+    }
+
+    /**
      * 时间戳转为简化版字符串日期
      * yyyy-MM-dd
      *
@@ -86,19 +99,6 @@ public interface Time {
     static String timeStampToSimpleDateTimeString(long timestamp) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_SIMPLE_FORMATTER);
         return dateTimeFormatter.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()));
-    }
-
-    /**
-     * 简化字符串日期转时间戳
-     * yyyy-MM-dd
-     *
-     * @param timeStr
-     * @return
-     */
-    static long simpleDateStringToTimeStamp(String timeStr) {
-        DateTimeFormatter ftf = DateTimeFormatter.ofPattern(DATE_SIMPLE_FORMATTER);
-        LocalDateTime parse = LocalDateTime.parse(timeStr, ftf);
-        return LocalDateTime.from(parse).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     /**
@@ -268,10 +268,10 @@ public interface Time {
         calendarEnd.setTime(toDate);
 
         while (calendarFrom.before(calendarEnd)) {
-            result.add(timeStampToSimpleDateString(calendarFrom.getTime().getTime()));
+            result.add(timeStampToYearMonth(calendarFrom.getTime().getTime()));
             calendarFrom.add(Calendar.MONTH, 1);
         }
-        result.add(timeStampToSimpleDateString(toDate.getTime()));
+        result.add(timeStampToYearMonth(toDate.getTime()));
         return result;
     }
 
