@@ -4,6 +4,8 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * 时间
@@ -13,6 +15,7 @@ import java.util.Date;
  */
 public interface Time {
 
+    String DATE_SIMPLE_FORMATTER = "yyyy-MM-dd";
     String DATE_TIME_SIMPLE_FORMATTER = "yyyy-MM-dd HH:mm:ss";
 
     /**
@@ -62,6 +65,18 @@ public interface Time {
     }
 
     /**
+     * 时间戳转为简化版字符串日期
+     * yyyy-MM-dd
+     *
+     * @param timestamp
+     * @return
+     */
+    static String timeStampToSimpleDateString(long timestamp) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_SIMPLE_FORMATTER);
+        return dateTimeFormatter.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()));
+    }
+
+    /**
      * 时间戳转为简化版字符串日期时间
      * yyyy-MM-dd HH:mm:ss
      *
@@ -71,6 +86,19 @@ public interface Time {
     static String timeStampToSimpleDateTimeString(long timestamp) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_SIMPLE_FORMATTER);
         return dateTimeFormatter.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()));
+    }
+
+    /**
+     * 简化字符串日期转时间戳
+     * yyyy-MM-dd
+     *
+     * @param timeStr
+     * @return
+     */
+    static long simpleDateStringToTimeStamp(String timeStr) {
+        DateTimeFormatter ftf = DateTimeFormatter.ofPattern(DATE_SIMPLE_FORMATTER);
+        LocalDateTime parse = LocalDateTime.parse(timeStr, ftf);
+        return LocalDateTime.from(parse).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     /**
@@ -199,6 +227,52 @@ public interface Time {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.DAY_OF_MONTH) == 1;
+    }
+
+    /**
+     * 计算俩个日期之间包含的年月日
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    static Set<String> simpleDateBetweenYearMonthDay(Date fromDate, Date toDate) {
+        Set<String> result = new LinkedHashSet<>();
+        Calendar calendarFrom = Calendar.getInstance();
+        calendarFrom.setTime(fromDate);
+
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.setTime(toDate);
+
+        while (calendarFrom.before(calendarEnd)) {
+            result.add(timeStampToSimpleDateString(calendarFrom.getTime().getTime()));
+            calendarFrom.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        result.add(timeStampToSimpleDateString(toDate.getTime()));
+        return result;
+    }
+
+    /**
+     * 计算俩个日期之间包含的年月
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    static Set<String> simpleDateBetweenYearMonth(Date fromDate, Date toDate) {
+        Set<String> result = new LinkedHashSet<>();
+        Calendar calendarFrom = Calendar.getInstance();
+        calendarFrom.setTime(fromDate);
+
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.setTime(toDate);
+
+        while (calendarFrom.before(calendarEnd)) {
+            result.add(timeStampToSimpleDateString(calendarFrom.getTime().getTime()));
+            calendarFrom.add(Calendar.MONTH, 1);
+        }
+        result.add(timeStampToSimpleDateString(toDate.getTime()));
+        return result;
     }
 
 }
