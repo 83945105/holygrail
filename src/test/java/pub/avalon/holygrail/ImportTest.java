@@ -12,7 +12,6 @@ import java.io.IOException;
  */
 public class ImportTest {
 
-    @Test
     void test01() throws IOException, ExcelException, InstantiationException, IllegalAccessException {
         ImportFactory.buildXSSFImportExcelWorkBook()
                 .parseFile("E://test.xlsx")

@@ -15,7 +15,6 @@ import java.util.Map;
  */
 public class ExportTest {
 
-    @Test
     void test01() throws ExcelException, IOException {
         List<Map<String, Object>> records = new ArrayList<>();
 
