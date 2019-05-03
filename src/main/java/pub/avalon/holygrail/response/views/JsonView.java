@@ -18,7 +18,7 @@ public interface JsonView extends DataView {
      *
      * @return
      */
-    Map<String, Object> getRecord();
+    Object getRecord();
 
     /**
      * 获取存储于record的对象
