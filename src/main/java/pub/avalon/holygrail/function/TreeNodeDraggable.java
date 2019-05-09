@@ -416,7 +416,7 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
         long dropIndex = drop.getSortIndex();
         if (dragIndex == dropIndex) {
             // 正常情况下, 如果是兄弟节点之间拖拽, 两者下标不能相同
-            LOGGER.warn("draggableBrotherBefore: dragIndex are equal to dropIndex.");
+            LOGGER.warn("draggableBrotherAfter: dragIndex are equal to dropIndex.");
             return;
         }
         if (dragIndex < dropIndex) {
@@ -458,7 +458,7 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
         //计算出拖动元素与将要移动的第一个元素之间的下标间隔
         long minusNum = drags.get(0).getSortIndex() - drag.getSortIndex();
         if (minusNum <= 0) {
-            LOGGER.warn("draggableBrotherBeforeFromUpToDown: minusNum must be greater than zero.");
+            LOGGER.warn("draggableBrotherAfterFromUpToDown: minusNum must be greater than zero.");
             return;
         }
         drags.add(drop);
@@ -495,7 +495,7 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
         SortUtil.bubbleSort(drags, (left, right) -> left.getSortIndex() > right.getSortIndex());
         long plusNum = drag.getSortIndex() - drags.get(drags.size() - 1).getSortIndex();
         if (plusNum <= 0) {
-            LOGGER.warn("draggableBrotherBeforeFromDownToUp: plusNum must be greater than zero.");
+            LOGGER.warn("draggableBrotherAfterFromDownToUp: plusNum must be greater than zero.");
             return;
         }
         plusNodesSortIndex(drags, plusNum, params);
@@ -525,7 +525,7 @@ public interface TreeNodeDraggable<T extends TreeNode, P> {
             //存在下一个
             long minusNum = nextDrag.getSortIndex() - drag.getSortIndex();
             if (minusNum <= 0) {
-                LOGGER.warn("draggableBefore: minusNum must be greater than zero.");
+                LOGGER.warn("draggableInner: minusNum must be greater than zero.");
                 return;
             }
             // 更新拖拽节点同级后所有节点的下标

@@ -9,7 +9,7 @@ package pub.avalon.holygrail.function.beans;
 public interface TreeNode<T extends TreeNode> {
 
     /**
-     * 获取排序喜爱宝
+     * 获取排序下标
      *
      * @return
      */
