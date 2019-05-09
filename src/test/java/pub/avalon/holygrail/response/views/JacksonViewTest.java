@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class JacksonViewTest {
 
-    @Test
+//    @Test
     void TestRecord() {
         Object record = null;
         DataView dataView = DataViewUtil.getModelViewSuccess(0, "", record);

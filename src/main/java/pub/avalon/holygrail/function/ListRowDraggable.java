@@ -32,29 +32,29 @@ public interface ListRowDraggable<T extends ListRow, P> {
     /**
      * 更新行的排序下标
      *
-     * @param node
+     * @param row
      * @param sortIndex
      * @param params
      */
-    void updateRowSortIndex(T node, long sortIndex, P params);
+    void updateRowSortIndex(T row, long sortIndex, P params);
 
     /**
      * 将行下标减去指定数值
      *
-     * @param nodes
+     * @param rows
      * @param minusNum 始终大于0
      * @param params
      */
-    void minusRowsSortIndex(Collection<T> nodes, long minusNum, P params);
+    void minusRowsSortIndex(Collection<T> rows, long minusNum, P params);
 
     /**
      * 将行下标加上指定数值
      *
-     * @param nodes
+     * @param rows
      * @param plusNum 始终大于0
      * @param params
      */
-    void plusRowsSortIndex(Collection<T> nodes, long plusNum, P params);
+    void plusRowsSortIndex(Collection<T> rows, long plusNum, P params);
 
     /**
      * 拖拽
