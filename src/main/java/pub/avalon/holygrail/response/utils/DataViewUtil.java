@@ -345,6 +345,13 @@ public class DataViewUtil {
         return new MessageView(code, ResultUtil.createSuccess(message));
     }
 
+    public static MessageView getMessageViewFail(String message) {
+        return new MessageView(0, ResultUtil.createFail(message));
+    }
+
+    public static MessageView getMessageViewFail(Integer code, String message) {
+        return new MessageView(code, ResultUtil.createFail(message));
+    }
 
     public static ModelView getModelViewSuccess(Object record) {
         return new ModelView(0, ResultUtil.createSuccess("success"), record);
