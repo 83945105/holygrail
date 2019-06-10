@@ -162,6 +162,20 @@ public interface Time {
     }
 
     /**
+     * 获取指定日期之后N天的日期
+     *
+     * @param date
+     * @param day
+     * @return
+     */
+    static Date dateTimeAfterDate(Date date, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + day);
+        return calendar.getTime();
+    }
+
+    /**
      * 计算2个日期之间相差的年月日
      * 例: 2011-02-02 到  2017-03-02 相差 6年，1个月，0天
      *
