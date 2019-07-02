@@ -78,7 +78,7 @@ public class JacksonView implements JsonView {
             return this.record;
         }
         TreeNode treeNode = this.treeNode.get(ModelView.RECORD_KEY);
-        if (treeNode instanceof NullNode) {
+        if (treeNode == null || treeNode instanceof NullNode) {
             return null;
         }
         if (treeNode instanceof TextNode) {
