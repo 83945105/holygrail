@@ -78,7 +78,7 @@ public class JacksonView implements JsonView {
             return this.record;
         }
         TreeNode treeNode = this.treeNode.get(ModelView.RECORD_KEY);
-        if (treeNode instanceof NullNode) {
+        if (treeNode == null || treeNode instanceof NullNode) {
             return null;
         }
         if (treeNode instanceof TextNode) {
@@ -333,50 +333,50 @@ public class JacksonView implements JsonView {
 
     private static class JacksonPagination implements Limit {
 
-        private Integer total;
+        private Long total;
 
-        private Integer currentPage;
+        private Long currentPage;
 
-        private Integer pageSize;
+        private Long pageSize;
 
-        private Integer pageCount;
+        private Long pageCount;
 
         @Override
-        public Integer getTotal() {
+        public long getTotal() {
             return total;
         }
 
         @Override
-        public void setTotal(Integer total) {
+        public void setTotal(Long total) {
             this.total = total;
         }
 
         @Override
-        public Integer getCurrentPage() {
+        public long getCurrentPage() {
             return currentPage;
         }
 
         @Override
-        public void setCurrentPage(Integer currentPage) {
+        public void setCurrentPage(Long currentPage) {
             this.currentPage = currentPage;
         }
 
         @Override
-        public Integer getPageSize() {
+        public long getPageSize() {
             return pageSize;
         }
 
         @Override
-        public void setPageSize(Integer pageSize) {
+        public void setPageSize(Long pageSize) {
             this.pageSize = pageSize;
         }
 
         @Override
-        public Integer getPageCount() {
+        public long getPageCount() {
             return pageCount;
         }
 
-        public void setPageCount(Integer pageCount) {
+        public void setPageCount(Long pageCount) {
             this.pageCount = pageCount;
         }
     }

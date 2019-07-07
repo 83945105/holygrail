@@ -38,8 +38,8 @@ public class LimitDataView extends LimitView {
         this.rows = rows;
     }
 
-    public LimitDataView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows) {
-        super(code, resultInfo, total, currPage, pageSize);
+    public LimitDataView(Integer code, ResultInfo resultInfo, long total, long currentPage, long pageSize, Collection<?> rows) {
+        super(code, resultInfo, total, currentPage, pageSize);
         this.rows = rows;
     }
 

@@ -12,51 +12,51 @@ public interface Limit {
     /**
      * 获取总数
      *
-     * @return
+     * @return {@link java.lang.Long}
      */
-    Integer getTotal();
+    long getTotal();
 
     /**
      * 设置总数
      *
-     * @param total
+     * @param total {@link java.lang.Long}
      */
-    void setTotal(Integer total);
+    void setTotal(Long total);
 
     /**
      * 获取当前页号
      *
-     * @return
+     * @return {@link java.lang.Long}
      */
-    Integer getCurrentPage();
+    long getCurrentPage();
 
     /**
      * 设置当前页号
      *
-     * @param currentPage
+     * @param currentPage {@link java.lang.Long}
      */
-    void setCurrentPage(Integer currentPage);
+    void setCurrentPage(Long currentPage);
 
     /**
      * 获取每页显示数量
      *
-     * @return
+     * @return {@link java.lang.Long}
      */
-    Integer getPageSize();
+    long getPageSize();
 
     /**
      * 设置每页显示数量
      *
-     * @param pageSize
+     * @param pageSize {@link java.lang.Long}
      */
-    void setPageSize(Integer pageSize);
+    void setPageSize(Long pageSize);
 
     /**
      * 获取总页数
      *
-     * @return
+     * @return {@link java.lang.Long}
      */
-    Integer getPageCount();
+    long getPageCount();
 
     /**
      * 执行分页

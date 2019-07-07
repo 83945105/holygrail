@@ -23,7 +23,7 @@ public class LimitView extends MessageView {
         this.limit = new PageViewLimit(limit.getTotal(), limit.getCurrentPage(), limit.getPageSize());
     }
 
-    public LimitView(Integer code, ResultInfo resultInfo, int total, int currPageNum, int pageSize) {
+    public LimitView(Integer code, ResultInfo resultInfo, long total, long currPageNum, long pageSize) {
         super(code, resultInfo);
         this.limit = new PageViewLimit(total, currPageNum, pageSize);
     }
@@ -37,50 +37,50 @@ public class LimitView extends MessageView {
     }
 
     private final class PageViewLimit implements Limit {
-        private int total;
-        private int currentPage = 1;
-        private int pageSize = 1;
+        private long total;
+        private long currentPage = 1L;
+        private long pageSize = 1L;
 
-        private PageViewLimit(int total, int currentPage, int pageSize) {
+        private PageViewLimit(long total, long currentPage, long pageSize) {
             this.setTotal(total);
             this.setCurrentPage(currentPage);
             this.setPageSize(pageSize);
         }
 
         @Override
-        public Integer getTotal() {
+        public long getTotal() {
             return this.total;
         }
 
         @Override
-        public void setTotal(Integer total) {
+        public void setTotal(Long total) {
             this.total = (total == null || total <= 0) ? 0 : total;
         }
 
         @Override
-        public Integer getCurrentPage() {
+        public long getCurrentPage() {
             return this.currentPage;
         }
 
         @Override
-        public void setCurrentPage(Integer currentPage) {
+        public void setCurrentPage(Long currentPage) {
             this.currentPage = (currentPage == null || currentPage <= 0) ? 1 : currentPage;
         }
 
         @Override
-        public Integer getPageSize() {
+        public long getPageSize() {
             return this.pageSize;
         }
 
         @Override
-        public void setPageSize(Integer pageSize) {
+        public void setPageSize(Long pageSize) {
             this.pageSize = (pageSize == null || pageSize <= 0) ? 1 : pageSize;
         }
 
         @Override
-        public Integer getPageCount() {
+        public long getPageCount() {
             if (this.total <= 0) {
-                return 1;
+                return 1L;
             }
             if (this.total % this.pageSize == 0) {
                 return this.total / this.pageSize;
@@ -88,7 +88,7 @@ public class LimitView extends MessageView {
             if (total % pageSize > 0) {
                 return this.total / this.pageSize + 1;
             }
-            return 1;
+            return 1L;
         }
 
     }

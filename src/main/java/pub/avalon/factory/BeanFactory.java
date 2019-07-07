@@ -21,11 +21,11 @@ public final class BeanFactory {
         return new Pagination(this.dataBaseType);
     }
 
-    public Pagination newPagination(int currentPage, int pageSize) {
+    public Pagination newPagination(long currentPage, long pageSize) {
         return new Pagination(this.dataBaseType, currentPage, pageSize);
     }
 
-    public Pagination newPagination(int total, int currentPage, int pageSize) {
+    public Pagination newPagination(long total, long currentPage, long pageSize) {
         return new Pagination(this.dataBaseType, total, currentPage, pageSize);
     }
 

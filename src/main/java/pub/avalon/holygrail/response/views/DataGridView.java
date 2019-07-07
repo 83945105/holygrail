@@ -26,8 +26,8 @@ public class DataGridView extends LimitDataView {
         super(code, resultInfo, rows);
     }
 
-    public DataGridView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows) {
-        super(code, resultInfo, total, currPage, pageSize, rows);
+    public DataGridView(Integer code, ResultInfo resultInfo, long total, long currentPage, long pageSize, Collection<?> rows) {
+        super(code, resultInfo, total, currentPage, pageSize, rows);
     }
 
     public DataGridView(Integer code, ResultInfo resultInfo, Limit limit, Collection<?> rows) {
@@ -39,8 +39,8 @@ public class DataGridView extends LimitDataView {
         this.footer = footer;
     }
 
-    public DataGridView(Integer code, ResultInfo resultInfo, int total, int currPage, int pageSize, Collection<?> rows, Collection<?> footer) {
-        super(code, resultInfo, total, currPage, pageSize, rows);
+    public DataGridView(Integer code, ResultInfo resultInfo, long total, long currentPage, long pageSize, Collection<?> rows, Collection<?> footer) {
+        super(code, resultInfo, total, currentPage, pageSize, rows);
         this.footer = footer;
     }
 
