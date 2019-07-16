@@ -134,4 +134,27 @@ public class CollectionUtil {
         CollectionUtil.batchProcess(records, 0, Math.abs(size), handler);
     }
 
+    /**
+     * 根据数量将集合分组
+     *
+     * @param list     集合
+     * @param quantity 数量
+     * @return
+     */
+    public static <T> List<List<T>> groupListByQuantity(List<T> list, int quantity) {
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        if (quantity <= 0) {
+            return null;
+        }
+        List<List<T>> wrapList = new ArrayList<>();
+        int count = 0;
+        while (count < list.size()) {
+            wrapList.add(list.subList(count, (count + quantity) > list.size() ? list.size() : count + quantity));
+            count += quantity;
+        }
+        return wrapList;
+    }
+
 }
