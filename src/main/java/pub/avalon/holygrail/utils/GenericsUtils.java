@@ -25,6 +25,9 @@ public class GenericsUtils {
     public static Class getSuperClassGenricType(Class clazz, int index)
             throws IndexOutOfBoundsException {
         Type genType = clazz.getGenericSuperclass();
+        if (genType instanceof Class) {
+            return (Class) genType;
+        }
         if (!(genType instanceof ParameterizedType)) {
             return Object.class;
         }
