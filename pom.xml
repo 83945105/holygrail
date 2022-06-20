@@ -52,7 +52,7 @@
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <reflectasm.version>1.11.3</reflectasm.version>
         <org.apache.poi.version>3.9</org.apache.poi.version>
-        <mysql-connector.version>6.0.6</mysql-connector.version>
+        <mysql-connector.version>8.0.28</mysql-connector.version>
         <javax.servlet.version>4.0.0-b01</javax.servlet.version>
         <com.alibaba.fastjson.version>1.2.7</com.alibaba.fastjson.version>
         <com.alibaba.druid.version>1.0.26</com.alibaba.druid.version>
