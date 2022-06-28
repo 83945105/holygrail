@@ -51,7 +51,7 @@
         <spring.version>4.3.13.RELEASE</spring.version>
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <reflectasm.version>1.11.3</reflectasm.version>
-        <org.apache.poi.version>3.9</org.apache.poi.version>
+        <org.apache.poi.version>4.1.1</org.apache.poi.version>
         <mysql-connector.version>6.0.6</mysql-connector.version>
         <javax.servlet.version>4.0.0-b01</javax.servlet.version>
         <com.alibaba.fastjson.version>1.2.7</com.alibaba.fastjson.version>
