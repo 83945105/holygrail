@@ -56,7 +56,7 @@
         <javax.servlet.version>4.0.0-b01</javax.servlet.version>
         <com.alibaba.fastjson.version>1.2.7</com.alibaba.fastjson.version>
         <com.alibaba.druid.version>1.0.26</com.alibaba.druid.version>
-        <shiro.version>1.2.4</shiro.version>
+        <shiro.version>1.9.1</shiro.version>
         <commons-io.version>2.6</commons-io.version>
         <json-lib.version>2.4</json-lib.version>
     </properties>
